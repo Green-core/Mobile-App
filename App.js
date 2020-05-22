@@ -1,24 +1,23 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
-import GreenButton from './components/customButton';
-import {BoxShadow} from 'react-native-shadow';
+import {StyleSheet, Text, View} from 'react-native';
+import {
+  GreenButtonSmall,
+  GreenButtonMedium,
+  GreenButtonLarge,
+  GreenButtonPlus,
+} from './components/customButton';
 
 export default class App extends Component {
   render() {
-    const shadowOpt = {
-      width: 80,
-      height: 80,
-      color: '#43E97B',
-      border: 30,
-      radius: 40,
-      opacity: 0.4,
-      x: 0,
-      y: 3,
-    };
-
     return (
       <View style={styles.container}>
-        <BoxShadow setting={shadowOpt}></BoxShadow>
+        <GreenButtonSmall text="Sign up" />
+        <Text></Text>
+        <GreenButtonMedium text="hello" />
+        <Text></Text>
+        <GreenButtonLarge text="hello" />
+        <Text></Text>
+        <GreenButtonPlus />
       </View>
     );
   }
@@ -33,15 +32,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.9,
     shadowRadius: 4.65,
     elevation: 6,
-  },
-  shadow: {
-    shadowOffset: {width: 10, height: 10},
-    shadowColor: 'black',
-    shadowOpacity: 1.0,
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 4,
-    color: 'white',
-    elevation: 5,
   },
 });
