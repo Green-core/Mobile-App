@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 
-export default function Settings({text, onPress}) {
+export default function Settings({text, onPress, width = 50}) {
   return (
     <View>
       <Text style={styles.title}>Settings</Text>
