@@ -18,6 +18,8 @@ export function GreenButtonSmall({text, onPress}) {
   );
 }
 
+
+
 export function GreenButtonMedium({text, onPress}) {
   return (
     <TouchableOpacity style={styles.touch} onPress={onPress}>
@@ -65,9 +67,9 @@ export function GreenButtonPlus({onPress}) {
 
 const shadowOpt = {
   height: 32,
-  color: '#43E97B',
+  color: '#39F9D4',
   border: 15,
-  radius: 15,
+  radius: 16,
   opacity: 0.5,
 };
 
@@ -87,20 +89,20 @@ const shadowOptMedium = {
 
 const shadowOptLarge = {
   ...shadowOpt,
-  y: 52,
+  y: 48,
   x: 37,
   width: 228,
 };
 
 const shadowOptPlus = {
-  height: 32,
-  color: '#43E97B',
+  height: 25,
+  color: '#39F9D4',
   border: 15,
-  radius: 15,
+  radius: 12.5,
   opacity: 0.5,
-  y: 43,
+  y: 40,
   x: 12,
-  width: 32,
+  width: 25,
 };
 
 const styles = StyleSheet.create({

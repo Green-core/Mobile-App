@@ -1,24 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {
-  GreenButtonSmall,
-  GreenButtonMedium,
-  GreenButtonLarge,
-  GreenButtonPlus,
-} from './components/customButton';
+import { GreenButtonMedium} from './components/customButtons'
+import ProfileScreen from './screens/profile'
+
 
 export default class App extends Component {
   render() {
-    return (
-      <View style={styles.container}>
-        <GreenButtonSmall text="Sign up" />
-        <Text></Text>
-        <GreenButtonMedium text="hello" />
-        <Text></Text>
-        <GreenButtonLarge text="hello" />
-        <Text></Text>
-        <GreenButtonPlus />
-      </View>
+
+    return (  
+
+    
+<ProfileScreen /> 
     );
   }
 }
