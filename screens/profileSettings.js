@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput, ToastAndroid,Keyboard,
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput,Keyboard , ToastAndroid, } from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
-import MenuBar from '../components/menuBar';
+import BackArrow from '../components/backArrow';
 import axios from 'axios';
 import { Formik} from 'formik';
+import * as yup from 'yup'
+
+//form validator
+const validationScheme = yup.object({
+  name : yup.string().min(5), 
+  mobile: yup.string().min(9).max(12)
+});
 
 export default class ProfileSettingsScreen extends Component {
   constructor(props) {
@@ -37,7 +39,8 @@ export default class ProfileSettingsScreen extends Component {
   }
 
   updateValues(values) {
-    Keyboard.dismiss();
+ 
+      Keyboard.dismiss();
     const newUser = {
       name:values.name,
       mobile:parseInt(values.mobile , 10),//convert string to int 
@@ -49,21 +52,18 @@ export default class ProfileSettingsScreen extends Component {
     .put(
       ' https://ancient-temple-30883.herokuapp.com/users/update/5ec66db7aa16ff3a80870c9a', newUser
     )
-    .then((res) => {
-      const userData = res.data;
-     // console.log(JSON.stringify(userData))   
+    .then((res) => {  
      ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
     })
     .catch((error) => console.log(error)); 
-
- 
+     
   }
 
   render() {
     console.log(JSON.stringify(this.state.mobile + '+' + this.state.name));
     return (
       <View style={styles.container}>
-        <MenuBar />
+        <BackArrow  />
 
         <View>
           <Text style={styles.titleText}>Profile settings</Text>
@@ -74,7 +74,8 @@ export default class ProfileSettingsScreen extends Component {
                 name: this.state.name,
                 mobile:  this.state.mobile.toString(),
               }}
-              enableReinitialize
+              enableReinitialize 
+              validationSchema ={validationScheme}
               onSubmit={(values) => {
                 this.updateValues(values);
               }}>
@@ -85,22 +86,23 @@ export default class ProfileSettingsScreen extends Component {
                     placeholder={'Enter new username here'}
                     onChangeText={props.handleChange('name')}
                     value={props.values.name}
-                    style={styles.inputs}
+                    style={[styles.inputs,  , props.errors.name? styles.errorText : styles.inputs]}
                     editable={this.state.enabled}
                   />
 
-                  <Text style={styles.inputTitles}>Mobile No</Text>
+                  <Text style={ styles.inputTitles }>Mobile No</Text>
                   <TextInput
                     placeholder={'Enter new Mobile No. here '}
                     onChangeText={props.handleChange('mobile')}
                     value={props.values.mobile}
-                    style={styles.inputs}
+                    style={[styles.inputs , props.errors.mobile? styles.errorText : styles.inputs ]}
                     editable={this.state.enabled}
                     keyboardType={'number-pad'}
                   />
-
+                     
                   <View style={styles.buttoContainer}>
                     <GreenButtonSmall
+                      
                       text={'Save changes'}
                       onPress={props.handleSubmit}
                     />
@@ -160,6 +162,10 @@ const styles = StyleSheet.create({
     color: '#404040',
     paddingTop: 5,
     paddingBottom: 1,
+  },
+  
+  errorText:{  
+    color: 'red', 
   },
 
   card: {
