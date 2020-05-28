@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "formik": "^2.1.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-axios": "^0.17.1",
