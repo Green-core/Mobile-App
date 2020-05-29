@@ -1,16 +1,17 @@
 import React, {Component} from 'react'; 
 //import ProfileScreen from './screens/profile';
-import ProfileSettingsScreen from './screens/profileSettings'; 
-import Demo from './screens/testScreen'; 
+//import ProfileSettingsScreen from './screens/profileSettings'; 
+
+import AccountSettingsScreen from './screens/accountSettings'; 
 
 
 export default class App extends Component {
   render() {
-    return ( <ProfileSettingsScreen /> ) ;
+    return ( < AccountSettingsScreen /> ) ;
       
     
   }
 }
  
-    {/* //<ProfileScreen />);<Demo /> <Demo /> 
+    {/* <ProfileSettingsScreen /> //<ProfileScreen />);<Demo /> <Demo /> 
     //<  */}
