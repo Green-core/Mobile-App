@@ -10,7 +10,7 @@ export function GreenButtonSmall({text, onPress}) {
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        colors={['#2CBE64','#33CA75' ,  '#2CBE64']}
         style={styles.buttonSmall}>
         <Text style={styles.buttonText}> {text}</Text>
       </LinearGradient>
@@ -27,7 +27,7 @@ export function GreenButtonMedium({text, onPress}) {
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        colors={['#2CBE64','#33CA75' ,  '#2CBE64']}
         style={styles.buttonMedium}>
         <Text style={styles.buttonText}> {text}</Text>
       </LinearGradient>
@@ -42,7 +42,7 @@ export function GreenButtonLarge({text, onPress}) {
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        colors={['#2CBE64','#33CA75' ,  '#2CBE64']}
         style={styles.buttonLarge}>
         <Text style={styles.buttonText}>{text}</Text>
       </LinearGradient>
@@ -57,7 +57,7 @@ export function GreenButtonPlus({onPress}) {
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        colors={['#2CBE64','#33CA75' ,  '#2CBE64']}
         style={styles.buttonPlus}>
         <Text style={styles.buttonPlusText}>+</Text>
       </LinearGradient>
@@ -67,17 +67,17 @@ export function GreenButtonPlus({onPress}) {
 
 const shadowOpt = {
   height: 32,
-  color: '#39F9D4',
+  color: '#C0EBD1',
   border: 15,
-  radius: 16,
-  opacity: 0.5,
+  radius: 8,
+  opacity: 0.8,
 };
 
 const shadowOptSmall = {
   ...shadowOpt,
   x: 31,
-  width: 125,
-  y: 45,
+  width: 135,
+  y: 43,
 };
 
 const shadowOptMedium = {
@@ -96,7 +96,7 @@ const shadowOptLarge = {
 
 const shadowOptPlus = {
   height: 25,
-  color: '#39F9D4',
+  color: '#C0EBD1',
   border: 15,
   radius: 12.5,
   opacity: 0.5,
@@ -107,11 +107,11 @@ const shadowOptPlus = {
 
 const styles = StyleSheet.create({
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Segoe UI',
     textAlign: 'center',
     margin: 10,
-    marginTop: 15,
+    marginTop: 14,
     color: '#ffffff',
     backgroundColor: 'transparent',
   },
