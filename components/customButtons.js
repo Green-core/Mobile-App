@@ -9,8 +9,8 @@ export function GreenButtonSmall({text, onPress}) {
       <BoxShadow setting={shadowOptSmall}></BoxShadow>
       <LinearGradient
         start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        end={{x: 1, y: 0}} 
+        colors={['#2CBE64','#33C974' ,'#2CBE64']} 
         style={styles.buttonSmall}>
         <Text style={styles.buttonText}> {text}</Text>
       </LinearGradient>
@@ -26,8 +26,8 @@ export function GreenButtonMedium({text, onPress}) {
       <BoxShadow setting={shadowOptMedium}></BoxShadow>
       <LinearGradient
         start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        end={{x: 1, y: 0}} 
+        colors={['#2CBE64','#33C974' ,'#2CBE64']} 
         style={styles.buttonMedium}>
         <Text style={styles.buttonText}> {text}</Text>
       </LinearGradient>
@@ -42,7 +42,7 @@ export function GreenButtonLarge({text, onPress}) {
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        colors={['#2CBE64','#33CA75' ,  '#2CBE64']}
         style={styles.buttonLarge}>
         <Text style={styles.buttonText}>{text}</Text>
       </LinearGradient>
@@ -56,8 +56,8 @@ export function GreenButtonPlus({onPress}) {
       <BoxShadow setting={shadowOptPlus}></BoxShadow>
       <LinearGradient
         start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#43E97C', '#39F9D4']}
+        end={{x: 1, y: 0}} 
+        colors={['#2CBE64','#33C974' ,'#2CBE64']} 
         style={styles.buttonPlus}>
         <Text style={styles.buttonPlusText}>+</Text>
       </LinearGradient>
@@ -67,17 +67,17 @@ export function GreenButtonPlus({onPress}) {
 
 const shadowOpt = {
   height: 32,
-  color: '#39F9D4',
-  border: 15,
-  radius: 16,
-  opacity: 0.5,
+  color: '#C0EBD1', 
+  border: 18,
+  radius: 10,
+  opacity: 0.9, 
 };
 
 const shadowOptSmall = {
-  ...shadowOpt,
-  x: 31,
-  width: 125,
-  y: 45,
+  ...shadowOpt, 
+  x: 20,
+  width: 137,
+  y: 45, 
 };
 
 const shadowOptMedium = {
@@ -96,7 +96,7 @@ const shadowOptLarge = {
 
 const shadowOptPlus = {
   height: 25,
-  color: '#39F9D4',
+  color: '#C0EBD1',
   border: 15,
   radius: 12.5,
   opacity: 0.5,
@@ -107,11 +107,11 @@ const shadowOptPlus = {
 
 const styles = StyleSheet.create({
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Segoe UI',
     textAlign: 'center',
     margin: 10,
-    marginTop: 15,
+    marginTop: 14,
     color: '#ffffff',
     backgroundColor: 'transparent',
   },
