@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TextInput,
-  Keyboard, 
+  Keyboard,
   ToastAndroid,
 } from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
@@ -16,9 +16,9 @@ import * as yup from 'yup';
 
 //form validator
 const validationScheme = yup.object({
-  newPassword: yup.string().min(6),
-  reTypeNewPassword: yup.string().min(6),
-  oldPassword: yup.string().min(6),
+  newPassword: yup.string().min(1),
+  reTypeNewPassword: yup.string().min(1),
+  oldPassword: yup.string().min(1),
 });
 
 export default class AccountSettingsScreen extends Component {
@@ -38,10 +38,11 @@ export default class AccountSettingsScreen extends Component {
     //get profile details usind _id
     axios
       .get(
-        ' https://ancient-temple-30883.herokuapp.com/users/get/5ecb578fb2b10b0844de4cff',
+        'https://ancient-temple-30883.herokuapp.com/users/get/5ee5dc0ddb3c35001745bd93',
       )
       .then((res) => {
         const userData = res.data;
+
         this.setState({...userData, enabled: true});
       })
       .catch((error) => console.log(error));
@@ -52,22 +53,36 @@ export default class AccountSettingsScreen extends Component {
 
     if (values.newPassword != values.reNewPassword) {
       ToastAndroid.show('Re enter new password correctly', ToastAndroid.SHORT);
-    } else if (this.state.password != values.oldPassword) {
-      console.log(this.state.password);
-      ToastAndroid.show('Re enter old password correctly', ToastAndroid.SHORT);
-    } else if (this.state.password == values.oldPassword) {
+    } else {
+      const checkPassword = {
+        id: '5ee5dc0ddb3c35001745bd93',
+        password: values.oldPassword,
+      };
+
       axios
-        .put(
-          ' https://ancient-temple-30883.herokuapp.com/users/update/5ec66db7aa16ff3a80870c9a',
-          {password: values.newPassword},
-        )
+        .post('https://ancient-temple-30883.herokuapp.com/users/check', checkPassword)
         .then((res) => {
-          ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
+          const result = res.data;
+          console.log(result);
+          if (!result) {
+            ToastAndroid.show(
+              'Re enter old password correctly',
+              ToastAndroid.SHORT,
+            );
+          } else {
+            axios
+              .put(
+                ' https://ancient-temple-30883.herokuapp.com/users/update/',
+                { id:"5ee5dc0ddb3c35001745bd93",
+                  password: values.newPassword},
+              )
+              .then((res) => {
+                ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
+              }).catch((error) => console.log(error));;
+          }
         })
         .catch((error) => console.log(error));
     }
-
-    console.log(JSON.stringify({...values}, null, 2));
   }
 
   render() {
