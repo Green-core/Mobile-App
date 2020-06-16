@@ -10,7 +10,7 @@ class Welcome extends Component{
                 <Text style={styles.titleText}>
                     Welcome to Green Core
                 </Text>
-                {/* <Image style={styles.image} source={logo}/> */}
+                <Image   style={{ width: 250, height: 300 ,resizeMode : 'stretch',marginTop:60,marginLeft:60}} source={logo}/>
                 <TouchableOpacity
                     style={styles.button}
                     //onPress={this.onPress}
@@ -42,15 +42,14 @@ const styles = StyleSheet.create({
 
     },
     image:{
-       // width:'200',
-        //height:'300',
+        width:'200',
+        height:'300',
         marginTop:'50',
-        position:"absolute",
         resizeMode : 'stretch'
     },
     button:{
         backgroundColor:'green',
-        marginTop:410,
+        top:100,
         padding:10,
         alignItems:'center',
         marginLeft:100,
