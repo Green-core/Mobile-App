@@ -1,7 +1,9 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {Alert} from 'react-native';
 
 const deviceStorage = {
     //asynstorage functions
+    // save items in asyncstorage
     async saveItem(key,value){
         try{
             await AsyncStorage.setItem(key,value);
@@ -10,7 +12,7 @@ const deviceStorage = {
             console.log("AsyncStorage error "+ err.message);
         }
     },
-
+    // load jwt token
     async loadJWT() {
         try {
           const value = await AsyncStorage.getItem('jwtToken');
@@ -19,7 +21,8 @@ const deviceStorage = {
               jwt: value,
               loading: false
             });
-          } else {
+          } 
+          else {
             this.setState({
               loading: false
             });
@@ -28,7 +31,7 @@ const deviceStorage = {
           console.log('AsyncStorage Error: ' + err.message);
         }
     },
-
+    // delete jwt token
     async deleteJWT() {
         try{
           await AsyncStorage.removeItem('jwtToken')
@@ -36,6 +39,7 @@ const deviceStorage = {
               this.setState({
                 jwt: ''
               })
+              Alert.alert('Log Out Success!');
             }
           );
         } catch (err) {

@@ -1,46 +1,94 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput } from 'react-native';
+import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput, ScrollView,Alert } from 'react-native';
 import BackArrow from '../components/backArrow';
+import Axios from 'axios';
+import { Loading }from '../components/Loading';
+import deviceStorage from '../services/deviceStorage';
 
 export default class Login extends Component{
 
-    render(){
-        return(
-            <View style={styles.container}> 
-                <BackArrow  />
-                <Text style={styles.headerText}>Log in</Text> 
-                <View style={styles.card}>
-                    <Text style={ styles.inputTitles }>Email</Text>
-                    <TextInput
-                        placeholder={'Email'}
-                        //  onChangeText={props.handleChange('name')}
-                        //  value={props.values.name}
-                        style={styles.textInput}
-                    />
-                    <Text style={ styles.inputTitles }>Password</Text>
-                    <TextInput
-                        placeholder={'Password'}
-                        //  onChangeText={props.handleChange('mobile')}
-                        //  value={props.values.mobile}
-                        style={styles.textInput}
-                        secureTextEntry={true}
-                    />
-                 </View>
-                <TouchableOpacity
-                    style={styles.button}
-                    //onPress={this.onPress}
-                >
-                    <Text style={styles.buttonText}> Log in </Text>
-                </TouchableOpacity>
-                <Text 
-                    style={styles.loginText}
-                    //onpress
-                >
-                     Don't have account? Click here to signup
-                </Text> 
-          </View>
-        );
+    constructor(props){
+        super(props);
+        this.state = {
+          email: '',
+          password: '',
+          loading: false
+        };
+    }
+    loginUser = () =>{
+        //TODO validation and error text
+        this.setState({loading:true})
+        const user = {
+           email:this.state.email,
+           password:this.state.password
+       }
+       Axios
+         .post('http://10.0.2.2:5000/users/login',user)
+         .then(res=>{
+            if(res.status === 200){
+                deviceStorage.saveItem("jwtToken", res.data.token);
+                this.props.newJWT(res.data.token);
+                //console.log(res.data.token);
+                this.setState({loading:false})
+                Alert.alert('Successfuly loged in')
+            }
+            else{
+                console.log(res.err)
+            }
+         })
+         .catch(err=>{
+             console.log(err);
+             this.setState({loading:false})
+             Alert.alert('Failed')
+         })
+    }
 
+    render(){
+        const { loading,email,password } = this.state;
+        if(loading){
+            return(
+                    <Loading size={"large"}/>
+            )
+        }
+        else{
+            return(
+                <View style={styles.container}> 
+                    <ScrollView>
+                    <BackArrow  />
+                    <Text style={styles.headerText}>Log in</Text> 
+                    <View style={styles.card}>
+                        <Text style={ styles.inputTitles }>Email</Text>
+                        <TextInput
+                            placeholder={'Email'}
+                            onChangeText={(email)=>{this.setState({email})}}
+                            value={email}
+                            style={styles.textInput}
+                        />
+                        <Text style={ styles.inputTitles }>Password</Text>
+                        <TextInput
+                            placeholder={'Password'}
+                            onChangeText={(password)=>{this.setState({password})}}
+                            value={password}
+                            style={styles.textInput}
+                            secureTextEntry={true}
+                        />
+                    </View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={this.loginUser}
+                    >
+                        <Text style={styles.buttonText}> Log In </Text>
+                    </TouchableOpacity>
+                    <Text 
+                        style={styles.loginText}
+                        //onpress
+                    >
+                        Don't have account? Click here to Sign Up
+                    </Text> 
+                    </ScrollView>
+                </View>    
+            );
+        }
     }
 }
 
@@ -50,8 +98,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Segoe UI',
         flex: 1,
         backgroundColor: '#E4E4E4',
-       // backgroundColor:'lightgreen',
-
     },
     headerText:{
         fontSize:30,
@@ -124,6 +170,7 @@ const styles = StyleSheet.create({
     },
     loginText:{
         fontFamily: 'Segoe UI',
+        fontSize:16,
         color:'green',
         marginLeft:70,
         marginTop:10
