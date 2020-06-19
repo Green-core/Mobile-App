@@ -11,6 +11,10 @@ import {Loading} from './components/Loading'
 import LinkUnitsScreen from './screens/linkUnit'
 import ViewAllUnits from './screens/viewAllUnits'
 
+import AllMessagesScreen from './screens/AllMessages'
+import SingleMessageScreen from './screens/SingleMessage'
+import ReplyMessageScreen from './screens/ReplyMessage'
+import SendMessageScreen from './screens/SendMessage'
 import AccountSettingsScreen from './screens/accountSettings'; 
 import ViewAllUnitsScreen from './screens/viewAllUnits'; 
 
