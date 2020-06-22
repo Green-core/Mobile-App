@@ -12,9 +12,13 @@ export default class Login extends Component{
         this.state = {
           email: '',
           password: '',
-          loading: false
+          loading: false,
+          //error:'',
+         // errors:[]
         };
+        
     }
+
     loginUser = () =>{
         //TODO validation and error text
         this.setState({loading:true})
@@ -25,26 +29,40 @@ export default class Login extends Component{
        Axios
          .post('http://10.0.2.2:5000/users/login',user)
          .then(res=>{
+             console.log('request status = '+res.status);
             if(res.status === 200){
+                deviceStorage.saveItem('id',res.data.id);
+                this.props.newID(res.data.id)
                 deviceStorage.saveItem("jwtToken", res.data.token);
                 this.props.newJWT(res.data.token);
-                //console.log(res.data.token);
-                this.setState({loading:false})
                 Alert.alert('Successfuly loged in')
             }
-            else{
-                console.log(res.err)
-            }
+            this.setState({loading:false})
          })
          .catch(err=>{
              console.log(err);
+             if(err.response.status ===400){
+                 Alert.alert("Incorrect Email or Password");
+                // console.log('err.response = '+err.response.data);
+                // console.log('err.response = '+err.response.status);
+                // console.log('err.response = '+err.response.headers);
+                // console.log('err.response = '+err.response);
+             }
+            else if(err.response.status ===404){
+                 Alert.alert("Network Error")
+            }
+            else{
+             console.log('err.message = '+err.message)
+            }
+           // console.log(err.config);
+            // this.setState({errors:err.response.data})
              this.setState({loading:false})
-             Alert.alert('Failed')
+           //  Alert.alert('Login Failed')
          })
     }
 
     render(){
-        const { loading,email,password } = this.state;
+        const { loading,email,password,error } = this.state;
         if(loading){
             return(
                     <Loading size={"large"}/>
@@ -57,6 +75,7 @@ export default class Login extends Component{
                     <BackArrow  />
                     <Text style={styles.headerText}>Log in</Text> 
                     <View style={styles.card}>
+                        {/* <Text style={styles.errorText}>{error}</Text> */}
                         <Text style={ styles.inputTitles }>Email</Text>
                         <TextInput
                             placeholder={'Email'}
@@ -103,16 +122,10 @@ const styles = StyleSheet.create({
         fontSize:30,
         fontFamily: 'Segoe UI',
         fontWeight:'500',
-       // color:'green',
         marginTop:55,
         marginLeft:30,
-       // textAlign:'center',
-
     },
     card:{
-       
-      //  marginLeft:35,
-     //   marginTop:60,
         borderRadius: 6,
         backgroundColor: 'white',
         shadowOpacity: 0.3,
@@ -125,34 +138,30 @@ const styles = StyleSheet.create({
         margin: 'auto',
         position: 'relative',
       //  zIndex: -1,
-
     },
     inputTitles:{
         marginLeft:25,
         fontFamily: 'Segoe UI',
         fontSize:18,
-        marginTop:30,
-        
+        marginTop:30,   
     },
     textInput:{
         marginLeft:20,
         fontFamily: 'Segoe UI',
         fontSize:15,
-      //  marginTop:0,
-       // marginLeft:20,
-      //  marginRight:30,
         color: '#404040',
         width: '80%',
-      //  alignSelf: "center",
         borderColor: "#ccc",
         borderBottomWidth: 1,
       //  borderWidth:1,
       //  borderRightWidth:10,
-        
       //  backgroundColor:'white',
-
     },
-   
+    errorText:{
+        color:'red',
+        fontSize:13,
+        marginLeft:25,
+    },
     button:{
         backgroundColor:'green',
         marginTop:200,
@@ -160,7 +169,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
         marginLeft:100,
         marginRight:100,
-
     },
     buttonText:{
         fontFamily: 'Segoe UI',
@@ -174,9 +182,5 @@ const styles = StyleSheet.create({
         color:'green',
         marginLeft:70,
         marginTop:10
-
     }
-
-
-
 })

@@ -14,13 +14,17 @@ export default class AuthHome extends Component {
   }
 
   componentDidMount(){
-     this.setState({loading:true})
+     this.setState({loading:true});
+     console.log('id in authhome = '+ this.props.id);
+     console.log('token in auth home ='+ this.props.jwt)
      const headers = {
        'authorization': 'Bearer ' + this.props.jwt
      };
+     ///{params:{id:this.props.id}}
     Axios
-    .get('http://10.0.2.2:5000/users/get/5ee5dc0ddb3c35001745bd93', { headers:headers})
+    .get(`http://10.0.2.2:5000/users/get/${this.props.id}`,{ headers:headers})
     .then((res) => {
+      console.log('authHome res status = '+res.status)
       this.setState({
         user:res.data,
         loading: false
@@ -54,7 +58,9 @@ export default class AuthHome extends Component {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={this.props.deleteJWT}
+            //  onPress={() => { this.props.deleteJWT; this.props.deleteID;}}
+              onPress={this.props.deleteItem}
+             // onPressOut={this.props.deleteID}
             >
               <Text style={styles.buttonText}> Log Out </Text>
             </TouchableOpacity>
