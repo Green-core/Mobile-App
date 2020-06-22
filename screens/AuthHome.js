@@ -15,8 +15,6 @@ export default class AuthHome extends Component {
 
   componentDidMount(){
      this.setState({loading:true});
-     console.log('id in authhome = '+ this.props.id);
-     console.log('token in auth home ='+ this.props.jwt)
      const headers = {
        'authorization': 'Bearer ' + this.props.jwt
      };
@@ -24,13 +22,11 @@ export default class AuthHome extends Component {
     Axios
     .get(`http://10.0.2.2:5000/users/get/${this.props.id}`,{ headers:headers})
     .then((res) => {
-      console.log('authHome res status = '+res.status)
       this.setState({
         user:res.data,
         loading: false
       });
-     // const user = res.data;
-      console.log(this.state.user);
+      //console.log(this.state.user);
       //TODO : Navigate to login page
     })
     .catch(err => {

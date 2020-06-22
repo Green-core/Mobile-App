@@ -29,7 +29,6 @@ export default class Login extends Component{
        Axios
          .post('http://10.0.2.2:5000/users/login',user)
          .then(res=>{
-             console.log('request status = '+res.status);
             if(res.status === 200){
                 deviceStorage.saveItem('id',res.data.id);
                 this.props.newID(res.data.id)
@@ -40,13 +39,8 @@ export default class Login extends Component{
             this.setState({loading:false})
          })
          .catch(err=>{
-             console.log(err);
              if(err.response.status ===400){
                  Alert.alert("Incorrect Email or Password");
-                // console.log('err.response = '+err.response.data);
-                // console.log('err.response = '+err.response.status);
-                // console.log('err.response = '+err.response.headers);
-                // console.log('err.response = '+err.response);
              }
             else if(err.response.status ===404){
                  Alert.alert("Network Error")
@@ -54,8 +48,6 @@ export default class Login extends Component{
             else{
              console.log('err.message = '+err.message)
             }
-           // console.log(err.config);
-            // this.setState({errors:err.response.data})
              this.setState({loading:false})
            //  Alert.alert('Login Failed')
          })

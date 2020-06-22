@@ -34,7 +34,7 @@ export default class Signup extends Component{
            .post("http://10.0.2.2:5000/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
-                    console.log(res.data)
+                   // console.log(res.data)
                     Alert.alert('Successfuly Registered')
                }
                 else if(res.status === 404){              //validation errors

@@ -7,7 +7,7 @@ const deviceStorage = {
     async saveItem(key,value){
         try{
             await AsyncStorage.setItem(key,value);
-            console.log('saved '+key+'- '+value);
+           // console.log('saved '+key+'- '+value);
         }
         catch(err){
             console.log("AsyncStorage error "+ err.message);
@@ -20,11 +20,11 @@ const deviceStorage = {
           const jwt = await AsyncStorage.getItem('jwtToken');
           if (jwt !== null) {
             this.setState({jwt});
-            console.log('value of token '+ jwt)
+          //  console.log('value of token '+ jwt)
           } 
           if(id!==null){
             this.setState({id});
-            console.log('value of id '+id)
+           // console.log('value of id '+id)
           }
           this.setState({loading: false});
         } catch (err) {
