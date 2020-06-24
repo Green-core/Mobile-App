@@ -11,12 +11,12 @@ class Welcome extends Component{
                     Welcome to Green Core
                 </Text>
                 <Image   style={{ width: 250, height: 300 ,resizeMode : 'stretch',marginTop:60,marginLeft:60}} source={logo}/>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={styles.button}
                     //onPress={this.onPress}
                 >
                     <Text style={styles.buttonText}> Log in </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </View>
         );

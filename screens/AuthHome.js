@@ -9,18 +9,27 @@ export default class AuthHome extends Component {
     super(props);
     this.state = {
       loading: true,
-      user:{},    
+      user:{},
+      jwt:'',
+      id:''    
     }
+    this.loadItem = deviceStorage.loadItem.bind(this);
+    this.deleteItem = deviceStorage.deleteItem.bind(this);
+    this.loadItem();
   }
 
   componentDidMount(){
      this.setState({loading:true});
+     //console.log('auth home'+this.state.jwt)
+     //console.log('authHome'+this.state.id)
+
      const headers = {
-       'authorization': 'Bearer ' + this.props.jwt
+       'authorization': 'Bearer ' + this.state.jwt
      };
+     //${this.props.id}
      ///{params:{id:this.props.id}}
     Axios
-    .get(`http://10.0.2.2:5000/users/get/${this.props.id}`,{ headers:headers})
+    .get('http://10.0.2.2:5000/users/get/5ecb578fb2b10b0844de4cff',{ headers:headers})
     .then((res) => {
       this.setState({
         user:res.data,
@@ -34,8 +43,14 @@ export default class AuthHome extends Component {
       console.log(err)
     });
   }
+  
+  logOut = ()=>{
+    this.deleteItem();
+   // this.props.navigation.navigate('AuthNavigatorScreen',{screen:'Login'});
+  }
 
   render() {
+   // console.log(this.props);
     const {loading,user} = this.state;
    
     if (loading){
@@ -54,9 +69,7 @@ export default class AuthHome extends Component {
             </Text>
             <TouchableOpacity
               style={styles.button}
-            //  onPress={() => { this.props.deleteJWT; this.props.deleteID;}}
-              onPress={this.props.deleteItem}
-             // onPressOut={this.props.deleteID}
+            onPress={()=>this.props.navigation.navigate('Logout')}
             >
               <Text style={styles.buttonText}> Log Out </Text>
             </TouchableOpacity>

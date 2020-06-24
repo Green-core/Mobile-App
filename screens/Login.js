@@ -4,6 +4,8 @@ import BackArrow from '../components/backArrow';
 import Axios from 'axios';
 import { Loading }from '../components/Loading';
 import deviceStorage from '../services/deviceStorage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 export default class Login extends Component{
 
@@ -20,21 +22,23 @@ export default class Login extends Component{
     }
 
     loginUser = () =>{
-        //TODO validation and error text
+        console.log('this'+this.props)
         this.setState({loading:true})
         const user = {
            email:this.state.email,
            password:this.state.password
        }
+     //  this.props.navigation.navigate('AuthHome')
        Axios
          .post('http://10.0.2.2:5000/users/login',user)
          .then(res=>{
             if(res.status === 200){
                 deviceStorage.saveItem('id',res.data.id);
-                this.props.newID(res.data.id)
                 deviceStorage.saveItem("jwtToken", res.data.token);
-                this.props.newJWT(res.data.token);
                 Alert.alert('Successfuly loged in')
+                this.props.navigation.navigate('AuthHome')
+               // TODO Find a way to do this 
+                // thi.props.navigation.navigate('AuthNavigatorScreen',{screen:"AuthHome"})
             }
             this.setState({loading:false})
          })
@@ -54,6 +58,8 @@ export default class Login extends Component{
     }
 
     render(){
+       // console.log('login'+this.props)
+      //  const {navigation} = this.props;
         const { loading,email,password,error } = this.state;
         if(loading){
             return(
@@ -86,13 +92,15 @@ export default class Login extends Component{
                     </View>
                     <TouchableOpacity
                         style={styles.button}
+                       // onPress={()=>this.props.navigation.replace('AuthHome',{screenname:'Authe'})}
                         onPress={this.loginUser}
                     >
                         <Text style={styles.buttonText}> Log In </Text>
                     </TouchableOpacity>
                     <Text 
                         style={styles.loginText}
-                        //onpress
+                        //TODO go toAuthenticate stack
+                      //   onPress={()=>this.props.navigation.navigate('Authscreen')}
                     >
                         Don't have account? Click here to Sign Up
                     </Text> 
