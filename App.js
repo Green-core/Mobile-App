@@ -1,13 +1,23 @@
+import 'react-native-gesture-handler';
 import React, {Component} from 'react';
+import { NavigationContainer,DefaultTheme,DarkTheme,DrawerActions } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-community/async-storage';
+//import { Appearance, useColorScheme, AppearanceProvider } from 'react-native-appearance';
+import deviceStorage from './services/deviceStorage';
+//     screens
 import ProfileScreen from './screens/profile';
 import ProfileSettingsScreen from './screens/profileSettings';
+
 import LoginScreen from './screens/Login';
+import LogoutScreen from './screens/Logout';
 import SignupScreen from './screens/Signup';
 import WelcomeScreen from './screens/Welcome';
+
 import AuthHomeScreen from './screens/AuthHome';
-import deviceStorage from './services/deviceStorage';
 import {Loading} from './components/Loading';
-import AsyncStorage from '@react-native-community/async-storage';
+
 
 import LinkUnitsScreen from './screens/linkUnit';
 import ViewAllUnits from './screens/viewAllUnits';
@@ -16,51 +26,159 @@ import AccountSettingsScreen from './screens/accountSettings';
 import ViewAllUnitsScreen from './screens/viewAllUnits';
 import UnitDetailsScreen from './screens/unitDetails';
 
-export default class App extends Component {
+// const colorScheme = useColorScheme();
+// const MyTheme = {
+//   dark: false,
+//   colors: {
+//     primary: 'white',
+//     background: 'white',
+//     card: '#65509f',
+//     text: 'white',
+//     border: 'green',
+//   },
+// }
+
+const HeaderOptions = {
+  headerStyle: {
+      backgroundColor: "#3b7548"//'#16a085'
+  },
+  headerTintColor: "#FFFF",
+  headerTitleStyle: {
+      color: "#FFFF"            
+  }
+};
+
+// login flow
+const Auth = createStackNavigator();
+ const AuthStack =()=> (
+    <Auth.Navigator 
+        initialRouteName="Login"
+        drawerStyle={{
+            backgroundColor:'#FFFF'
+        }}
+        headerMode='none'
+       // screenOptions={HeaderOptions}
+           //TODO forgot password token screen and email screen
+    >
+        <Auth.Screen name="Login" component={LoginScreen} /> 
+        <Auth.Screen name="Signup" component={SignupScreen} />
+        <Auth.Screen name="Logout" component={LogoutScreen} />
+    </Auth.Navigator>
+ )
+
+// All authenticated screen stack
+const Home = createStackNavigator();
+  const  HomeStack = () =>(
+  
+    <Home.Navigator 
+        initialRouteName="Home"
+        drawerStyle={{
+            backgroundColor:'#D1C4E9'
+        }}
+        // screenOptions={{ headerStyle: { backgroundColor: 'FFFF' } }}
+    >
+        <Home.Screen name="Profile settings" component={ProfileSettingsScreen} />
+        <Home.Screen name="Home" component={AuthHomeScreen} />
+        <Home.Screen name="Logout" component={LogoutScreen} />
+        <Home.Screen name="Login" component={LoginScreen} />
+    </Home.Navigator>
+  )
+
+ const LinkUnits = createStackNavigator();
+ const  LinkUnitsStack = () => (
+      <LinkUnits.Navigator
+          initialRouteName='LinkUnits'
+          screenOptions={HeaderOptions}
+      >
+          <LinkUnits.Screen
+              name="LinkUnits"
+              component={LinkUnitsScreen}
+          />
+           <LinkUnits.Screen
+              name="ViewAllUnits"
+              component={ViewAllUnitsScreen}
+          />
+           <LinkUnits.Screen
+              name="UnitsDerails"
+              component={UnitDetailsScreen}
+          />
+      </LinkUnits.Navigator>
+ )
+
+// drawer use only in authenticated screens
+const Drawer = createDrawerNavigator();
+const DrawerStack = () => (
+    
+        <Drawer.Navigator 
+            initialRouteName="Home"
+            drawerStyle={{
+                backgroundColor:'#FFFF'
+            }}
+        >
+            <Drawer.Screen name="Home" component={HomeStack} />
+            <Drawer.Screen name="Link" component={LinkUnitsStack} />
+            <Drawer.Screen name="Profile" component={ProfileScreen} />
+            <Drawer.Screen name="Account settings" component={AccountSettingsScreen} />
+
+        </Drawer.Navigator>
+)
+
+
+ class App extends Component {
   constructor() {
     super();
     this.state = {
       jwt: '',
       id:'',
       loading: true,
+      timePassed:false,
+      hasToken:false,
     };
     this.deleteItem = deviceStorage.deleteItem.bind(this);
     this.loadItem = deviceStorage.loadItem.bind(this);
     this.loadItem();
+    console.log("constructor jwt"+this.state.jwt)
   }
 
-  newJWT = (jwt) => {
-    this.setState({jwt});
-    console.log('app js '+this.state.jwt)
-  };
-  newID = (id) => {
-    this.setState({id});
-    console.log('app js '+this.state.id);
+  setTimePassed = () =>{
+    this.setState({timePassed:true})
   }
  
  componentDidMount(){
-    this.loadItem();
+   // splash screen
+    setTimeout(() => {
+      this.setTimePassed();  
+    }, 2000);
+    // take both id and jwt
+    AsyncStorage.getItem('jwtToken').then((token) => {
+      this.setState({ hasToken: token !== null, loading: true,jwt:token })
+    })
+  //  this.loadItem();
+    console.log('inside app comdidMount '+this.state.jwt)
   }
 
+  
   render() {
-    if (this.state.loading) {
-      return <Loading size={'large'} />;
-    } else if (!this.state.jwt) {
+    
+    if (this.state.loading || !this.state.timePassed) {
+      return <WelcomeScreen/>
+    } else  {
       return (
-        <LoginScreen newID={this.newID} newJWT={this.newJWT} />
-        //  <ProfileSettingsScreen />
-        // <SignUpScreen/>
-        // <UnitDetailsScreen />
-        // component you need to test without token
-      );
-    } else {
-      return (
-        // < WelcomeScreen />
-        <AuthHomeScreen id={this.state.id} jwt={this.state.jwt}  deleteItem={this.deleteItem}  />
+        // <AppearanceProvider>
+        //theme={colorScheme == 'dark' ? DarkTheme : MyTheme}
+          <NavigationContainer >
+      
+            {!this.state.jwt ? ( 
+              <AuthStack/> 
+            ) : ( 
+              <DrawerStack/>
+            )}
+
+          </NavigationContainer>
+        // </AppearanceProvider>
+        
       );
     }
-
-    //  < ViewAllUnits /> ) ;
   }
 }
 
@@ -69,27 +187,4 @@ export default class App extends Component {
     //<  */
 }
 
-//   <Router>
-//   <Scene key="root">
-//     <Scene key="Welcome"
-//       component={WelcomeScreen}
-//       title="Welcome"
-//       initial
-//     />
-//     <Scene
-//       key="Signup"
-//       component={SignupScreen}
-//       title="SignUp"
-//     />
-//     <Scene
-//       key="Login"
-//       component={LoginScreen}
-//       title="Login"
-//     />
-//     <Scene
-//       key="Auth"
-//       component={AuthHomeScreen}
-//       title="Auth"
-//     />
-//   </Scene>
-// </Router>
+export default App;
