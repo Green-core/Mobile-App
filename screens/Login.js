@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput, ScrollView,Alert } from 'react-native';
+import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput, ScrollView,Alert,KeyboardAvoidingView } from 'react-native';
 import BackArrow from '../components/backArrow';
 import Axios from 'axios';
 import { Loading }from '../components/Loading';
@@ -15,6 +15,7 @@ export default class Login extends Component{
           email: '',
           password: '',
           loading: false,
+          success:false,
           //error:'',
          // errors:[]
         };
@@ -22,13 +23,11 @@ export default class Login extends Component{
     }
 
     loginUser = () =>{
-        console.log('this'+this.props)
         this.setState({loading:true})
         const user = {
            email:this.state.email,
            password:this.state.password
        }
-     //  this.props.navigation.navigate('AuthHome')
        Axios
          .post('http://10.0.2.2:5000/users/login',user)
          .then(res=>{
@@ -36,9 +35,9 @@ export default class Login extends Component{
                 deviceStorage.saveItem('id',res.data.id);
                 deviceStorage.saveItem("jwtToken", res.data.token);
                 Alert.alert('Successfuly loged in')
-                this.props.navigation.navigate('AuthHome')
-               // TODO Find a way to do this 
-                // thi.props.navigation.navigate('AuthNavigatorScreen',{screen:"AuthHome"})
+                console.log(res.data);
+                this.setState({success:true});
+                this.props.navigation.navigate('App',{jwt:res.data.jwt})
             }
             this.setState({loading:false})
          })
@@ -50,15 +49,16 @@ export default class Login extends Component{
                  Alert.alert("Network Error")
             }
             else{
+             Alert.alert('Login Failed')
              console.log('err.message = '+err.message)
             }
-             this.setState({loading:false})
+             this.setState({loading:false,email:'',password:''})
            //  Alert.alert('Login Failed')
          })
     }
 
     render(){
-       // console.log('login'+this.props)
+        console.log('login '+this.props)
       //  const {navigation} = this.props;
         const { loading,email,password,error } = this.state;
         if(loading){
@@ -69,38 +69,44 @@ export default class Login extends Component{
         else{
             return(
                 <View style={styles.container}> 
-                    <ScrollView>
-                    <BackArrow  />
-                    <Text style={styles.headerText}>Log in</Text> 
-                    <View style={styles.card}>
-                        {/* <Text style={styles.errorText}>{error}</Text> */}
-                        <Text style={ styles.inputTitles }>Email</Text>
-                        <TextInput
-                            placeholder={'Email'}
-                            onChangeText={(email)=>{this.setState({email})}}
-                            value={email}
-                            style={styles.textInput}
-                        />
-                        <Text style={ styles.inputTitles }>Password</Text>
-                        <TextInput
-                            placeholder={'Password'}
-                            onChangeText={(password)=>{this.setState({password})}}
-                            value={password}
-                            style={styles.textInput}
-                            secureTextEntry={true}
-                        />
-                    </View>
+                    <ScrollView keyboardShouldPersistTaps="handled">
+                    {/* <BackArrow  /> */}
+                    <Text style={styles.headerText}>Log in</Text>
+                    {/* <KeyboardAvoidingView > */}
+                        <View style={styles.card}>
+                            {/* <Text style={styles.errorText}>{error}</Text> */}
+                            <Text style={ styles.inputTitles }>Email</Text>
+                            <TextInput
+                                placeholder={'Email'}
+                                onChangeText={(email)=>{this.setState({email})}}
+                                value={email}
+                                style={styles.textInput}
+                            />
+                            <Text style={ styles.inputTitles }>Password</Text>
+                            <TextInput
+                                placeholder={'Password'}
+                                onChangeText={(password)=>{this.setState({password})}}
+                                value={password}
+                                style={styles.textInput}
+                                secureTextEntry={true}
+                            />
+                        </View>
+                    {/* </KeyboardAvoidingView>  */}
+                    <Text 
+                        style={styles.forgotText}
+                        onPress={()=>Alert.alert("Reset password token has sent to your Email.Please Check Your Emails !")}
+                    >
+                        Forgot Password
+                    </Text> 
                     <TouchableOpacity
                         style={styles.button}
-                       // onPress={()=>this.props.navigation.replace('AuthHome',{screenname:'Authe'})}
                         onPress={this.loginUser}
                     >
                         <Text style={styles.buttonText}> Log In </Text>
                     </TouchableOpacity>
                     <Text 
                         style={styles.loginText}
-                        //TODO go toAuthenticate stack
-                      //   onPress={()=>this.props.navigation.navigate('Authscreen')}
+                       onPress={()=>this.props.navigation.navigate('Signup')}
                     >
                         Don't have account? Click here to Sign Up
                     </Text> 
@@ -180,7 +186,16 @@ const styles = StyleSheet.create({
         fontFamily: 'Segoe UI',
         fontSize:16,
         color:'green',
-        marginLeft:70,
+        marginLeft:65,
         marginTop:10
+    },
+    forgotText:{
+        fontFamily: 'Segoe UI',
+        fontSize:16,
+        color:'green',
+        marginLeft:150,
+       // marginRight:50,
+        top:140,
+        textDecorationLine:'underline'
     }
 })

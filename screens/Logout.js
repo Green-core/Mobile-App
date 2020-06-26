@@ -15,8 +15,7 @@ export default class AuthHome extends Component {
   logOut = ()=>{
     this.setState({loading:true})
     this.deleteItem();
-    alert('go to login')
-   // this.props.navigation.navigate('AuthStack',{screen:'Login'});
+   this.props.navigation.reset({index: 0,routes: [{ name: 'Auth' }]})
   }
 
   render() {
@@ -42,8 +41,8 @@ export default class AuthHome extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={()=>alert('pop up modal')}
-              //this.props.navigation.navigate('Login',{screenname:'profile'})
+              onPress={()=>{this.props.navigation.goBack()}}
+              //this.props.navigation.goback()
             >
               <Text style={styles.buttonText}>No</Text>
             </TouchableOpacity>
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text:{
-      marginLeft:20,
+      marginLeft:55,
       fontSize:20
   },
   btwWrapper: {
@@ -70,12 +69,12 @@ const styles = StyleSheet.create({
   }, 
   button:{
     backgroundColor:'green',
-    marginTop:100,
+    marginTop:50,
     paddingHorizontal:25,
     paddingVertical:10,
     alignItems:'center',
-    marginLeft:40,
-    marginRight:20,
+    marginLeft:10,
+    marginRight:10,
 
   },
   buttonText:{

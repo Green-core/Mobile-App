@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text ,Button,StyleSheet,Alert,TouchableOpacity} from 'react-native';
 import Axios from 'axios';
 import {Loading} from '../components/Loading'
+import AsyncStorage from '@react-native-community/async-storage';
 import deviceStorage from '../services/deviceStorage';
 
 export default class AuthHome extends Component {
@@ -13,15 +14,19 @@ export default class AuthHome extends Component {
       jwt:'',
       id:''    
     }
-    this.loadItem = deviceStorage.loadItem.bind(this);
-    this.deleteItem = deviceStorage.deleteItem.bind(this);
-    this.loadItem();
+    //this.loadItem = deviceStorage.loadItem.bind(this);
+  //  this.loadItem();
   }
 
   componentDidMount(){
+    console.log(this.props);
      this.setState({loading:true});
-     //console.log('auth home'+this.state.jwt)
-     //console.log('authHome'+this.state.id)
+     AsyncStorage.getItem('jwtToken').then((jwt) => {
+      this.setState({jwt})
+  })  
+     console.log('auth home'+this.state.jwt)
+     console.log('authHome'+this.state.id)
+  //   console.log('params jwt'+this.props.route.params.jwt)
 
      const headers = {
        'authorization': 'Bearer ' + this.state.jwt
@@ -43,12 +48,6 @@ export default class AuthHome extends Component {
       console.log(err)
     });
   }
-  
-  logOut = ()=>{
-    this.deleteItem();
-   // this.props.navigation.navigate('AuthNavigatorScreen',{screen:'Login'});
-  }
-
   render() {
    // console.log(this.props);
     const {loading,user} = this.state;
@@ -69,9 +68,15 @@ export default class AuthHome extends Component {
             </Text>
             <TouchableOpacity
               style={styles.button}
-            onPress={()=>this.props.navigation.navigate('Logout')}
+              onPress={()=>this.props.navigation.navigate('Logout')}
             >
               <Text style={styles.buttonText}> Log Out </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+            onPress={()=>this.props.navigation.navigate('Profile settings')}
+            >
+              <Text style={styles.buttonText}> Profile Settings </Text>
             </TouchableOpacity>
           </View>
       );
@@ -92,7 +97,8 @@ const styles = StyleSheet.create({
   }, 
   button:{
     backgroundColor:'green',
-    marginTop:200,
+    marginTop:10,
+    marginBottom:10,
     padding:10,
     alignItems:'center',
     marginLeft:100,

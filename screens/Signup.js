@@ -19,6 +19,7 @@ export default class Signup extends Component{
            errors:[],
            loading:false,
            statusError:'',
+           success:false,
         }   
     }
 
@@ -35,21 +36,27 @@ export default class Signup extends Component{
            .then(res=>{
                 if(res.status === 200){
                    // console.log(res.data)
-                    Alert.alert('Successfuly Registered')
+                    Alert.alert('Successfuly Registered');
+                    this.setState({success:true});
                }
-                else if(res.status === 404){              //validation errors
-                        this.setState({statusError:'Network Error'})
-                        Alert.alert("Network Error");
-                }
                this.setState({loading:false});
            })
            .catch(err=>{
-               this.setState({errors:err.response.data})  
+            if(err.response.status === 404){              
+                this.setState({statusError:'Network Error'})
+                Alert.alert("Network Error");
+            }
+               this.setState({errors:err.response.data});
               // console.log(this.state.errors)
                this.setState({loading:false});
-               Alert.alert('Sign Up Failed')
+               Alert.alert('Sign Up Failed');
            })
+           if(this.state.success){
+             //  this.props.navigation.navigate('AuthStack',{screen:'Login'})
+               this.props.navigation.navigate('Login')
+           }
     }
+
     errFilter = (key) =>{
         const {errors} = this.state;
         if(errors && errors.length){
@@ -76,7 +83,7 @@ export default class Signup extends Component{
             return(
                 <View style={styles.container}> 
                     <ScrollView keyboardShouldPersistTaps="handled">
-                    <BackArrow  />
+                    {/* <BackArrow  /> */}
                     <Text style={styles.headerText}>Sign Up</Text> 
                     <KeyboardAvoidingView enabled>
                     <View style={styles.card}>
@@ -133,8 +140,8 @@ export default class Signup extends Component{
                         </TouchableOpacity>
                         <Text 
                             style={styles.loginText}
-                            //onpress=
-                            //TODO noavigation to login 
+                            onPress={()=>{this.props.navigation.navigate('Login')}}
+                            //this.props.navigation.navigate('Login')
                         >
                             Already have an account ? Click here to Sign in
                         </Text> 
@@ -213,6 +220,6 @@ const styles = StyleSheet.create({
         color:'green',
         fontSize:16,
         marginLeft:55,
-        marginTop:10
+        marginTop:10,
     }
 })

@@ -38,6 +38,19 @@ import UnitDetailsScreen from './screens/unitDetails';
 //   },
 // }
 
+
+
+// options={{
+//   title: 'My home',
+//   headerStyle: {
+//     backgroundColor: '#f4511e',
+//   },
+//   headerTintColor: '#fff',
+//   headerTitleStyle: {
+//     fontWeight: 'bold',
+//   },
+// }}
+
 const HeaderOptions = {
   headerStyle: {
       backgroundColor: "#3b7548"//'#16a085'
@@ -53,16 +66,15 @@ const Auth = createStackNavigator();
  const AuthStack =()=> (
     <Auth.Navigator 
         initialRouteName="Login"
-        drawerStyle={{
-            backgroundColor:'#FFFF'
+        screenOptions={{
+          animationEnabled: false
         }}
         headerMode='none'
-       // screenOptions={HeaderOptions}
            //TODO forgot password token screen and email screen
     >
         <Auth.Screen name="Login" component={LoginScreen} /> 
         <Auth.Screen name="Signup" component={SignupScreen} />
-        <Auth.Screen name="Logout" component={LogoutScreen} />
+        {/* <Auth.Screen name="Home" component={AuthHomeScreen} /> */}
     </Auth.Navigator>
  )
 
@@ -73,14 +85,13 @@ const Home = createStackNavigator();
     <Home.Navigator 
         initialRouteName="Home"
         drawerStyle={{
-            backgroundColor:'#D1C4E9'
+            backgroundColor:'#3b7548'
         }}
-        // screenOptions={{ headerStyle: { backgroundColor: 'FFFF' } }}
+         screenOptions={{ headerStyle: { backgroundColor: '#E4E4E4' },animationEnabled: false }}
     >
         <Home.Screen name="Profile settings" component={ProfileSettingsScreen} />
         <Home.Screen name="Home" component={AuthHomeScreen} />
-        <Home.Screen name="Logout" component={LogoutScreen} />
-        <Home.Screen name="Login" component={LoginScreen} />
+        {/* <Home.Screen name="Login" options={{headerMode:'none'}} component={LoginScreen} /> */}
     </Home.Navigator>
   )
 
@@ -88,7 +99,7 @@ const Home = createStackNavigator();
  const  LinkUnitsStack = () => (
       <LinkUnits.Navigator
           initialRouteName='LinkUnits'
-          screenOptions={HeaderOptions}
+         // screenOptions={HeaderOptions}
       >
           <LinkUnits.Screen
               name="LinkUnits"
@@ -112,18 +123,19 @@ const DrawerStack = () => (
         <Drawer.Navigator 
             initialRouteName="Home"
             drawerStyle={{
-                backgroundColor:'#FFFF'
+                backgroundColor:'#FFFF'       
             }}
         >
             <Drawer.Screen name="Home" component={HomeStack} />
             <Drawer.Screen name="Link" component={LinkUnitsStack} />
+            <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
             <Drawer.Screen name="Profile" component={ProfileScreen} />
             <Drawer.Screen name="Account settings" component={AccountSettingsScreen} />
+            <Drawer.Screen name="Logout" component={LogoutScreen}/>
 
         </Drawer.Navigator>
 )
-
-
+const RootStack = createStackNavigator();
  class App extends Component {
   constructor() {
     super();
@@ -137,43 +149,41 @@ const DrawerStack = () => (
     this.deleteItem = deviceStorage.deleteItem.bind(this);
     this.loadItem = deviceStorage.loadItem.bind(this);
     this.loadItem();
-    console.log("constructor jwt"+this.state.jwt)
   }
 
-  setTimePassed = () =>{
-    this.setState({timePassed:true})
-  }
  
  componentDidMount(){
-   // splash screen
-    setTimeout(() => {
-      this.setTimePassed();  
-    }, 2000);
-    // take both id and jwt
+
+   // take both id and jwt
     AsyncStorage.getItem('jwtToken').then((token) => {
-      this.setState({ hasToken: token !== null, loading: true,jwt:token })
+      console.log('token '+token);
+      this.setState({ hasToken: token !== null, loading: false})
     })
   //  this.loadItem();
-    console.log('inside app comdidMount '+this.state.jwt)
+    console.log(this.state.hasToken)
   }
 
   
   render() {
+    const {loading} = this.state;
     
-    if (this.state.loading || !this.state.timePassed) {
-      return <WelcomeScreen/>
+    if (loading) {
+      return <Loading/>
     } else  {
       return (
         // <AppearanceProvider>
         //theme={colorScheme == 'dark' ? DarkTheme : MyTheme}
-          <NavigationContainer >
-      
-            {!this.state.jwt ? ( 
-              <AuthStack/> 
-            ) : ( 
-              <DrawerStack/>
-            )}
-
+          <NavigationContainer>
+            <RootStack.Navigator 
+              headerMode="none" 
+              initialRouteName='Splash'
+              screenOptions={{
+                animationEnabled: false
+              }}>
+              <RootStack.Screen name='Splash' component={WelcomeScreen} />
+              <RootStack.Screen name='Auth' component={AuthStack}/>
+              <RootStack.Screen name='App' component={DrawerStack}/>
+            </RootStack.Navigator>
           </NavigationContainer>
         // </AppearanceProvider>
         
