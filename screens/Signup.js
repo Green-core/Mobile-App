@@ -1,9 +1,11 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput,ScrollView,Alert } from 'react-native';
+import { View,StyleSheet,Text,TouchableOpacity,ScrollView,Alert,KeyboardAvoidingView,TextInput } from 'react-native';
 import BackArrow from '../components/backArrow';
 import { Loading }from '../components/Loading';
 import Axios from 'axios';
 import deviceStorage from '../services/deviceStorage';
+import { isObject } from 'formik';
+// import { TextInput } from 'react-native-material-TextInput';
 
 export default class Signup extends Component{
 
@@ -14,13 +16,14 @@ export default class Signup extends Component{
            email:'',
            password: '' ,
            confirmPassword:'',
-           error:'',
+           errors:[],
            loading:false,
+           statusError:'',
+           success:false,
         }   
     }
 
     registerUser = () => {
-// TODO validation show error text
        this.setState({loading:true})
         const user = {
             name:this.state.name,
@@ -32,24 +35,43 @@ export default class Signup extends Component{
            .post("http://10.0.2.2:5000/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
-                    console.log(res.data)
-                    //this.setState({loading:false});
-                    Alert.alert('Successfuly registered')
-               }
-               else{
-                    console.log(res.err);
+                   // console.log(res.data)
+                    Alert.alert('Successfuly Registered');
+                    this.setState({success:true});
                }
                this.setState({loading:false});
            })
            .catch(err=>{
-               console.log(err)
+            if(err.response.status === 404){              
+                this.setState({statusError:'Network Error'})
+                Alert.alert("Network Error");
+            }
+               this.setState({errors:err.response.data});
+              // console.log(this.state.errors)
                this.setState({loading:false});
-               Alert.alert('Failed')
+               Alert.alert('Sign Up Failed');
            })
+           if(this.state.success){
+             //  this.props.navigation.navigate('AuthStack',{screen:'Login'})
+               this.props.navigation.navigate('Login')
+           }
+    }
+
+    errFilter = (key) =>{
+        const {errors} = this.state;
+        if(errors && errors.length){
+            let data = errors.filter((err) => err.param ==key).map((param)=>{return param.msg });
+            console.log(data[0])
+            return data[0];
+        }
+        else{
+            let data = []
+            return data[0]='';
+        }
     }
 
     render(){
-        const { loading,email,password,name,confirmPassword } = this.state;
+        const { loading,email,password,name,confirmPassword,statusError} = this.state;
         if(loading){
             return(
                 <View style={styles.container}> 
@@ -60,41 +82,56 @@ export default class Signup extends Component{
         else{
             return(
                 <View style={styles.container}> 
-                    <ScrollView>
-                    <BackArrow  />
+                    <ScrollView keyboardShouldPersistTaps="handled">
+                    {/* <BackArrow  /> */}
                     <Text style={styles.headerText}>Sign Up</Text> 
+                    <KeyboardAvoidingView enabled>
                     <View style={styles.card}>
+                        <Text style={styles.errorText}>{statusError}</Text>
                         <Text style={styles.inputTitles}>Name</Text>
                         <TextInput
                             placeholder={'Name'}
-                            style={styles.textInput}
+                            style={styles.TextInput}
                             onChangeText={(name)=>{this.setState({name})}}
                             value = {name}
                         />
-                        <Text style={ styles.inputTitles }>Email</Text>
+                        <Text  style={styles.errorText}> {this.errFilter('name')}</Text>
+
+                        <Text style={styles.inputTitles}>Email</Text>
                         <TextInput
                             placeholder={'Email'}
-                            style={styles.textInput}
+                            keyboardType='email-address'
+                            autoCapitalize = "none"
+                            style={styles.TextInput}
                             onChangeText={(email)=>{this.setState({email})}}
                             value = {email}
                         />
+                        <Text  style={styles.errorText}> {this.errFilter('email')}</Text>
+
                         <Text style={ styles.inputTitles }>Password</Text>
                         <TextInput
                             placeholder={'Password'}
+                           // keyboardType='visible-password'
+                            autoCapitalize = "none"
                             secureTextEntry={true}
-                            style={styles.textInput}
+                            style={styles.TextInput}
                             onChangeText={(password)=>{this.setState({password})}}
                             value = {password}
                         />
+                        <Text  style={styles.errorText}> {this.errFilter('password')}</Text>
+
                         <Text style={ styles.inputTitles }>Confirm Password</Text>
                         <TextInput
                             placeholder={'Confirm Password'}
                             secureTextEntry={true}
-                            style={styles.textInput}
+                            autoCapitalize = "none"
+                            style={styles.TextInput}
                             onChangeText={(confirmPassword)=>{this.setState({confirmPassword})}}
                             value = {confirmPassword}
                         />
+                        <Text  style={styles.errorText}> {this.errFilter('confirmPassword')}</Text>    
                     </View>
+                    </KeyboardAvoidingView>
                         <TouchableOpacity
                             style={styles.button}
                             onPress={this.registerUser}
@@ -103,7 +140,8 @@ export default class Signup extends Component{
                         </TouchableOpacity>
                         <Text 
                             style={styles.loginText}
-                            //TODO noavigation to login 
+                            onPress={()=>{this.props.navigation.navigate('Login')}}
+                            //this.props.navigation.navigate('Login')
                         >
                             Already have an account ? Click here to Sign in
                         </Text> 
@@ -120,7 +158,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Segoe UI',
         flex: 1,
         backgroundColor: '#E4E4E4',
-
     },
     headerText:{
         fontSize:30,
@@ -128,12 +165,8 @@ const styles = StyleSheet.create({
         fontWeight:'500',
         marginTop:55,
         marginLeft:30,
-
     },
     card:{
-       
-      //  marginLeft:35,
-     //   marginTop:60,
         fontFamily: 'Segoe UI',
         borderRadius: 6,
         backgroundColor: 'white',
@@ -141,30 +174,32 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 1, height: 1},
        // marginHorizontal: 4,
         marginLeft: 40,
-        top: 45,
-        height: 370,
+        top: 35,
+        height: 400,
         width: '80%',
         margin: 'auto',
         position: 'relative',
         //zIndex: -1,
-
     },
     inputTitles:{
         marginLeft:25,
         fontFamily: 'Segoe UI',
-        fontSize:18,
-        marginTop:15,
-        
+        fontSize:16,
+        marginTop:6,     
     },
-    textInput:{
+    TextInput:{
         marginLeft:25,
         fontFamily: 'Segoe UI',
         fontSize:15,
-      //  marginTop:0,
         color: '#404040',
         width: '80%',
         borderColor: "#ccc",
         borderBottomWidth: 1,
+    },
+    errorText:{
+        color:'red',
+        fontSize:13,
+        marginLeft:25,
     },
     button:{
         backgroundColor:'green',
@@ -185,10 +220,6 @@ const styles = StyleSheet.create({
         color:'green',
         fontSize:16,
         marginLeft:55,
-        marginTop:10
-
+        marginTop:10,
     }
-
-
-
 })

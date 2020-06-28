@@ -7,45 +7,45 @@ const deviceStorage = {
     async saveItem(key,value){
         try{
             await AsyncStorage.setItem(key,value);
+           // console.log('saved '+key+'- '+value);
         }
         catch(err){
             console.log("AsyncStorage error "+ err.message);
         }
     },
-    // load jwt token
-    async loadJWT() {
+    // load jwt token,id
+    async loadItem() {
         try {
-          const value = await AsyncStorage.getItem('jwtToken');
-          if (value !== null) {
-            this.setState({
-              jwt: value,
-              loading: false
-            });
+          const id = await AsyncStorage.getItem('id');
+          const jwt = await AsyncStorage.getItem('jwtToken');
+          if (jwt !== null) {
+            this.setState({jwt});
+          //  console.log('value of token '+ jwt)
           } 
-          else {
-            this.setState({
-              loading: false
-            });
+          if(id!==null){
+            this.setState({id});
+           // console.log('value of id '+id)
           }
+          this.setState({loading: false});
         } catch (err) {
           console.log('AsyncStorage Error: ' + err.message);
         }
     },
-    // delete jwt token
-    async deleteJWT() {
+    // delete jwt token,id
+    async deleteItem() {
         try{
           await AsyncStorage.removeItem('jwtToken')
+          await AsyncStorage.removeItem('id')
           .then(() => {
-              this.setState({
-                jwt: ''
-              })
+              this.setState({jwt: '',id:''})
               Alert.alert('Log Out Success!');
             }
           );
-        } catch (err) {
+        } 
+        catch (err) {
           console.log('AsyncStorage Error: ' + err.message);
         }
-      }
+      },  
 };
 
 export default deviceStorage

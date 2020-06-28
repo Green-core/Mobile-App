@@ -1,36 +1,51 @@
 import React,{Component} from 'react';
 import { View,StyleSheet,Text,Button,Image,TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 const logo = require('../assets/images/Logo.png');
 
 class Welcome extends Component{
 
+    constructor(props) {
+        super(props);
+        this.state = {
+         // timePassed:false,
+        };
+    }
+    // setTimePassed = () =>{
+    //     this.setState({timePassed:true})
+    //   }
+
+    componentDidMount(){
+        setTimeout(() => {
+           // this.setTimePassed();
+            AsyncStorage.getItem('jwtToken').then((token) => {
+                this.props.navigation.navigate(
+                    token === null ? 'Auth' : 'App'
+                )
+                console.log(token)
+            })  
+        }, 2000);
+        console.log('after time out')
+    }
+
     render(){
         return(
             <View style={styles.container}>
-                <Text style={styles.titleText}>
+                {/* <Text style={styles.titleText}>
                     Welcome to Green Core
-                </Text>
-                <Image   style={{ width: 250, height: 300 ,resizeMode : 'stretch',marginTop:60,marginLeft:60}} source={logo}/>
-                <TouchableOpacity
-                    style={styles.button}
-                    //onPress={this.onPress}
-                >
-                    <Text style={styles.buttonText}> Log in </Text>
-                </TouchableOpacity>
-
+                </Text> */}
+                <Image style={{ width: 230, height: 250 ,resizeMode : 'contain',top:180}} source={logo}/>
             </View>
         );
     }
-
-
 }
 
 const styles = StyleSheet.create({
 
     container:{
         fontFamily: 'Segoe UI',
-       // backgroundColor:'lightgreen',
-
+        alignItems:'center',
+        //backgroundColor:'white',
     },
     titleText:{
         fontFamily: 'Segoe UI',
@@ -47,23 +62,6 @@ const styles = StyleSheet.create({
         marginTop:'50',
         resizeMode : 'stretch'
     },
-    button:{
-        backgroundColor:'green',
-        top:100,
-        padding:10,
-        alignItems:'center',
-        marginLeft:100,
-        marginRight:100,
-
-    },
-    buttonText:{
-        color:'white',
-        fontSize:20,
-        fontFamily: 'Segoe UI',
-     //   fontWeight:'200',
-    }
-
-
 })
 
 export default Welcome;
