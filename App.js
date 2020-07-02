@@ -42,6 +42,7 @@ import AllMessagesScreen from './screens/AllMessages'
 import SingleMessageScreen from './screens/SingleMessage'
 import ReplyMessageScreen from './screens/ReplyMessage'
 import SendMessageScreen from './screens/SendMessage'
+import NotiicationScreen from "./screens/notifications";
 
 
 // options={{
@@ -69,14 +70,16 @@ const HeaderOptions = {
 const Auth = createStackNavigator();
  const AuthStack =()=> (
     <Auth.Navigator 
-        initialRouteName="Login"
+    //initialRouteName="Login"
+    initialRouteName="Notifications"
         screenOptions={{
           animationEnabled: false
         }}
         headerMode='none'
            //TODO forgot password token screen and email screen
     >
-        <Auth.Screen name="Login" component={LoginScreen} /> 
+    <Auth.Screen name="Login" component={LoginScreen} />
+        <Auth.Screen name="Notifications" component={NotiicationScreen} />  
         <Auth.Screen name="Signup" component={SignupScreen} />
         {/* <Auth.Screen name="Home" component={AuthHomeScreen} /> */}
     </Auth.Navigator>
