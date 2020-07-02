@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,Text,TouchableOpacity,ScrollView,Alert,KeyboardAvoidingView,TextInput } from 'react-native';
-import BackArrow from '../components/backArrow';
-import { Loading }from '../components/Loading';
+import { View,StyleSheet,Text,ScrollView,Alert,KeyboardAvoidingView,TextInput } from 'react-native';
 import Axios from 'axios';
-import deviceStorage from '../services/deviceStorage';
-import { isObject } from 'formik';
-// import { TextInput } from 'react-native-material-TextInput';
+
+import { Loading }from '../components/Loading';
+import { 
+    GreenButtonMedium ,  GreenButtonSmall
+  } from './../components/customButtons';
 
 export default class Signup extends Component{
 
@@ -19,7 +19,6 @@ export default class Signup extends Component{
            errors:[],
            loading:false,
            statusError:'',
-           success:false,
         }   
     }
 
@@ -35,10 +34,13 @@ export default class Signup extends Component{
            .post("http://10.0.2.2:5000/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
-                   // console.log(res.data)
+                    // console.log(res.data)
                     Alert.alert('Successfuly Registered');
-                    this.setState({success:true});
-               }
+                    this.props.navigation.navigate.reset({
+                        index: 0,
+                        routes: [{ name: 'Auth' }],
+                      });
+                }
                this.setState({loading:false});
            })
            .catch(err=>{
@@ -47,14 +49,9 @@ export default class Signup extends Component{
                 Alert.alert("Network Error");
             }
                this.setState({errors:err.response.data});
-              // console.log(this.state.errors)
                this.setState({loading:false});
                Alert.alert('Sign Up Failed');
            })
-           if(this.state.success){
-             //  this.props.navigation.navigate('AuthStack',{screen:'Login'})
-               this.props.navigation.navigate('Login')
-           }
     }
 
     errFilter = (key) =>{
@@ -83,7 +80,6 @@ export default class Signup extends Component{
             return(
                 <View style={styles.container}> 
                     <ScrollView keyboardShouldPersistTaps="handled">
-                    {/* <BackArrow  /> */}
                     <Text style={styles.headerText}>Sign Up</Text> 
                     <KeyboardAvoidingView enabled>
                     <View style={styles.card}>
@@ -132,19 +128,16 @@ export default class Signup extends Component{
                         <Text  style={styles.errorText}> {this.errFilter('confirmPassword')}</Text>    
                     </View>
                     </KeyboardAvoidingView>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={this.registerUser}
-                        >
-                            <Text style={styles.buttonText}> Sign up </Text>
-                        </TouchableOpacity>
-                        <Text 
-                            style={styles.loginText}
-                            onPress={()=>{this.props.navigation.navigate('Login')}}
-                            //this.props.navigation.navigate('Login')
-                        >
-                            Already have an account ? Click here to Sign in
-                        </Text> 
+
+                    <View style={styles.centerButton} >
+                        < GreenButtonSmall text={"Sign Up"} onPress={this.registerUser} />   
+                    </View>
+                    <Text 
+                        style={styles.loginText}
+                        onPress={()=>{this.props.navigation.navigate('Login')}}
+                    >
+                        Already have an account ? Click here to Sign in
+                    </Text> 
                     </ScrollView>
                 </View>
             );
@@ -174,10 +167,10 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 1, height: 1},
        // marginHorizontal: 4,
         marginLeft: 40,
-        top: 35,
+        top: 30,
         height: 400,
         width: '80%',
-        margin: 'auto',
+        marginBottom: 10,
         position: 'relative',
         //zIndex: -1,
     },
@@ -201,25 +194,16 @@ const styles = StyleSheet.create({
         fontSize:13,
         marginLeft:25,
     },
-    button:{
-        backgroundColor:'green',
-        marginTop:80,
-        padding:9,
-        alignItems:'center',
-        marginLeft:100,
-        marginRight:100,
-    },
-    buttonText:{
-        fontFamily: 'Segoe UI',
-        color:'white',
-        fontSize:20,
-        fontWeight:'200',
-    },
     loginText:{
         fontFamily: 'Segoe UI',
         color:'green',
         fontSize:16,
         marginLeft:55,
-        marginTop:10,
-    }
+        marginTop:13,
+    },
+    centerButton:{ 
+        top:'1%',
+        alignContent:'center',
+        alignItems:'center', 
+      },
 })

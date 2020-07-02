@@ -4,6 +4,9 @@ import Axios from 'axios';
 import {Loading} from '../components/Loading'
 import AsyncStorage from '@react-native-community/async-storage';
 import deviceStorage from '../services/deviceStorage';
+import { 
+  GreenButtonMedium ,  GreenButtonSmall
+} from './../components/customButtons';
 
 export default class AuthHome extends Component {
   constructor(props){
@@ -14,23 +17,35 @@ export default class AuthHome extends Component {
       jwt:'',
       id:''    
     }
-    //this.loadItem = deviceStorage.loadItem.bind(this);
-  //  this.loadItem();
+   // this.loadItem = deviceStorage.loadItem.bind(this);
+   // this.loadItem();
   }
 
   componentDidMount(){
-    console.log(this.props);
-     this.setState({loading:true});
-     AsyncStorage.getItem('jwtToken').then((jwt) => {
-      this.setState({jwt})
-  })  
-     console.log('auth home'+this.state.jwt)
-     console.log('authHome'+this.state.id)
-  //   console.log('params jwt'+this.props.route.params.jwt)
 
+     this.setState({loading:true});
+     AsyncStorage.getItem('jwtToken').then((token) => {
+      if(token !== null) {
+        this.setState({jwt:token});
+        console.log('jwt in auth '+ token);
+        return token 
+      }
+    })
+    
+    //console.log('jwt '+ this.state.jwt)
+
+    AsyncStorage.getItem('id').then(userId => {
+      if(userId!==null){
+      this.setState({id:userId})
+      console.log('id in auth '+this.state.id)
+      }
+    }) 
+     
+  //   console.log('params jwt'+this.props.route.params.jwt)
      const headers = {
        'authorization': 'Bearer ' + this.state.jwt
      };
+    // console.log(headers)
      //${this.props.id}
      ///{params:{id:this.props.id}}
     Axios
@@ -49,7 +64,7 @@ export default class AuthHome extends Component {
     });
   }
   render() {
-   // console.log(this.props);
+    //console.log(this.props);
     const {loading,user} = this.state;
    
     if (loading){
@@ -68,13 +83,7 @@ export default class AuthHome extends Component {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={()=>this.props.navigation.navigate('Logout')}
-            >
-              <Text style={styles.buttonText}> Log Out </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-            onPress={()=>this.props.navigation.navigate('Profile settings')}
+              onPress={()=>this.props.navigation.navigate('Profile settings')}
             >
               <Text style={styles.buttonText}> Profile Settings </Text>
             </TouchableOpacity>
