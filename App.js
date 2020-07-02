@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
+import {Alert} from 'react-native';
 import { NavigationContainer,DefaultTheme,DarkTheme,DrawerActions } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator,DrawerContentScrollView,DrawerItemList,DrawerItem, } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
 //import { Appearance, useColorScheme, AppearanceProvider } from 'react-native-appearance';
 import deviceStorage from './services/deviceStorage';
@@ -11,13 +12,18 @@ import ProfileScreen from './screens/profile';
 import ProfileSettingsScreen from './screens/profileSettings';
 
 import LoginScreen from './screens/Login';
-import LogoutScreen from './screens/Logout';
 import SignupScreen from './screens/Signup';
 import WelcomeScreen from './screens/Welcome';
 
 import AuthHomeScreen from './screens/AuthHome';
 import {Loading} from './components/Loading';
 
+import AllMessagesScreen from './screens/AllMessages'
+import SingleMessageScreen from './screens/SingleMessage'
+import ReplyMessageScreen from './screens/ReplyMessage'
+import SendMessageScreen from './screens/SendMessage'
+
+import NotificationScreen from './screens/notifications'  // add in the drawer stack
 
 import LinkUnitsScreen from './screens/linkUnit';
 import ViewAllUnits from './screens/viewAllUnits';
@@ -26,6 +32,7 @@ import AccountSettingsScreen from './screens/accountSettings';
 import ViewAllUnitsScreen from './screens/viewAllUnits';
 import UnitDetailsScreen from './screens/unitDetails';
 
+         //---- theme
 // const colorScheme = useColorScheme();
 // const MyTheme = {
 //   dark: false,
@@ -37,14 +44,7 @@ import UnitDetailsScreen from './screens/unitDetails';
 //     border: 'green',
 //   },
 // }
-
-import AllMessagesScreen from './screens/AllMessages'
-import SingleMessageScreen from './screens/SingleMessage'
-import ReplyMessageScreen from './screens/ReplyMessage'
-import SendMessageScreen from './screens/SendMessage'
-import NotiicationScreen from "./screens/notifications";
-
-
+         // --header style in each screen
 // options={{
 //   title: 'My home',
 //   headerStyle: {
@@ -55,6 +55,9 @@ import NotiicationScreen from "./screens/notifications";
 //     fontWeight: 'bold',
 //   },
 // }}
+
+//{headerMode:'none'}
+
 
 const HeaderOptions = {
   headerStyle: {
@@ -70,16 +73,14 @@ const HeaderOptions = {
 const Auth = createStackNavigator();
  const AuthStack =()=> (
     <Auth.Navigator 
-    //initialRouteName="Login"
-    initialRouteName="Notifications"
+        initialRouteName="Login"
         screenOptions={{
           animationEnabled: false
         }}
         headerMode='none'
            //TODO forgot password token screen and email screen
     >
-    <Auth.Screen name="Login" component={LoginScreen} />
-        <Auth.Screen name="Notifications" component={NotiicationScreen} />  
+        <Auth.Screen name="Login" component={LoginScreen} /> 
         <Auth.Screen name="Signup" component={SignupScreen} />
         {/* <Auth.Screen name="Home" component={AuthHomeScreen} /> */}
     </Auth.Navigator>
@@ -98,7 +99,6 @@ const Home = createStackNavigator();
     >
         <Home.Screen name="Profile settings" component={ProfileSettingsScreen} />
         <Home.Screen name="Home" component={AuthHomeScreen} />
-        {/* <Home.Screen name="Login" options={{headerMode:'none'}} component={LoginScreen} /> */}
     </Home.Navigator>
   )
 
@@ -123,22 +123,79 @@ const Home = createStackNavigator();
       </LinkUnits.Navigator>
  )
 
+ function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem 
+        label="Logout" 
+        onPress={() => 
+          Alert.alert(
+            'Log out',
+            'Do you want to logout?',
+              [
+                {text: 'Yes', onPress: 
+                  async () => {
+                    await AsyncStorage.clear();
+                    props.navigation.reset({
+                      key:null,
+                      index: 0,
+                      routes: [{ name: 'Auth' }],
+                    });
+                }},
+                {text: 'No', onPress: () => {props.navigation.closeDrawer() }},
+              ],
+              { cancelable: false }
+          )} />
+                        
+   </DrawerContentScrollView>
+  );
+}
+
+const Chat = createStackNavigator();
+const ChatStack = () => (
+  <Chat.Navigator
+      initialRouteName="AllMessages"
+  >
+    <Chat.Screen
+      name="AllMessage"
+      component={AllMessagesScreen}
+    />
+    <Chat.Screen
+      name="SingleMessage"
+      component={SingleMessageScreen}
+    />
+    <Chat.Screen
+      name="SendMessage"
+      component={SendMessageScreen}
+    />
+    <Chat.Screen
+      name="ReplyMessages"
+      component={ReplyMessageScreen}
+    />
+  </Chat.Navigator>
+
+)
+
+
 // drawer use only in authenticated screens
 const Drawer = createDrawerNavigator();
 const DrawerStack = () => (
     
         <Drawer.Navigator 
             initialRouteName="Home"
-            drawerStyle={{
-                backgroundColor:'#FFFF'       
-            }}
+            drawerContent={props => <CustomDrawerContent {...props} />}
+            // drawerStyle={{
+            //     backgroundColor:'green'       
+            // }}
         >
             <Drawer.Screen name="Home" component={HomeStack} />
             <Drawer.Screen name="Link" component={LinkUnitsStack} />
             <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
             <Drawer.Screen name="Profile" component={ProfileScreen} />
             <Drawer.Screen name="Account settings" component={AccountSettingsScreen} />
-            <Drawer.Screen name="Logout" component={LogoutScreen}/>
+            <Drawer.Screen name="chat" component={ChatStack}/>
+            <Drawer.Screen name="Notification" component={NotificationScreen}/>
 
         </Drawer.Navigator>
 )
@@ -159,15 +216,31 @@ const RootStack = createStackNavigator();
   }
 
  
+
+
+   bootstrapAsync = async () => {
+    let userToken;
+    try {
+      userToken = await AsyncStorage.getItem('jwtToken');
+    } catch (e) {
+          console.log(e);
+    }
+     this.setState({jwt:userToken})
+  };
+
+
  componentDidMount(){
 
+  this.bootstrapAsync()
+  //console.log('app js'+this.state.jwt)
+
    // take both id and jwt
-    AsyncStorage.getItem('jwtToken').then((token) => {
-      console.log('token '+token);
-      this.setState({ hasToken: token !== null, loading: false})
-    })
+    // AsyncStorage.getItem('jwtToken').then((token) => {
+    //   console.log('token '+token);
+    //   this.setState({ hasToken: token !== null, loading: false})
+    // })
   //  this.loadItem();
-    console.log(this.state.hasToken)
+    //console.log(this.state.hasToken)
   }
 
   
