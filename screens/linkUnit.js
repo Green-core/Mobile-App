@@ -160,9 +160,12 @@ class LinkUnitsScreen extends Component {
                           : styles.inputs,
                       ]} 
                       >
-                      <Picker.Item label="Mango" value="Mango" />
-                      <Picker.Item label="jambu" value="jambu" />
-                      <Picker.Item label="Rambutan" value="Rambutan" /> 
+                      <Picker.Item label="Chiily" value="Chiily" />
+                      <Picker.Item label="Gotukola" value="Gotukola" />
+                      <Picker.Item label="Papaya" value="Papaya" />
+                      <Picker.Item label="Tomato" value="Tomato" />
+                      <Picker.Item label="Daspethiya" value="Daspethiya" />
+                      <Picker.Item label="Other" value="Other" /> 
                     </Picker>
 
                     <Text style={styles.inputTitles}>Location</Text>
