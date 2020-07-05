@@ -49,11 +49,11 @@ class AppProvider extends Component {
 
         //this.setData();
         //TODO async getKeys and set jwt and id
-        console.log("id",this.state.user)
+      //  console.log("id",this.state.user)
     }   
 
     render() {
-        console.log("app provider ",this.props)
+       // console.log("app provider ",this.props)
         return (
             <AppContext.Provider
                 value={{

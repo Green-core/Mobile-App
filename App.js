@@ -234,7 +234,7 @@ const RootStack = createStackNavigator();
 
  componentDidMount(){
        this.setState({loading:false})
-       console.log('app js mounted')
+      // console.log('app js mounted')
   }
 
   

@@ -20,7 +20,7 @@ const deviceStorage = {
           const jwt = await AsyncStorage.getItem('jwtToken');
           if (jwt !== null) {
          // this.setState({jwt});
-          console.log('value of token '+ jwt)
+         // console.log('value of token '+ jwt)
           return jwt
           } 
           // if(id!==null){

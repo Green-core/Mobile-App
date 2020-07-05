@@ -3,11 +3,12 @@ import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
 import MenuBar from '../components/menuBar';
 import axios from 'axios';
+import { withAppContext } from '../services/withAppContext'
 
 const plantImage = require('../assets/images/plants/mango.jpg');
 const grayLine = require('../assets/images/line.png');
 
-export default class ViewAllUnitsScreen extends Component {
+class ViewAllUnitsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,9 +17,10 @@ export default class ViewAllUnitsScreen extends Component {
   }
 
   componentDidMount() {
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        'https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a',
+        `https://ancient-temple-30883.herokuapp.com/units/get/${id}`,
       )
       .then(async (res) => {
         const units = await res.data;
@@ -236,3 +238,4 @@ const styles = StyleSheet.create({
     height: 150,
   },
 });
+export default withAppContext(ViewAllUnitsScreen);

@@ -6,8 +6,9 @@ import deviceStorage from '../services/deviceStorage';
 import MiniChart from '../components/miniChart';
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
+import { withAppContext } from '../services/withAppContext'
 
-export default class UnitDetailScreen extends Component {
+ class UnitDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,9 +21,10 @@ export default class UnitDetailScreen extends Component {
   }
 
   componentDidMount() {
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get( 
-        'https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a',
+        `https://ancient-temple-30883.herokuapp.com/units/get/${id}`,
       )
       .then(async (res) => {
         const units = await res.data;
@@ -202,5 +204,6 @@ const styles = StyleSheet.create({
     height: 150,
   },
 });
+export default withAppContext(UnitDetailScreen);
 
  

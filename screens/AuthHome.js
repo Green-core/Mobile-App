@@ -17,8 +17,8 @@ import { withAppContext } from '../services/withAppContext'
   componentDidMount(){
 
     const {id,jwt} = this.props.context.state.user;
-    console.log("Context props inside auth = ",this.props.context);
-    console.log("Context inside auth user= ",this.props.context.state.user);
+    //console.log("Context props inside auth = ",this.props.context);
+    //console.log("Context inside auth user= ",this.props.context.state.user);
   
 
      const headers = {
@@ -33,7 +33,7 @@ import { withAppContext } from '../services/withAppContext'
         user:res.data,
         loading: false
       });
-      console.log(this.state.user);
+    //  console.log(this.state.user);
       this.setState({loading: false});
     })
     .catch(err => {
