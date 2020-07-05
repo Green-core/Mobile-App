@@ -21,10 +21,15 @@ import { withAppContext } from '../services/withAppContext'
   }
 
   componentDidMount() {
-    const {id,jwt} = this.props.context.state.user;
+    const {id,jwt} = this.props.context.state.user;  // user id and jwt token
+    console.log('unitId = ',this.props.route.params.unitId)  // access unit id
+    //console.log('context=',this.props.context)
+    //console.log('id = ',id)
+    //console.log(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`)
+    //"https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a"
     axios
       .get( 
-        `https://ancient-temple-30883.herokuapp.com/units/get/${id}`,
+        "https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a",
       )
       .then(async (res) => {
         const units = await res.data;
@@ -105,7 +110,7 @@ import { withAppContext } from '../services/withAppContext'
   }
 
   render() { 
-
+   // console.log('routes',this.props.route.params.unitId)
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
