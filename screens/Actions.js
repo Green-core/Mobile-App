@@ -11,7 +11,7 @@ export default class Actions extends React.Component {
   }
 
   switchOn() {
-    console.log('unit id=',this.props.route.params.unitId)  //access unit id
+    //console.log('unit id=',this.props.route.params.unitId)  //access unit id
 
     const data = {
         moduleID: "5ec66db7aa16ff3a80870c9a",
@@ -46,7 +46,7 @@ export default class Actions extends React.Component {
   }
 
   render() {
-    //console.log('actions props',this.props.route.params.unitId)
+  //  console.log('actions props',this.props.route.params.unitId)
     return (
       <View>
         <Button title="Switch On" onPress={this.switchOn} />

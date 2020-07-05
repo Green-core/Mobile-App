@@ -18,12 +18,9 @@ class ViewAllUnitsScreen extends Component {
 
   componentDidMount() {
     const {id,jwt} = this.props.context.state.user;
-    //`https://ancient-temple-30883.herokuapp.com/units/get/${id}`
     //https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a'
     axios
-      .get(
-        "https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a",
-      )
+      .get(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`,)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});
