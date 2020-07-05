@@ -32,6 +32,7 @@ import ViewAllUnitsScreen from './screens/viewAllUnits';
 import UnitDetailsScreen from './screens/unitDetails';
 
 import { AppProvider } from  './services/AppProvider'
+import ActionsScreen from './screens/Actions'
 
          //---- theme
 // const colorScheme = useColorScheme();
@@ -199,6 +200,7 @@ const DrawerStack = () => (
             <Drawer.Screen name="Account settings" component={AccountSettingsScreen} />
             <Drawer.Screen name="Chat" component={ChatStack}/>
             <Drawer.Screen name="Notification" component={NotificationScreen}/>
+            <Drawer.Screen name="Actions" component={ActionsScreen}/>
 
         </Drawer.Navigator>
 )

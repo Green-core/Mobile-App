@@ -46,7 +46,9 @@ export default class AllMessages extends React.Component{
         }
         else{
             chats = Object.keys(this.state.chats).map((key) =>
-                <ListItem key={key}
+                <ListItem 
+                    button onPress={()=>{}}
+                    key={key}
                     title={this.state.chats[key].from}
                     subtitle={this.state.chats[key].message}
                     bottomDivider
