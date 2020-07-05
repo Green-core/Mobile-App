@@ -1,23 +1,42 @@
-import React, {Component} from 'react';
+import React, {Component ,useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, Image, Text, View , Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 
 
 
-
-const MiniChart = ({xdata, ydata, dataPoints , yAxisLabel , yAxisSuffix , yAxisInterval , labels , title , subTitle}) => {
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+const MiniChart = ({xdata, ydata, dataPoints =[0,0,0,0,0,0] , yAxisLabel , yAxisSuffix , yAxisInterval , labels , title , subTitle}) => {
+  
+  const graphData = {
+    labels: labels,
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2, // optional
+        data: [
+         ...dataPoints
+        ],
       },
     ],
-    legend: ['Rainy Days', 'Sunny Days', 'Snowy Days'], // optional
   };
+
+
+  const chart = () =>{
+    const graphData = {
+      labels: labels,
+      datasets: [
+        {
+          data: [
+           ...dataPoints
+          ],
+        },
+      ],
+    };
+    setGraphDataState(graphData)
+  }
  
+const [graphDataState, setGraphDataState] = useState(graphData) 
+
+useEffect(() => {
+  chart()
+},[dataPoints])
  
   return (  
    
@@ -25,16 +44,7 @@ const MiniChart = ({xdata, ydata, dataPoints , yAxisLabel , yAxisSuffix , yAxisI
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subTitle}>{subTitle}</Text>
           <LineChart
-            data={{
-              labels: labels,
-              datasets: [
-                {
-                  data: [
-                   ...dataPoints
-                  ],
-                },
-              ],
-            }}
+            data={graphDataState}
             width={Dimensions.get('window').width * 0.9} // from react-native
             height={320}
             yAxisLabel={yAxisLabel}
