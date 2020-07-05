@@ -4,8 +4,9 @@ import Axios from 'axios';
 import { Loading }from '../components/Loading';
 import deviceStorage from '../services/deviceStorage';
 import {  GreenButtonSmall} from './../components/customButtons';
+import { withAppContext } from '../services/withAppContext'
 
-export default class Login extends Component{
+class Login extends Component{
 
     constructor(props){
         super(props);
@@ -24,25 +25,34 @@ export default class Login extends Component{
            email:this.state.email,
            password:this.state.password
        }
+       //'https://ancient-temple-30883.herokuapp.com/users/login'
        Axios
-         .post('http://10.0.2.2:5000/users/login',user)
+         .post('https://ancient-temple-30883.herokuapp.com/users/login',user)
          .then(res=>{
             if(res.status === 200){
                 deviceStorage.saveItem('id',res.data.id);
                 deviceStorage.saveItem("jwtToken", res.data.token);
                 Alert.alert('Successfuly login')
-                //console.log(res.data);
+                const data ={
+                    id:res.data.id,
+                    email:res.data.email,
+                    jwt:res.data.token
+               }
+               //  console.log("Login  data = ",data)
+                // console.log("login context",this.props.context)
+                 this.props.context.setData(data);
+
                 this.props.navigation.reset({
                     key:null,     //go to the root navigator
                     index: 0,     //go to first screen
                     routes: [{ name: 'App' }],
-                    params:{jwt:res.data.token}
                   });
+               // this.props.navigation.navigate('App',{jwt:'heeey'})
             }
             this.setState({loading:false})
          })
          .catch(err=>{
-             //console.log(err.response.status)
+             console.log(err)
             if(err.response.status ===400){
                  Alert.alert("Incorrect Email or Password");
             }
@@ -58,7 +68,7 @@ export default class Login extends Component{
     }
 
     render(){
-        //console.log('login '+ this.props)
+        console.log('login props',this.props)
         const { loading,email,password,error } = this.state;
         if(loading){
             return(
@@ -186,3 +196,5 @@ const styles = StyleSheet.create({
         alignItems:'center', 
       },
 })
+
+export default withAppContext(Login);

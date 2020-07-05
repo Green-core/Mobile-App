@@ -14,6 +14,7 @@ import MenuBar from '../components/menuBar';
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import { withAppContext } from '../services/withAppContext'
 
 //form validator
 const validationScheme = yup.object({
@@ -23,7 +24,7 @@ const validationScheme = yup.object({
   plantType: yup.string().min(2)
 });
 
-export default class LinkUnitsScreen extends Component {
+class LinkUnitsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,9 +44,10 @@ export default class LinkUnitsScreen extends Component {
 
   componentDidMount() {
     //get profile details usind _id
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        ' https://ancient-temple-30883.herokuapp.com/users/get/5ecb578fb2b10b0844de4cff',
+        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -280,3 +282,4 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 });
+export default withAppContext(LinkUnitsScreen);

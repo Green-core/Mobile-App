@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
+import { withAppContext } from '../services/withAppContext'
 
 export default class ReplyMessage extends React.Component {
   constructor(props) {
@@ -50,3 +51,4 @@ export default class ReplyMessage extends React.Component {
     );
   }
 }
+//export default withAppContext(component name);

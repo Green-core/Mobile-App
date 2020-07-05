@@ -16,16 +16,17 @@ const deviceStorage = {
     // load jwt token,id
     async loadItem() {
         try {
-          const id = await AsyncStorage.getItem('id');
+         // const id = await AsyncStorage.getItem('id');
           const jwt = await AsyncStorage.getItem('jwtToken');
           if (jwt !== null) {
-            this.setState({jwt});
-          //  console.log('value of token '+ jwt)
+         // this.setState({jwt});
+          console.log('value of token '+ jwt)
+          return jwt
           } 
-          if(id!==null){
-            this.setState({id});
-           // console.log('value of id '+id)
-          }
+          // if(id!==null){
+          //   this.setState({id});
+          //  // console.log('value of id '+id)
+          // }
           this.setState({loading: false});
         } catch (err) {
           console.log('AsyncStorage Error: ' + err.message);
@@ -35,7 +36,7 @@ const deviceStorage = {
     async deleteItem() {
         try{
           await AsyncStorage.removeItem('jwtToken')
-          await AsyncStorage.removeItem('id')
+          //await AsyncStorage.removeItem('id')
           .then(() => {
               this.setState({jwt: '',id:''})
               Alert.alert('Log Out Success!');
@@ -45,7 +46,21 @@ const deviceStorage = {
         catch (err) {
           console.log('AsyncStorage Error: ' + err.message);
         }
-      },  
+      }, 
+       async getAllKeys(){
+        let keys = []
+        try {
+          keys = await AsyncStorage.getAllKeys()
+        } catch(e) {
+          // read key error
+        }
+      
+       // console.log(keys)
+        // example console.log result:
+        // ['@MyApp_user', '@MyApp_key']
+      },
+      
+       
 };
 
 export default deviceStorage

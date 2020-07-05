@@ -3,9 +3,7 @@ import { View,StyleSheet,Text,ScrollView,Alert,KeyboardAvoidingView,TextInput } 
 import Axios from 'axios';
 
 import { Loading }from '../components/Loading';
-import { 
-    GreenButtonMedium ,  GreenButtonSmall
-  } from './../components/customButtons';
+import {   GreenButtonSmall} from './../components/customButtons';
 
 export default class Signup extends Component{
 
@@ -31,12 +29,14 @@ export default class Signup extends Component{
             confirmPassword:this.state.confirmPassword
         }
         Axios
-           .post("http://10.0.2.2:5000/users/register",user)  
+           .post("https://ancient-temple-30883.herokuapp.com/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
                     // console.log(res.data)
                     Alert.alert('Successfuly Registered');
-                    this.props.navigation.navigate.reset({
+                    this.setState({loading:false});
+                    this.props.navigation.reset({
+                        key:'null',
                         index: 0,
                         routes: [{ name: 'Auth' }],
                       });
@@ -44,14 +44,18 @@ export default class Signup extends Component{
                this.setState({loading:false});
            })
            .catch(err=>{
-            if(err.response.status === 404){              
-                this.setState({statusError:'Network Error'})
-                Alert.alert("Network Error");
-            }
-               this.setState({errors:err.response.data});
-               this.setState({loading:false});
-               Alert.alert('Sign Up Failed');
-           })
+                console.log(err)
+                if(err.response.status === 422){     
+                    this.setState({errors:err.response.data});         
+                    Alert.alert('Sign Up Failed');
+                    //Alert.alert("Network Error");
+                }
+                else{
+                    this.setState({statusError:'Network Error'})
+                    this.setState({errors:err.response.data});
+                }
+                this.setState({loading:false});
+            })
     }
 
     errFilter = (key) =>{

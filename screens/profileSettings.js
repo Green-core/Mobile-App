@@ -5,6 +5,7 @@ import BackArrow from '../components/backArrow';
 import axios from 'axios';
 import { Formik} from 'formik';
 import * as yup from 'yup'
+import { withAppContext } from '../services/withAppContext'
 
 //form validator
 const validationScheme = yup.object({
@@ -12,7 +13,7 @@ const validationScheme = yup.object({
   mobile: yup.string().min(9).max(12)
 });
 
-export default class ProfileSettingsScreen extends Component {
+class ProfileSettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,9 +28,10 @@ export default class ProfileSettingsScreen extends Component {
   modules = '';
   componentDidMount() {
     //get profile details usind _id
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        ' https://ancient-temple-30883.herokuapp.com/users/get/5ecb578fb2b10b0844de4cff',
+        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -183,3 +185,4 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
 });
+export default withAppContext(ProfileSettingsScreen);

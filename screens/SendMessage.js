@@ -3,6 +3,7 @@ import axios from 'axios';
 import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
 import NavigationBar from 'react-native-navbar';
+import { withAppContext } from '../services/withAppContext'
 
 export default class SendMessage extends React.Component {
   constructor(props) {
