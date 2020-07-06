@@ -10,7 +10,7 @@ export default class SendMessage extends React.Component {
     super(props);
     this.state = {
       userID: '5ecb578fb2b10b0844de4cff',
-      userName: 'Nipuna Chandimal',
+      userName: 'Kavishka',
       admin: 'Admin',
       adminID: '5ec66db7aa16ff3a80870c9a',
     };

@@ -19,18 +19,21 @@ export default class SingleMessage extends React.Component{
 
     componentDidMount(){
         //const {id,jwt} = this.props.context.state.user;
+        // console.log('msgID = ',this.props.route.params.msgID)  // access unit id
+        const data = { id: this.props.route.params.msgID }
         this.setState({
             loading: true
         })
         //const data = id
       //  console.log(this.props.route.params.msgKey)
-        const data = { id: "5ece4f41f8dc143c847d3c85" }
+        // const data = { id: "5ece4f41f8dc143c847d3c85" }
         axios.post(
+            // 'http://localhost:5000/chats/get-one',
             'https://ancient-temple-30883.herokuapp.com/chats/get-one',
             data
         ).then(res => {
             const chatData = res.data
-            // console.log(chatData)
+            console.log(chatData)
             const replys = res.data.replies
 
             this.setState({
@@ -42,7 +45,7 @@ export default class SingleMessage extends React.Component{
     }
     
     render(){
-        const userName = "Nipuna Chandimal"     // get this from the store
+        const userName = "Kavishka"     // get this from the store
 
         if(this.state.loading){
             chat = <Text>Loading</Text>
@@ -81,7 +84,7 @@ export default class SingleMessage extends React.Component{
                     <ReplyMessage 
                     data={
                         {
-                            id: this.state.chat._id,
+                            id: this.props.route.params.msgID,
                             from: "5ecb578fb2b10b0844de4cff"
                         } 
                     }
