@@ -41,18 +41,20 @@ class ProfileSettingsScreen extends Component {
   }
 
   updateValues(values) {
+    const {id,jwt} = this.props.context.state.user;
  
       Keyboard.dismiss();
     const newUser = {
       name:values.name,
       mobile:parseInt(values.mobile , 10),//convert string to int 
-      updated_at: new Date()
+      updated_at: new Date(),
+      id
     };
 
-    console.log(JSON.stringify({...values }, null, 2));
+    console.log(JSON.stringify(newUser, null, 2));
      axios
     .put(
-      ' https://ancient-temple-30883.herokuapp.com/users/update/5ec66db7aa16ff3a80870c9a', newUser
+      'https://ancient-temple-30883.herokuapp.com/users/account/update', newUser
     )
     .then((res) => {  
      ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
