@@ -23,7 +23,6 @@ import { withAppContext } from '../services/withAppContext'
   componentDidMount() {
     const {id,jwt} = this.props.context.state.user;  // user id and jwt token
    //console.log('unitId = ',this.props.route.params.unitId)  // access unit id
-    //console.log('context=',this.props.context)
     //console.log('id = ',id)
     axios
       .get( `https://ancient-temple-30883.herokuapp.com/units/get/${id}`,)

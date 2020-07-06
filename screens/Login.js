@@ -52,16 +52,19 @@ class Login extends Component{
             this.setState({loading:false})
          })
          .catch(err=>{
-             console.log(err)
-            if(err.response.status ===400){
-                 Alert.alert("Incorrect Email or Password");
-            }
-            else if(err.response.status ===404){
-                 Alert.alert("Network Error")
+            console.log(err)
+            if(err.response){
+                console.log('res',err.response);
+                if(err.response.status ===400){
+                    Alert.alert("Incorrect Email or Password");
+                }
+                else if(err.response.status ===404){
+                    Alert.alert("Network Error")
+                }
             }
             else{
-             Alert.alert('Login Failed')
-             console.log('err.message = '+err.message)
+                console.log('err.message = '+err.message);
+                //Alert.alert(err.message);
             }
              this.setState({loading:false,email:'',password:''})
          })

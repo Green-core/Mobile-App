@@ -14,6 +14,7 @@ export default class ReplyMessage extends React.Component {
     };
   }
   render() {
+    // const {id,jwt} = this.props.context.state.user;
     return (
       <View>
         <Formik

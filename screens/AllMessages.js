@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import axios from 'axios'
 
 import { ListItem } from 'react-native-elements'
-
+import { withAppContext } from '../services/withAppContext'
 
 export default class AllMessages extends React.Component{
     
@@ -17,10 +17,11 @@ export default class AllMessages extends React.Component{
 
     componentDidMount(){
 
+       // const {id,jwt} = this.props.context.state.user;
         this.setState({
             loading: true
         })
-
+        //const data = id
         const data = { userID: "5ecb578fb2b10b0844de4cff" }
         axios.post(
             'https://ancient-temple-30883.herokuapp.com/chats/get-all',
@@ -47,7 +48,7 @@ export default class AllMessages extends React.Component{
         else{
             chats = Object.keys(this.state.chats).map((key) =>
                 <ListItem 
-                    button onPress={()=>{}}
+                    button onPress={()=>this.props.navigation.navigate('Chat',{screen:'SingleMessage',params:{msgKey:key}})}
                     key={key}
                     title={this.state.chats[key].from}
                     subtitle={this.state.chats[key].message}
@@ -65,3 +66,4 @@ export default class AllMessages extends React.Component{
         )
     }
 }
+//export default withAppContext(AuthHome);

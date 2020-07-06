@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {Alert} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer,DefaultTheme,DarkTheme,DrawerActions } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItemList,DrawerItem, } from '@react-navigation/drawer';
@@ -97,30 +98,51 @@ const Home = createStackNavigator();
         drawerStyle={{
             backgroundColor:'#3b7548'
         }}
-         screenOptions={{ headerStyle: { backgroundColor: '#E4E4E4' },animationEnabled: false }}
+         screenOptions={{ headerStyle: { backgroundColor: 'white' },animationEnabled: false }}
     >
         <Home.Screen name="Profile settings" component={ProfileSettingsScreen}/>
-        <Home.Screen name="Home" component={AuthHomeScreen} />
+        <Home.Screen 
+          name="Home"
+           component={AuthHomeScreen}
+           options={({ navigation }) => ({
+            //title: "Link Units",
+            headerLeft: () =>
+              <Icon
+                onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+                style={[{ color: 'black', marginLeft: 8 }]}
+                size={24}
+                name={'menu'}
+              />
+          })
+          }
+         />
     </Home.Navigator>
   )
 
  const LinkUnits = createStackNavigator();
  const  LinkUnitsStack = () => (
       <LinkUnits.Navigator
-          initialRouteName='LinkUnits'
-         // screenOptions={HeaderOptions}
+          headerMode="none"
+          initialRouteName='Link Units'
+          screenOptions={{
+            animationEnabled: false
+        }}
       >
           <LinkUnits.Screen
-              name="LinkUnits"
+              name="Link Units"
               component={LinkUnitsScreen}
           />
            <LinkUnits.Screen
-              name="ViewAllUnits"
+              name="View All Units"
               component={ViewAllUnitsScreen}
           />
            <LinkUnits.Screen
-              name="UnitsDerails"
+              name="Unit Details"
               component={UnitDetailsScreen}
+          />
+           <LinkUnits.Screen
+              name="Actions"
+              component={ActionsScreen}
           />
       </LinkUnits.Navigator>
  )
@@ -128,9 +150,11 @@ const Home = createStackNavigator();
  function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
+      <DrawerItemList {...props} activeTintColor="green" />
       <DrawerItem 
         label="Logout" 
+        activeTintColor="green"
+       // activeBackgroundColor="green"
         onPress={() => 
           Alert.alert(
             'Log out',
@@ -185,22 +209,28 @@ const Drawer = createDrawerNavigator();
 const DrawerStack = () => (
     
         <Drawer.Navigator 
-            initialRouteName="Home"
+            initialRouteName="Link Units"
+           // backBehavior="history"
             drawerContent={props => <CustomDrawerContent {...props} />}
             // drawerStyle={{
             //     backgroundColor:'green'       
             // }}
         >
-            <Drawer.Screen name="Home" component={HomeStack} />
-            <Drawer.Screen name="Link Units" component={LinkUnitsScreen} />
-            <Drawer.Screen name="Unit Deatails" component={UnitDetailsScreen} />
-            <Drawer.Screen name="Profiel Settings" component={ProfileSettingsScreen} />
-            <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
+            {/* <Drawer.Screen name="Home" component={HomeStack} /> */}
+            <Drawer.Screen 
+              name="Link Units" 
+              component={LinkUnitsStack} 
+              //  options={<Icon color={"black"} size={10} name={"Home"} />}
+              
+            />
+            {/* <Drawer.Screen name="Unit Details" component={UnitDetailsScreen} /> */}
             <Drawer.Screen name="Profile" component={ProfileScreen} />
-            <Drawer.Screen name="Account settings" component={AccountSettingsScreen} />
+            <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} />
+            <Drawer.Screen name="Account Settings" component={AccountSettingsScreen} />
+            <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
             <Drawer.Screen name="Chat" component={ChatStack}/>
             <Drawer.Screen name="Notification" component={NotificationScreen}/>
-            <Drawer.Screen name="Actions" component={ActionsScreen}/>
+            {/* <Drawer.Screen name="Actions" component={ActionsScreen}/> */}
 
         </Drawer.Navigator>
 )
@@ -215,8 +245,8 @@ const RootStack = createStackNavigator();
       hasToken:false,
     };
     this.deleteItem = deviceStorage.deleteItem.bind(this);
-    this.loadItem = deviceStorage.loadItem.bind(this);
-    this.loadItem();
+   // this.loadItem = deviceStorage.loadItem.bind(this);
+   // this.loadItem();
   }
 
  

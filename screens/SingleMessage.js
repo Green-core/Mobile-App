@@ -5,7 +5,7 @@ import axios from 'axios'
 import ReplyMessage from './ReplyMessage'
 import NavigationBar from 'react-native-navbar';
 import MessageComponent from './MessageComponent'
-
+import { withAppContext } from '../services/withAppContext'
 export default class SingleMessage extends React.Component{
     
     constructor(props){
@@ -18,11 +18,12 @@ export default class SingleMessage extends React.Component{
     }
 
     componentDidMount(){
-
+        //const {id,jwt} = this.props.context.state.user;
         this.setState({
             loading: true
         })
-
+        //const data = id
+      //  console.log(this.props.route.params.msgKey)
         const data = { id: "5ece4f41f8dc143c847d3c85" }
         axios.post(
             'https://ancient-temple-30883.herokuapp.com/chats/get-one',
@@ -89,3 +90,4 @@ export default class SingleMessage extends React.Component{
         )
     }
 }
+//export default withAppContext(SingleMessage);

@@ -16,6 +16,7 @@ export default class SendMessage extends React.Component {
     };
   }
   render() {
+     // const {id,jwt} = this.props.context.state.user;  
     return (
       <View>
         <Formik
@@ -68,3 +69,4 @@ export default class SendMessage extends React.Component {
     );
   }
 }
+//export default withAppContext(AuthHome);

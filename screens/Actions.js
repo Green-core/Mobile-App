@@ -55,3 +55,4 @@ export default class Actions extends React.Component {
     );
   }
 }
+//export default withAppContext(AuthHome);
