@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, Text, View ,SafeAreaView, ScrollView} from 'react-native';
-import { 
-  GreenButtonMedium ,  GreenButtonSmall
-} from './../components/customButtons';
-import MenuBar from '../components/menuBar';
+import {StyleSheet, TouchableOpacity, Text, View ,SafeAreaView, ScrollView} from 'react-native'; 
 import axios from 'axios';
 import { withAppContext } from '../services/withAppContext'
 
@@ -60,8 +56,7 @@ import { withAppContext } from '../services/withAppContext'
     return (
 
       <View style={styles.container}> 
-
-        <MenuBar />
+ 
         <Text style={styles.titleText}>Profile</Text>
 
         <View style={styles.card}>
@@ -83,9 +78,7 @@ import { withAppContext } from '../services/withAppContext'
           
            
           </View> 
-               <View style={styles.centerButton} >
-                  < GreenButtonSmall text={"Edit profile"}  onPress={()=>{alert('Hello')}} />   
-                </View>
+          
         </View> 
       </View>
     );

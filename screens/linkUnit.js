@@ -124,7 +124,7 @@ class LinkUnitsScreen extends Component {
                   <View>
                     <Text style={styles.inputTitles}>Unit ID</Text>
                     <TextInput
-                      placeholder={'Enter new password here'}
+                      placeholder={'Enter unit ID here'}
                       onChangeText={props.handleChange('unitID')}
                       selectedValue ={props.values.unitID}
                       style={[
@@ -170,7 +170,7 @@ class LinkUnitsScreen extends Component {
 
                     <Text style={styles.inputTitles}>Location</Text>
                     <TextInput
-                      placeholder={'Enter old password here'}
+                      placeholder={'Enter location of the device here'}
                       onChangeText={props.handleChange('location')}
                       value={props.values.location}
                       style={[
