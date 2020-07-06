@@ -51,13 +51,14 @@ const validationScheme = yup.object({
   }
 
   updateValues(values) {
+    const {id,jwt} = this.props.context.state.user;
     Keyboard.dismiss();
 
     if (values.newPassword != values.reNewPassword) {
       ToastAndroid.show('Re enter new password correctly', ToastAndroid.SHORT);
     } else {
       const checkPassword = {
-        id: '5ee5dc0ddb3c35001745bd93',
+        id,
         password: values.oldPassword,
       };
 
@@ -75,7 +76,7 @@ const validationScheme = yup.object({
             axios
               .put(
                 ' https://ancient-temple-30883.herokuapp.com/users/update/',
-                { id:"5ee5dc0ddb3c35001745bd93",
+                { id,
                   password: values.newPassword},
               )
               .then((res) => {
@@ -113,6 +114,7 @@ const validationScheme = yup.object({
                     <Text style={styles.inputTitles}>New password</Text>
                     <TextInput
                       placeholder={'Enter new password here'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('newPassword')}
                       value={props.values.newPassword}
                       style={[
@@ -129,6 +131,7 @@ const validationScheme = yup.object({
                     </Text>
                     <TextInput
                       placeholder={'re-enter new password'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('reNewPassword')}
                       value={props.values.reNewPassword}
                       style={[
@@ -141,6 +144,7 @@ const validationScheme = yup.object({
                     <Text style={styles.inputTitles}>Old password</Text>
                     <TextInput
                       placeholder={'Enter old password here'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('oldPassword')}
                       value={props.values.oldPassword}
                       style={[
