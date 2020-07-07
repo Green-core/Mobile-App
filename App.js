@@ -1,39 +1,44 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
-import {Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Alert, Text,View} from 'react-native';
+import { Icon ,Avatar} from 'react-native-elements'
 import { NavigationContainer,DefaultTheme,DarkTheme,DrawerActions } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItemList,DrawerItem, } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
 //import { Appearance, useColorScheme, AppearanceProvider } from 'react-native-appearance';
-import deviceStorage from './services/deviceStorage';
+
 //     screens
-import ProfileScreen from './screens/profile';
-import ProfileSettingsScreen from './screens/profileSettings';
 
 import LoginScreen from './screens/Login';
 import SignupScreen from './screens/Signup';
 import WelcomeScreen from './screens/Welcome';
-
 import AuthHomeScreen from './screens/AuthHome';
 import {Loading} from './components/Loading';
+
+import ProfileScreen from './screens/profile';
+import ProfileSettingsScreen from './screens/profileSettings';
+import AccountSettingsScreen from './screens/accountSettings';
 
 import AllMessagesScreen from './screens/AllMessages'
 import SingleMessageScreen from './screens/SingleMessage'
 import ReplyMessageScreen from './screens/ReplyMessage'
 import SendMessageScreen from './screens/SendMessage'
 
-import NotificationScreen from './screens/notifications'  // add in the drawer stack
+import NotificationScreen from './screens/notifications'  
 
 import LinkUnitsScreen from './screens/linkUnit';
-//import ViewAllUnits from './screens/viewAllUnits';
-import AccountSettingsScreen from './screens/accountSettings';
+
 import ViewAllUnitsScreen from './screens/viewAllUnits';
 import UnitDetailsScreen from './screens/unitDetails';
-
-import { AppProvider } from  './services/AppProvider'
 import ActionsScreen from './screens/Actions'
+
+// React context provider
+import { AppProvider } from  './services/AppProvider'
+
+// Asyncstorage methods
+import deviceStorage from './services/deviceStorage';
+
 
          //---- theme
 // const colorScheme = useColorScheme();
@@ -47,20 +52,7 @@ import ActionsScreen from './screens/Actions'
 //     border: 'green',
 //   },
 // }
-         // --header style in each screen
-// options={{
-//   title: 'My home',
-//   headerStyle: {
-//     backgroundColor: '#f4511e',
-//   },
-//   headerTintColor: '#fff',
-//   headerTitleStyle: {
-//     fontWeight: 'bold',
-//   },
-// }}
-
-//{headerMode:'none'}
-
+      
 
 const HeaderOptions = {
   headerStyle: {
@@ -85,19 +77,17 @@ const Auth = createStackNavigator();
     >
         <Auth.Screen name="Login" component={LoginScreen} /> 
         <Auth.Screen name="Signup" component={SignupScreen} />
-        {/* <Auth.Screen name="Home" component={AuthHomeScreen} /> */}
     </Auth.Navigator>
  )
 
-// All authenticated screen stack
+// All authenticated testing screen stack
+// - Home
+//    - profile settings
+
 const Home = createStackNavigator();
   const  HomeStack = () =>(
-  
     <Home.Navigator 
         initialRouteName="Home"
-        drawerStyle={{
-            backgroundColor:'#3b7548'
-        }}
          screenOptions={{ headerStyle: { backgroundColor: 'white' },animationEnabled: false }}
     >
         <Home.Screen name="Profile settings" component={ProfileSettingsScreen}/>
@@ -105,13 +95,13 @@ const Home = createStackNavigator();
           name="Home"
            component={AuthHomeScreen}
            options={({ navigation }) => ({
-            //title: "Link Units",
             headerLeft: () =>
               <Icon
                 onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-                style={[{ color: 'black', marginLeft: 8 }]}
-                size={24}
+                style={[{ color: 'black', marginLeft: 10 }]}
+                //size={24}
                 name={'menu'}
+                type='MaterialIcons'
               />
           })
           }
@@ -119,20 +109,20 @@ const Home = createStackNavigator();
     </Home.Navigator>
   )
 
+  //  -View All units
+  //       - Unit Details
+  //       - Actions   
+
  const LinkUnits = createStackNavigator();
  const  LinkUnitsStack = () => (
       <LinkUnits.Navigator
           headerMode="none"
-          initialRouteName='Link Units'
+          initialRouteName='View All Units'
           screenOptions={{
             animationEnabled: false
         }}
       >
           <LinkUnits.Screen
-              name="Link Units"
-              component={LinkUnitsScreen}
-          />
-           <LinkUnits.Screen
               name="View All Units"
               component={ViewAllUnitsScreen}
           />
@@ -147,41 +137,18 @@ const Home = createStackNavigator();
       </LinkUnits.Navigator>
  )
 
- function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} activeTintColor="green" />
-      <DrawerItem 
-        label="Logout" 
-        activeTintColor="green"
-       // activeBackgroundColor="green"
-        onPress={() => 
-          Alert.alert(
-            'Log out',
-            'Do you want to logout?',
-              [
-                {text: 'Yes', onPress: 
-                  async () => {
-                    await AsyncStorage.clear();
-                    props.navigation.reset({
-                      key:null,
-                      index: 0,
-                      routes: [{ name: 'Auth' }],
-                    });
-                }},
-                {text: 'No', onPress: () => {props.navigation.closeDrawer() }},
-              ],
-              { cancelable: false }
-          )} />
-                        
-   </DrawerContentScrollView>
-  );
-}
+//  - All Messages
+//       - single message
+//       - send message
+//       - reply message
 
 const Chat = createStackNavigator();
 const ChatStack = () => (
   <Chat.Navigator
       initialRouteName="AllMessages"
+      screenOptions={{
+        animationEnabled: false
+    }}
   >
     <Chat.Screen
       name="AllMessage"
@@ -203,35 +170,115 @@ const ChatStack = () => (
 
 )
 
+ function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props} >
+       <View style={{flexDirection:'column',marginTop: 20,alignItems:'center'}}>
+          <Avatar 
+             rounded
+            // icon={{name: 'home',type:'MaterialIcons'}}
+             source={{
+               uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
+             }}
+            size='small'
+          />
+          <Text style={{marginTop:5,marginBottom:15,fontSize: 16,fontWeight:'bold',marginLeft:15, flexDirection:'column'}}>kavishka@gmail.com</Text>
+      </View>
+      {/* <DrawerItemList {...props} activeTintColor="green" /> */}
 
-// drawer use only in authenticated screens
+      <DrawerItem 
+        label="Home" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='home' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('Home')}}
+      />
+      <DrawerItem 
+        label="Link Units" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='add-circle-outline' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('Link Units')}}
+      />
+       <DrawerItem 
+        label="Profile" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='person-outline' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('Profile')}}
+      />
+        <DrawerItem 
+          label="Profile Settings" 
+          activeTintColor="green"
+          icon= {() =><Icon  color="black" name='settings' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+          onPress={() => {props.navigation.navigate('Profile Settings')}}
+      />
+      <DrawerItem 
+        label="View All Units" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='border-all' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('View All Units')}}
+      />
+       <DrawerItem 
+        label="Chat" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='chat-bubble-outline' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('Chat')}}
+      />
+       <DrawerItem 
+        label="Notifications" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='notifications-none' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => {props.navigation.navigate('Notification')}}
+      />
+
+      <DrawerItem 
+        label="Log Out" 
+        activeTintColor="green"
+        icon= {() =><Icon  color="black" name='power-settings-new' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
+        onPress={() => 
+          Alert.alert(
+            'Log Out',
+            'Do you want to logout?',
+              [
+                {text: 'Yes', onPress: 
+                  async () => {
+                    await AsyncStorage.clear();
+                    props.navigation.reset({
+                      key:null,
+                      index: 0,
+                      routes: [{ name: 'Auth' }],
+                    });
+                }},
+                {text: 'No', onPress: () => {props.navigation.closeDrawer() }},
+              ],
+              { cancelable: false }
+          )} />
+                        
+   </DrawerContentScrollView>
+  );
+}
+
+
+
+// drawer represent all the authenticated screens
+
 const Drawer = createDrawerNavigator();
 const DrawerStack = () => (
-    
         <Drawer.Navigator 
             initialRouteName="Link Units"
+            activeTintColor="green"
            // backBehavior="history"
             drawerContent={props => <CustomDrawerContent {...props} />}
             // drawerStyle={{
             //     backgroundColor:'green'       
             // }}
         >
-            {/* <Drawer.Screen name="Home" component={HomeStack} /> */}
-            <Drawer.Screen 
-              name="Link Units" 
-              component={LinkUnitsStack} 
-              //  options={<Icon color={"black"} size={10} name={"Home"} />}
-              
-            />
-            {/* <Drawer.Screen name="Unit Details" component={UnitDetailsScreen} /> */}
+            <Drawer.Screen name="Home" component={HomeStack} />
+            <Drawer.Screen name="Link Units" component={LinkUnitsStack} />
             <Drawer.Screen name="Profile" component={ProfileScreen} />
             <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} />
             <Drawer.Screen name="Account Settings" component={AccountSettingsScreen} />
             <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
             <Drawer.Screen name="Chat" component={ChatStack}/>
             <Drawer.Screen name="Notification" component={NotificationScreen}/>
-            {/* <Drawer.Screen name="Actions" component={ActionsScreen}/> */}
-
         </Drawer.Navigator>
 )
 const RootStack = createStackNavigator();
@@ -239,12 +286,8 @@ const RootStack = createStackNavigator();
   constructor(props) {
     super(props);
     this.state = {
-      jwt: '',
-      id:'',
-    //  loading: true,
-      hasToken:false,
+      loading: true,
     };
-    this.deleteItem = deviceStorage.deleteItem.bind(this);
    // this.loadItem = deviceStorage.loadItem.bind(this);
    // this.loadItem();
   }
@@ -266,7 +309,6 @@ const RootStack = createStackNavigator();
 
  componentDidMount(){
        this.setState({loading:false})
-      // console.log('app js mounted')
   }
 
   
@@ -297,11 +339,6 @@ const RootStack = createStackNavigator();
       );
     }
   }
-}
-
-{
-  /* <ProfileSettingsScreen /> //<ProfileScreen /> <AccountSettingsScreen/>);<Demo /> <Demo /> 
-    //<  */
 }
 
 export default App;
