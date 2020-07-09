@@ -1,62 +1,64 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, Text, View ,SafeAreaView, ScrollView} from 'react-native'; 
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Image,
+} from 'react-native';
 import axios from 'axios';
-import { withAppContext } from '../services/withAppContext'
+import {withAppContext} from '../services/withAppContext';
+const grayLine = require('../assets/images/line.png');
 
- class ProfileScreen extends Component {
+class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      role: "",
-      _id: "",
-      name: "loading...",
-      email: "loading...",
-      mobile: "loading...", 
+      role: '',
+      _id: '',
+      name: 'loading...',
+      email: 'loading...',
+      mobile: 'loading...',
       modules: [
-      {
-      connected_date: "",
-      _id: "",
-      module_id: "loading..."
-      }, 
+        {
+          connected_date: '',
+          _id: '',
+          module_id: 'loading...',
+        },
       ],
-      created_at: "loading...", 
-      };
+      created_at: 'loading...',
+    };
   }
-  
-  modules = ""
+
+  modules = '';
   componentDidMount() {
-    const {id,jwt} = this.props.context.state.user;
+    const {id, jwt} = this.props.context.state.user;
     // add headers
     //get profile details usind _id
     axios
-      .get(
-        `https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
-      )
+      .get(`https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
       .then((res) => {
-        const userData = res.data;  
-        this.setState({...userData });
+        const userData = res.data;
+        this.setState({...userData});
       })
       .catch((error) => console.log(error));
-     }
-
-
+  }
 
   render() {
-    
-    //get module count 
-    const modules = this.state.modules.length
-  
-    //create date string 
-    var timeStamp=  new Date(this.state['created_at'])
-    var todate= timeStamp.getDate();
-    var tomonth=timeStamp.getMonth()+1;
-    var toyear= timeStamp.getFullYear();
-    const date=toyear+'-'+tomonth+'-'+todate;
+    //get module count
+    const modules = this.state.modules.length;
+
+    //create date string
+    var timeStamp = new Date(this.state['created_at']);
+    var todate = timeStamp.getDate();
+    var tomonth = timeStamp.getMonth() + 1;
+    var toyear = timeStamp.getFullYear();
+    const date = toyear + '-' + tomonth + '-' + todate;
 
     return (
-
-      <View style={styles.container}> 
- 
+      <View style={styles.container}>
         <Text style={styles.titleText}>Profile</Text>
 
         <View style={styles.card}>
@@ -71,15 +73,31 @@ import { withAppContext } from '../services/withAppContext'
             <Text style={styles.cardTextSmall}>{this.state['mobile']}</Text>
 
             <Text style={styles.cardTextLarge}>Account created on </Text>
-    <Text style={styles.cardTextSmall}>{  date }</Text>
+            <Text style={styles.cardTextSmall}>{date}</Text>
 
-            <Text style={styles.cardTextLarge}>Number of modules  </Text>
-            <Text style={styles.cardTextSmall}>{modules}</Text>  
-          
-           
-          </View> 
-          
-        </View> 
+            <Text style={styles.cardTextLarge}>Number of modules </Text>
+            <Text style={styles.cardTextSmall}>{modules}</Text>
+          </View>
+        </View>
+        <Image source={grayLine} style={styles.grayLine} />
+        <View style={styles.buttonLine}>
+          <Text
+            style={styles.buttonLineText}
+            onPress={() => {
+              //navigate to accountsettings 
+              this.props.navigation.navigate('Account settings');
+            }}>
+            Account settings
+          </Text>
+          <Text
+            style={styles.buttonLineText}
+            onPress={() => {
+              //navigate to profile settings 
+              this.navigateToActions('Profile settings');
+            }}>
+            Profile settings {'    '}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -91,10 +109,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#E4E4E4',
   },
 
-  centerButton:{ 
-    top:'1%',
-    alignContent:'center',
-    alignItems:'center', 
+  centerButton: {
+    top: '1%',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   titleText: {
     fontFamily: 'Segoe UI',
@@ -115,7 +133,7 @@ const styles = StyleSheet.create({
     color: '#A6A6A6',
     fontFamily: 'Segoe UI',
   },
-  
+
   cardTextSmall: {
     paddingLeft: '15%',
     paddingTop: '5%',
@@ -129,7 +147,7 @@ const styles = StyleSheet.create({
     paddingTop: '2%',
     fontFamily: 'Segoe UI',
     fontSize: 18,
-    width:'100%',
+    width: '100%',
     color: '#404040',
   },
 
@@ -145,6 +163,31 @@ const styles = StyleSheet.create({
     width: '85%',
     margin: 'auto',
     position: 'relative',
+  },
+  grayLine: {
+    top: 40,
+    width: '80%',
+    left: '10%',
+    right: '10%',
+  },
+
+  buttonLine: {
+    position: 'relative',
+    left: '5%',
+    right: '5%',
+    width: '90%',
+    top: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  buttonLineText: {
+    fontSize: 14,
+    paddingTop: '5%',
+    paddingLeft: '2%',
+    paddingRight: '8%',
+    color: '#454F63',
   },
 });
 export default withAppContext(ProfileScreen);
