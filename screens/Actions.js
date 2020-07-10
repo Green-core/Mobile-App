@@ -1,6 +1,14 @@
 import React from 'react';
-import {View, Button, Switch, StyleSheet , Text} from 'react-native';
+import {View, Image, Button, Switch, ToastAndroid, StyleSheet, Text} from 'react-native';
 import axios from 'axios';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+
+const expan = require('./../assets/images/expan.png');
+const grayLine = require('../assets/images/line.png');
+const waterDrop = require('../assets/images/notifications/water.png');
+const lightBulb = require('../assets/images/notifications/bulb.png');
+const bees = require('../assets/images/notifications/bee.png');
+const fertilizer = require('../assets/images/notifications/fertilizer.png');
 
 export default class Actions extends React.Component {
   constructor(props) {
@@ -12,64 +20,162 @@ export default class Actions extends React.Component {
   }
 
   toggleSwitch = () => {
-    const current = this.state.light;
+    const newState = !this.state.light;
     axios
-      .post('http://192.168.8.100:5000/actuator/update-light-status', {
-        moduleID: this.state.unitID,
-        activated: current,
-      })
+      .put(
+        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
+        {
+          actuator: 'lightActuator',
+          state: newState,
+        },
+      )
       .then((res) => {
+        
         console.log(res);
       });
-    this.setState({...this.state, light: !current});
+    this.setState({...this.state, light: newState});
+  };
+
+  addWater = () => {
+    axios
+      .put(
+        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
+        {
+          actuator: 'waterMotorActuator',
+          state: 'true',
+        },
+      )
+      .then((res) => {
+        ToastAndroid.showWithGravityAndOffset(
+          "Water added !",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          25,
+         100
+        );
+        console.log(res);
+      });
+  };
+
+  addFertilizer = () => {
+    axios
+      .put(
+        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
+        {
+          actuator: 'fertilizerActuator',
+          state: 'true',
+        },
+      )
+      .then((res) => {
+        ToastAndroid.showWithGravityAndOffset(
+          "Fertilizer added !",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          25,
+         100
+        );
+        console.log(res);
+      });
   };
 
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.titleText}>Control actuators</Text>
+        <Text style={styles.titleText}>Control actuators</Text>
 
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTextLarge}>Light bulb </Text>
-          <View style={styles.switchContainer}>
-             <Switch
-            trackColor={{false: '#767577', true: '#28AC5B'}}
-            thumbColor={this.state.light ? '#0F4021' : '#28AC5B'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() => this.toggleSwitch()}
-            value={this.state.light}
-            style={{position:'relative',right:100}}
-          /> 
+        <View style={styles.card}>
+          <View style={styles.cardContent}>
+            <View style={styles.detailLine}>
+              <Text style={styles.leftText}>Light bulb </Text>
+
+              <View style={styles.switchContainer}>
+                <Switch
+                  trackColor={{false: '#0F4021', true: '#28AC5B'}}
+                  thumbColor={this.state.light ? '#0F4021' : '#28AC5B'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => this.toggleSwitch()}
+                  value={this.state.light}
+                  style={{position: 'relative', right: 100}}
+                />
+              </View>
+            </View>
+
+            <View style={styles.detailLine}>
+              <Text style={styles.leftText}>Add water </Text>
+
+              <View style={styles.switchContainer}>
+                <View style={styles.buttonImageContainer}><TouchableWithoutFeedback
+                    onPress={() => {
+                      this.addWater();
+                    }}>
+                  <Image source={waterDrop} style={styles.buttonImage} />
+                  </TouchableWithoutFeedback>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.detailLine}>
+              <Text style={styles.leftText}>Add fertilizer </Text>
+
+              <View style={styles.switchContainer}>
+                <View style={styles.buttonImageContainer}>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      this.addFertilizer();
+                    }}>
+                    <Image source={fertilizer} style={styles.buttonImage} />
+                  </TouchableWithoutFeedback>
+                </View>
+              </View>
+            </View>
           </View>
-         
-
-          <Text style={styles.cardTextLarge}>Email</Text>
-          <Text style={styles.cardTextSmall}>asdfsda</Text>
-
-          <Text style={styles.cardTextLarge}>Mobile </Text>
-          <Text style={styles.cardTextSmall}>dsgsf</Text>
-
-          <Text style={styles.cardTextLarge}>Account created on </Text>
-          <Text style={styles.cardTextSmall}>asdfd</Text>
- 
         </View>
-      </View> 
-   
-    </View>
+      </View>
     );
   }
 }
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E4E4E4',
   },
 
-  switchContainer:{
-    alignContent:'center',
-    justifyContent:'center'
+  leftText: {
+    fontSize: 20,
+  },
+  buttonImage: {
+    height: 30,
+    width: 30,
+    margin: 10,
+  },
+
+  buttonImageContainer: {
+    height: 50,
+    width: 50,
+    position: 'relative',
+    bottom: 13,
+    right: '400%',
+    borderRadius: 25,
+    backgroundColor: 'white',
+    elevation: 5,
+  },
+  detailLine: {
+    marginVertical: 40,
+    position: 'relative',
+    left: '5%',
+    right: '5%',
+    width: '90%',
+    top: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  switchContainer: {
+    marginLeft: 80,
+    position: 'relative',
+    left: '390%',
   },
 
   centerButton: {
@@ -132,17 +238,6 @@ const styles = StyleSheet.create({
     width: '80%',
     left: '10%',
     right: '10%',
-  },
-
-  buttonLine: {
-    position: 'relative',
-    left: '5%',
-    right: '5%',
-    width: '90%',
-    top: 40,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
   },
 
   buttonLineText: {
