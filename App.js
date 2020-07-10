@@ -13,6 +13,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import LoginScreen from './screens/Login';
 import SignupScreen from './screens/Signup';
 import WelcomeScreen from './screens/Welcome';
+import RequestEmailScreen from './screens/ResetPassword/RequestEmail';
+import VerifyTokenScreen from './screens/ResetPassword/VerifyToken';
+import ResetPasswordScreen from './screens/ResetPassword/ResetPassword';
+
 import AuthHomeScreen from './screens/AuthHome';
 import {Loading} from './components/Loading';
 
@@ -73,10 +77,12 @@ const Auth = createStackNavigator();
           animationEnabled: false
         }}
         headerMode='none'
-           //TODO forgot password token screen and email screen
     >
         <Auth.Screen name="Login" component={LoginScreen} /> 
         <Auth.Screen name="Signup" component={SignupScreen} />
+        <Auth.Screen name="RequestEmail" component={RequestEmailScreen} />
+        <Auth.Screen name="VerifyToken" component={VerifyTokenScreen} />
+        <Auth.Screen name="ResetPassword" component={ResetPasswordScreen} />
     </Auth.Navigator>
  )
 
@@ -98,15 +104,52 @@ const Home = createStackNavigator();
             headerLeft: () =>
               <Icon
                 onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-                style={[{ color: 'black', marginLeft: 10 }]}
+                containerStyle={{ color: 'black', marginLeft: 10 }}
                 //size={24}
                 name={'menu'}
                 type='MaterialIcons'
-              />
+              />,
+
+            headerRight: () => 
+              <Icon
+                onPress={() => navigation.navigate('Notification')}
+                containerStyle={{ color: 'black', marginRight: 10 }}
+                //size={24}
+                name={'notifications-none'}
+                type='MaterialIcons'
+            />,
           })
           }
          />
     </Home.Navigator>
+  )
+
+  // profile
+  //    - Account Settings
+  //    - Profile Settings
+  
+  const Profile = createStackNavigator();
+  const ProfileStack = () => (
+    <Profile.Navigator
+      headerMode="none"
+      initialRouteName='Profile'
+      screenOptions={{
+        animationEnabled: false
+      }}
+    >
+      <Profile.Screen
+        name='Profile'
+        component={ProfileScreen}
+      />
+      <Profile.Screen
+        name='Profile Settings'
+        component={ProfileSettingsScreen}
+      />
+      <Profile.Screen
+        name='Account Settings'
+        component={AccountSettingsScreen}
+      />
+    </Profile.Navigator>
   )
 
   //  -View All units
@@ -204,12 +247,12 @@ const ChatStack = () => (
         icon= {() =><Icon  color="black" name='person-outline' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
         onPress={() => {props.navigation.navigate('Profile')}}
       />
-        <DrawerItem 
+        {/* <DrawerItem 
           label="Profile Settings" 
           activeTintColor="green"
           icon= {() =><Icon  color="black" name='settings' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
           onPress={() => {props.navigation.navigate('Profile Settings')}}
-      />
+      /> */}
       <DrawerItem 
         label="View All Units" 
         activeTintColor="green"
@@ -272,11 +315,11 @@ const DrawerStack = () => (
             // }}
         >
             <Drawer.Screen name="Home" component={HomeStack} />
-            <Drawer.Screen name="Link Units" component={LinkUnitsStack} />
-            <Drawer.Screen name="Profile" component={ProfileScreen} />
-            <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} />
-            <Drawer.Screen name="Account Settings" component={AccountSettingsScreen} />
-            <Drawer.Screen name="View All Units" component={ViewAllUnitsScreen} />
+            <Drawer.Screen name="Link Units" component={LinkUnitsScreen} />
+            <Drawer.Screen name="Profile" component={ProfileStack} />
+            {/* <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} /> */}
+            {/* <Drawer.Screen name="Account Settings" component={AccountSettingsScreen} /> */}
+            <Drawer.Screen name="View All Units" component={LinkUnitsStack} />
             <Drawer.Screen name="Chat" component={ChatStack}/>
             <Drawer.Screen name="Notification" component={NotificationScreen}/>
         </Drawer.Navigator>
