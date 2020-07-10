@@ -32,12 +32,12 @@ class ViewAllUnitsScreen extends Component {
   }
 
   navigateToDetails = (unitID) => {
-    this.props.navigation.navigate("Link Units",{screen:"Unit Details",params:{unitId:unitID}})
+    this.props.navigation.navigate("Unit Details",{unitId:unitID})
     //alert(unitID);
   };
 
   navigateToActions = (unitID) => {
-    this.props.navigation.navigate('Link Units',{screen:"Actions",params:{unitId:unitID}})
+    this.props.navigation.navigate("Actions",{unitId:unitID})
     //alert(unitID);
   };
 

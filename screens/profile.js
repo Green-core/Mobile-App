@@ -83,17 +83,13 @@ class ProfileScreen extends Component {
         <View style={styles.buttonLine}>
           <Text
             style={styles.buttonLineText}
-            onPress={() => {
-              //navigate to accountsettings 
-              this.props.navigation.navigate('Account settings');
-            }}>
+            onPress={() => this.props.navigation.navigate('Account Settings')}>
             Account settings
           </Text>
           <Text
             style={styles.buttonLineText}
             onPress={() => {
-              //navigate to profile settings 
-              this.navigateToActions('Profile settings');
+              this.props.navigation.navigate('Profile Settings');
             }}>
             Profile settings {'    '}
           </Text>
