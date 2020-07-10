@@ -3,43 +3,63 @@ import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
 import MenuBar from '../components/menuBar';
 import axios from 'axios';
+import { withAppContext } from '../services/withAppContext'
 
 const plantImage = require('../assets/images/plants/mango.jpg');
 const grayLine = require('../assets/images/line.png');
 
-export default class ViewAllUnitsScreen extends Component {
+class ViewAllUnitsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      units: [] 
+      units: [],
     };
   }
 
   componentDidMount() {
+    const {id,jwt} = this.props.context.state.user;
+    //https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a'
     axios
-      .get(
-        'https://ancient-temple-30883.herokuapp.com/units/get/5ecb578fb2b10b0844de4cff',
-      )
-      .then(async(res) => {
-        const units = await res.data; 
+      .get(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`,)
+      .then(async (res) => {
+        const units = await res.data;
         this.setState({units});
         //console.log(JSON.stringify(units, null ,2))
-        
-        //console.log(JSON.stringify(units[0].sensors[0].soilTemp, null ,2))
+
+        console.log(JSON.stringify(units[0].soilTemp, null, 2));
       })
       .catch((error) => console.log(error));
   }
 
+  navigateToDetails = (unitID) => {
+    this.props.navigation.navigate("Unit Details",{unitId:unitID})
+    //alert(unitID);
+  };
+
+  navigateToActions = (unitID) => {
+    this.props.navigation.navigate("Actions",{unitId:unitID})
+    //alert(unitID);
+  };
+
   render() {
     const allCards = this.state.units.map((unit) => {
-      console.log(JSON.stringify(unit.sensors[0].soilTemp, null ,2))
-      return (
+      const temparatureReading = unit.temperatureSensor.lastReading.substring(
+        0,
+        unit.temperatureSensor.lastReading.length - 1,
+      );
+      const soilMoistureReading = unit.soilMoistureSensor.lastReading;
+      const lightIntensityReading = unit.lightIntensitySensor.lastReading;
+      const humidityReading = unit.humiditySensor.lastReading.substring(
+        0,
+        unit.humiditySensor.lastReading.length - 1,
+      );
 
+      return (
         <View style={styles.card} key={unit._id}>
           <View style={styles.cardHeader}>
             <Image source={plantImage} style={styles.plantImage} />
             <View style={styles.headerTextContainer}>
-              <Text style={styles.plantName}>{unit.deviceName}</Text>
+              <Text style={styles.plantName}>Test Name</Text>
               <Text style={styles.subTitleText}>{unit._id} </Text>
             </View>
           </View>
@@ -53,23 +73,34 @@ export default class ViewAllUnitsScreen extends Component {
             </View>
 
             <View style={styles.contentDetails}>
-              <Text style={styles.cardContentDetail}>{unit.deviceName}</Text>
-              <Text style={styles.cardContentDetail}>{unit.plantType} </Text>
+              <Text style={styles.cardContentDetail}>Test Name</Text>
+              <Text style={styles.cardContentDetail}>Test Type </Text>
               <Text style={styles.cardContentDetail}>{unit.location} </Text>
               <View style={styles.cardContentDetailCondition}>
-                <Text>Soil temperature : {unit.sensors[0].soilTemp} °C </Text>
-                <Text>Soil moisture : {unit.sensors[0].soilMoisture} % </Text>
-                <Text>Soil N2 level : {unit.sensors[0].soilN2}(mg/kg)</Text>
-                <Text>Soil pH value : {unit.sensors[0].pH}</Text>
-                <Text>Relative humidity: {unit.sensors[0].RH }%</Text>
+                <Text>Soil temperature : {temparatureReading} °C </Text>
+                <Text>Soil moisture : {soilMoistureReading} % </Text>
+                <Text>Light intensity level : {lightIntensityReading} </Text>
+                <Text>Relative humidity: {humidityReading} %</Text>
+                <Text> {''}</Text>
               </View>
             </View>
           </View>
           <Image source={grayLine} style={styles.grayLine} />
           <View style={styles.buttonLine}>
-            <Text style={styles.buttonLineText} onPress={()=>{alert('Details')}}>Details</Text>
-            <Text style={styles.buttonLineText} onPress={()=>{alert('Actions')}}>Actions </Text>
-            <Text style={styles.buttonLineText} onPress={()=>{alert('Live')}}>Live</Text>
+            <Text
+              style={styles.buttonLineText}
+              onPress={() => {
+                this.navigateToDetails(unit._id);
+              }}>
+              Details
+            </Text>
+            <Text
+              style={styles.buttonLineText}
+              onPress={() => {
+                this.navigateToActions(unit._id);
+              }}>
+              Actions{' '}
+            </Text>
           </View>
         </View>
       );
@@ -208,3 +239,4 @@ const styles = StyleSheet.create({
     height: 150,
   },
 });
+export default withAppContext(ViewAllUnitsScreen);

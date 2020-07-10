@@ -14,6 +14,7 @@ import MenuBar from '../components/menuBar';
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import { withAppContext } from '../services/withAppContext'
 
 //form validator
 const validationScheme = yup.object({
@@ -23,7 +24,7 @@ const validationScheme = yup.object({
   plantType: yup.string().min(2)
 });
 
-export default class LinkUnitsScreen extends Component {
+class LinkUnitsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,9 +44,10 @@ export default class LinkUnitsScreen extends Component {
 
   componentDidMount() {
     //get profile details usind _id
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        ' https://ancient-temple-30883.herokuapp.com/users/get/5ecb578fb2b10b0844de4cff',
+        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -122,7 +124,7 @@ export default class LinkUnitsScreen extends Component {
                   <View>
                     <Text style={styles.inputTitles}>Unit ID</Text>
                     <TextInput
-                      placeholder={'Enter new password here'}
+                      placeholder={'Enter unit ID here'}
                       onChangeText={props.handleChange('unitID')}
                       selectedValue ={props.values.unitID}
                       style={[
@@ -158,14 +160,17 @@ export default class LinkUnitsScreen extends Component {
                           : styles.inputs,
                       ]} 
                       >
-                      <Picker.Item label="Mango" value="Mango" />
-                      <Picker.Item label="jambu" value="jambu" />
-                      <Picker.Item label="Rambutan" value="Rambutan" /> 
+                      <Picker.Item label="Chiily" value="Chiily" />
+                      <Picker.Item label="Gotukola" value="Gotukola" />
+                      <Picker.Item label="Papaya" value="Papaya" />
+                      <Picker.Item label="Tomato" value="Tomato" />
+                      <Picker.Item label="Daspethiya" value="Daspethiya" />
+                      <Picker.Item label="Other" value="Other" /> 
                     </Picker>
 
                     <Text style={styles.inputTitles}>Location</Text>
                     <TextInput
-                      placeholder={'Enter old password here'}
+                      placeholder={'Enter location of the device here'}
                       onChangeText={props.handleChange('location')}
                       value={props.values.location}
                       style={[
@@ -280,3 +285,4 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 });
+export default withAppContext(LinkUnitsScreen);

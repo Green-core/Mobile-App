@@ -1,13 +1,12 @@
 import React,{Component} from 'react';
-import { View,StyleSheet,Text,Button,TouchableOpacity,TextInput, ScrollView,Alert,KeyboardAvoidingView } from 'react-native';
-import BackArrow from '../components/backArrow';
+import { View,StyleSheet,Text,TextInput, ScrollView,Alert,KeyboardAvoidingView } from 'react-native';
 import Axios from 'axios';
 import { Loading }from '../components/Loading';
 import deviceStorage from '../services/deviceStorage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {  GreenButtonSmall} from './../components/customButtons';
+import { withAppContext } from '../services/withAppContext'
 
-export default class Login extends Component{
+class Login extends Component{
 
     constructor(props){
         super(props);
@@ -15,9 +14,7 @@ export default class Login extends Component{
           email: '',
           password: '',
           loading: false,
-          success:false,
           //error:'',
-         // errors:[]
         };
         
     }
@@ -28,38 +25,53 @@ export default class Login extends Component{
            email:this.state.email,
            password:this.state.password
        }
+       //'https://ancient-temple-30883.herokuapp.com/users/login'
        Axios
-         .post('http://10.0.2.2:5000/users/login',user)
+         .post('https://ancient-temple-30883.herokuapp.com/users/login',user)
          .then(res=>{
             if(res.status === 200){
                 deviceStorage.saveItem('id',res.data.id);
                 deviceStorage.saveItem("jwtToken", res.data.token);
-                Alert.alert('Successfuly loged in')
-                console.log(res.data);
-                this.setState({success:true});
-                this.props.navigation.navigate('App',{jwt:res.data.jwt})
+                Alert.alert('Successfuly login')
+                const data ={
+                    id:res.data.id,
+                    email:res.data.email,
+                    jwt:res.data.token
+               }
+               //  console.log("Login  data = ",data)
+                // console.log("login context",this.props.context)
+                 this.props.context.setData(data);
+
+                this.props.navigation.reset({
+                    key:null,     //go to the root navigator
+                    index: 0,     //go to first screen
+                    routes: [{ name: 'App' }],
+                  });
+               // this.props.navigation.navigate('App',{jwt:'heeey'})
             }
             this.setState({loading:false})
          })
          .catch(err=>{
-             if(err.response.status ===400){
-                 Alert.alert("Incorrect Email or Password");
-             }
-            else if(err.response.status ===404){
-                 Alert.alert("Network Error")
+            console.log(err)
+            if(err.response){
+                console.log('res',err.response);
+                if(err.response.status ===400){
+                    Alert.alert("Incorrect Email or Password");
+                }
+                else if(err.response.status ===404){
+                    Alert.alert("Network Error")
+                }
             }
             else{
-             Alert.alert('Login Failed')
-             console.log('err.message = '+err.message)
+                console.log('err.message = '+err.message);
+                //Alert.alert(err.message);
             }
              this.setState({loading:false,email:'',password:''})
-           //  Alert.alert('Login Failed')
          })
     }
 
     render(){
-        console.log('login '+this.props)
-      //  const {navigation} = this.props;
+      //  console.log('login props',this.props)
         const { loading,email,password,error } = this.state;
         if(loading){
             return(
@@ -70,8 +82,7 @@ export default class Login extends Component{
             return(
                 <View style={styles.container}> 
                     <ScrollView keyboardShouldPersistTaps="handled">
-                    {/* <BackArrow  /> */}
-                    <Text style={styles.headerText}>Log in</Text>
+                    <Text style={styles.headerText}>Log In</Text>
                     {/* <KeyboardAvoidingView > */}
                         <View style={styles.card}>
                             {/* <Text style={styles.errorText}>{error}</Text> */}
@@ -98,17 +109,14 @@ export default class Login extends Component{
                     >
                         Forgot Password
                     </Text> 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.loginUser}
-                    >
-                        <Text style={styles.buttonText}> Log In </Text>
-                    </TouchableOpacity>
+                    <View style={styles.centerButton} >
+                        < GreenButtonSmall text={"Log In"} onPress={this.loginUser} />   
+                    </View>
                     <Text 
                         style={styles.loginText}
-                       onPress={()=>this.props.navigation.navigate('Signup')}
+                        onPress={()=>this.props.navigation.navigate('Signup')}
                     >
-                        Don't have account? Click here to Sign Up
+                        Don't have an account? Click here to Sign Up
                     </Text> 
                     </ScrollView>
                 </View>    
@@ -138,7 +146,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 1, height: 1},
        // marginHorizontal: 4,
         marginLeft: 35,
-        top: 100,
+        top: 80,
         height: 250,
         width: '80%',
         margin: 'auto',
@@ -168,20 +176,7 @@ const styles = StyleSheet.create({
         fontSize:13,
         marginLeft:25,
     },
-    button:{
-        backgroundColor:'green',
-        marginTop:200,
-        padding:10,
-        alignItems:'center',
-        marginLeft:100,
-        marginRight:100,
-    },
-    buttonText:{
-        fontFamily: 'Segoe UI',
-        color:'white',
-        fontSize:20,
-        fontWeight:'200',
-    },
+    
     loginText:{
         fontFamily: 'Segoe UI',
         fontSize:16,
@@ -195,7 +190,14 @@ const styles = StyleSheet.create({
         color:'green',
         marginLeft:150,
        // marginRight:50,
-        top:140,
+        top:100,
         textDecorationLine:'underline'
-    }
+    },
+    centerButton:{ 
+        marginTop:100,
+       // alignContent:'center',
+        alignItems:'center', 
+      },
 })
+
+export default withAppContext(Login);

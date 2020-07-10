@@ -13,6 +13,7 @@ import BackArrow from '../components/backArrow';
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import { withAppContext } from '../services/withAppContext'
 
 //form validator
 const validationScheme = yup.object({
@@ -21,7 +22,7 @@ const validationScheme = yup.object({
   oldPassword: yup.string().min(1),
 });
 
-export default class AccountSettingsScreen extends Component {
+ class AccountSettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,9 +37,10 @@ export default class AccountSettingsScreen extends Component {
 
   componentDidMount() {
     //get profile details usind _id
+    const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        'https://ancient-temple-30883.herokuapp.com/users/get/5ee5dc0ddb3c35001745bd93',
+        `https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -49,13 +51,14 @@ export default class AccountSettingsScreen extends Component {
   }
 
   updateValues(values) {
+    const {id,jwt} = this.props.context.state.user;
     Keyboard.dismiss();
 
     if (values.newPassword != values.reNewPassword) {
       ToastAndroid.show('Re enter new password correctly', ToastAndroid.SHORT);
     } else {
       const checkPassword = {
-        id: '5ee5dc0ddb3c35001745bd93',
+        id,
         password: values.oldPassword,
       };
 
@@ -73,7 +76,7 @@ export default class AccountSettingsScreen extends Component {
             axios
               .put(
                 ' https://ancient-temple-30883.herokuapp.com/users/update/',
-                { id:"5ee5dc0ddb3c35001745bd93",
+                { id,
                   password: values.newPassword},
               )
               .then((res) => {
@@ -111,6 +114,7 @@ export default class AccountSettingsScreen extends Component {
                     <Text style={styles.inputTitles}>New password</Text>
                     <TextInput
                       placeholder={'Enter new password here'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('newPassword')}
                       value={props.values.newPassword}
                       style={[
@@ -127,6 +131,7 @@ export default class AccountSettingsScreen extends Component {
                     </Text>
                     <TextInput
                       placeholder={'re-enter new password'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('reNewPassword')}
                       value={props.values.reNewPassword}
                       style={[
@@ -139,6 +144,7 @@ export default class AccountSettingsScreen extends Component {
                     <Text style={styles.inputTitles}>Old password</Text>
                     <TextInput
                       placeholder={'Enter old password here'}
+                      secureTextEntry={true}
                       onChangeText={props.handleChange('oldPassword')}
                       value={props.values.oldPassword}
                       style={[
@@ -245,3 +251,4 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 });
+export default withAppContext(AccountSettingsScreen);

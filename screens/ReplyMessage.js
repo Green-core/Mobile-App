@@ -2,17 +2,20 @@ import React from 'react';
 import axios from 'axios';
 import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
+import { withAppContext } from '../services/withAppContext'
 
 export default class ReplyMessage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userID: '5ecb578fb2b10b0844de4cff',
-      chatID: '5ece4f41f8dc143c847d3c85',
-      userName: 'Nipuna Chandimal',
+      userName: 'Kavishka',
     };
   }
-  render() {
+  render(props) {
+    // const {id,jwt} = this.props.context.state.user;
+    
+    console.log('msgID = ',this.props.data.id)  // access unit id
     return (
       <View>
         <Formik
@@ -21,7 +24,7 @@ export default class ReplyMessage extends React.Component {
           }}
           onSubmit={(values) => {
             const data = {
-              id: this.state.chatID,
+              id: this.props.data.id,
               reply: values.reply,
               from: this.state.userName,
               fromID: this.state.userID,
@@ -50,3 +53,4 @@ export default class ReplyMessage extends React.Component {
     );
   }
 }
+//export default withAppContext(component name);

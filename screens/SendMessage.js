@@ -3,18 +3,20 @@ import axios from 'axios';
 import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
 import NavigationBar from 'react-native-navbar';
+import { withAppContext } from '../services/withAppContext'
 
 export default class SendMessage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userID: '5ecb578fb2b10b0844de4cff',
-      userName: 'Nipuna Chandimal',
+      userName: 'Kavishka',
       admin: 'Admin',
       adminID: '5ec66db7aa16ff3a80870c9a',
     };
   }
   render() {
+     // const {id,jwt} = this.props.context.state.user;  
     return (
       <View>
         <Formik
@@ -67,3 +69,4 @@ export default class SendMessage extends React.Component {
     );
   }
 }
+//export default withAppContext(AuthHome);

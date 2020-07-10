@@ -2,46 +2,39 @@ import React, { Component } from 'react';
 import { View, Text ,Button,StyleSheet,Alert,TouchableOpacity} from 'react-native';
 import Axios from 'axios';
 import {Loading} from '../components/Loading'
-import AsyncStorage from '@react-native-community/async-storage';
-import deviceStorage from '../services/deviceStorage';
-
-export default class AuthHome extends Component {
+//import AsyncStorage from '@react-native-community/async-storage';
+//import deviceStorage from '../services/deviceStorage';
+import { withAppContext } from '../services/withAppContext'
+ class AuthHome extends Component {
   constructor(props){
     super(props);
     this.state = {
       loading: true,
       user:{},
-      jwt:'',
-      id:''    
     }
-    //this.loadItem = deviceStorage.loadItem.bind(this);
-  //  this.loadItem();
   }
 
   componentDidMount(){
-    console.log(this.props);
-     this.setState({loading:true});
-     AsyncStorage.getItem('jwtToken').then((jwt) => {
-      this.setState({jwt})
-  })  
-     console.log('auth home'+this.state.jwt)
-     console.log('authHome'+this.state.id)
-  //   console.log('params jwt'+this.props.route.params.jwt)
+
+    const {id,jwt} = this.props.context.state.user;
+    //console.log("Context props inside auth = ",this.props.context);
+    //console.log("Context inside auth user= ",this.props.context.state.user);
+  
 
      const headers = {
-       'authorization': 'Bearer ' + this.state.jwt
+       'authorization': 'Bearer ' + jwt
      };
-     //${this.props.id}
-     ///{params:{id:this.props.id}}
+     //{ headers:headers}
+     //`http://10.0.2.2:5000/users/get/${id}`
     Axios
-    .get('http://10.0.2.2:5000/users/get/5ecb578fb2b10b0844de4cff',{ headers:headers})
+    .get(`https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
     .then((res) => {
       this.setState({
         user:res.data,
         loading: false
       });
-      //console.log(this.state.user);
-      //TODO : Navigate to login page
+    //  console.log(this.state.user);
+      this.setState({loading: false});
     })
     .catch(err => {
       this.setState({loading: false});
@@ -49,7 +42,7 @@ export default class AuthHome extends Component {
     });
   }
   render() {
-   // console.log(this.props);
+   // console.log("auth props",this.props);
     const {loading,user} = this.state;
    
     if (loading){
@@ -61,20 +54,14 @@ export default class AuthHome extends Component {
         return(
           <View style={styles.container}>
             <Text style={styles.text}>
-              Authenticated screen
+              Authenticated screen {user.email}
             </Text>
             <Text style={styles.text}>
               Welcome {user.name}
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={()=>this.props.navigation.navigate('Logout')}
-            >
-              <Text style={styles.buttonText}> Log Out </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-            onPress={()=>this.props.navigation.navigate('Profile settings')}
+              onPress={()=>this.props.navigation.navigate('Profile settings')}
             >
               <Text style={styles.buttonText}> Profile Settings </Text>
             </TouchableOpacity>
@@ -112,3 +99,4 @@ const styles = StyleSheet.create({
     fontWeight:'200',
   },
 });
+export default withAppContext(AuthHome);
