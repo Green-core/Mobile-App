@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Image, Button, Switch, ToastAndroid, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  Image,
+  Button,
+  Switch,
+  ToastAndroid,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import axios from 'axios';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
@@ -30,7 +38,6 @@ export default class Actions extends React.Component {
         },
       )
       .then((res) => {
-        
         console.log(res);
       });
     this.setState({...this.state, light: newState});
@@ -47,11 +54,11 @@ export default class Actions extends React.Component {
       )
       .then((res) => {
         ToastAndroid.showWithGravityAndOffset(
-          "Water added !",
+          'Water added !',
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
           25,
-         100
+          100,
         );
         console.log(res);
       });
@@ -68,11 +75,11 @@ export default class Actions extends React.Component {
       )
       .then((res) => {
         ToastAndroid.showWithGravityAndOffset(
-          "Fertilizer added !",
+          'Fertilizer added !',
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
           25,
-         100
+          100,
         );
         console.log(res);
       });
@@ -104,11 +111,12 @@ export default class Actions extends React.Component {
               <Text style={styles.leftText}>Add water </Text>
 
               <View style={styles.switchContainer}>
-                <View style={styles.buttonImageContainer}><TouchableWithoutFeedback
+                <View style={styles.buttonImageContainer}>
+                  <TouchableWithoutFeedback
                     onPress={() => {
                       this.addWater();
                     }}>
-                  <Image source={waterDrop} style={styles.buttonImage} />
+                    <Image source={waterDrop} style={styles.buttonImage} />
                   </TouchableWithoutFeedback>
                 </View>
               </View>
