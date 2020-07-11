@@ -22,16 +22,83 @@ export default class VerifyToken extends Component {
   }
 
   sendToken = () => {
-    // send token and check token exist and valid
-    // suceess navigate to login page
-    // failure error - invalid token try again stay on token page
-    Alert.alert(
-      'Success',
-      'Your password now can be reset',
-      [{text: 'Ok', onPress: () => {}}],
-      {cancelable: false},
-    );
+    this.setState({loading:true})
+    console.log(this.props.route.params.email)
+    const user = {
+      email :this.props.route.params.email,
+      token: this.state.token
+    }
+    Axios
+      .post('http://10.0.2.2:5000/users/checkToken',user)
+      .then(res=>{
+        if(res.status === 200){
+        //  console.log(res.data.response);
+          Alert.alert(
+            'Success',
+            'Your password now can be reset',
+            [{text: 'Ok', onPress: () => {}}],
+            {cancelable: false},
+          );
+          this.props.navigation.navigate('ResetPassword',{email:user.email})
+        }
+        else{
+          console.log(res)
+        }
+      })
+      .catch(err=>{
+        if(err.response){
+          if(err.response.status === 422){
+            console.log(err.response.data[0].msg)
+            this.setState({error:err.response.data[0].msg})
+          }
+          else if(err.response.status === 400){
+            console.log(err.response.data.err)
+            this.setState({error:err.response.data.err})
+          }
+        }
+        else{
+          console.log('err.message = '+err.message);
+          Alert.alert(err.message);
+        }
+        this.setState({loading:false,email:''})
+      })
   };
+
+  resendToken = () => {
+    this.setState({loading:true})
+    const email = this.props.route.params.email;
+    Axios
+      .post('http://10.0.2.2:5000/users/forgotPassword',{email})
+      .then(res=>{
+        if(res.status === 200){
+         // console.log(res.data);
+          this.setState({loading:false})
+          Alert.alert(
+            ' Verify Code Sent',
+            'Please check your emails',
+            [{text: 'Ok', onPress: () => {}}],
+            {cancelable: false},
+          );
+        }
+        else{
+          console.log(res)
+        }
+      })
+      .catch(err=>{
+        if(err.response){
+          if(err.response.status === 422){
+            console.log(err.response.data[0].msg)
+          }
+        }
+        else{
+          console.log('err.message = '+err.message);
+          Alert.alert(err.message);
+        }
+        this.setState({loading:false})
+      })
+  };
+
+
 
   render() {
     const {error, token, loading} = this.state;
@@ -66,11 +133,12 @@ export default class VerifyToken extends Component {
           <View style={styles.centerButton}>
             <GreenButtonSmall
               text={'Submit'}
-              onPress={() => this.props.navigation.navigate('ResetPassword')}
+              onPress={this.sendToken}
+              //onPress={() => this.props.navigation.navigate('ResetPassword')}
             />
           </View>
           <View style={styles.centerButton}>
-            <GreenButtonSmall text={'Resend'} onPress={() => {}} />
+            <GreenButtonSmall text={'Resend'} onPress={this.resendToken} />
           </View>
         </View>
       );

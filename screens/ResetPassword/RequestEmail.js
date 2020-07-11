@@ -22,18 +22,38 @@ export default class RequestEmail extends Component {
   }
 
   sendEmail = () => {
-    //  check email exist and valid
-    //      if succeeefull sent email
-    //          then suceess navigate to token page
-    //      else
-    //          try again alert
-    // failure error text- enter valid email/if valid but not exist email is incorrect
-    Alert.alert(
-      ' Token sent',
-      'Please check your email',
-      [{text: 'Ok', onPress: () => {}}],
-      {cancelable: false},
-    );
+    this.setState({loading:true})
+    Axios
+      .post('http://10.0.2.2:5000/users/forgotPassword',{email:this.state.email})
+      .then(res=>{
+        if(res.status === 200){
+          console.log(res.data.response);
+          this.setState({loading:false})
+          Alert.alert(
+            ' Verify Code Sent',
+            'Please check your emails',
+            [{text: 'Ok', onPress: () => {}}],
+            {cancelable: false},
+          );
+          this.props.navigation.navigate('VerifyToken',{email:this.state.email})
+        }
+        else{
+          console.log(res)
+        }
+      })
+      .catch(err=>{
+        if(err.response){
+          if(err.response.status === 422){
+            console.log(err.response.data[0].msg)
+            this.setState({error:err.response.data[0].msg})
+          }
+        }
+        else{
+          console.log('err.message = '+err.message);
+          Alert.alert(err.message);
+        }
+        this.setState({loading:false,email:''})
+      })
   };
 
   render() {
@@ -73,7 +93,8 @@ export default class RequestEmail extends Component {
           <View style={styles.centerButton}>
             <GreenButtonSmall
               text={'Submit'}
-              onPress={()=>this.props.navigation.navigate('VerifyToken')}
+              onPress={this.sendEmail}
+             // onPress={()=>this.props.navigation.navigate('VerifyToken')}
             />
           </View>
         </View>
