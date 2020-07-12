@@ -6,10 +6,11 @@ import {
   View,
   TextInput,
   KeyboardAvoidingView,
+  Alert
 } from 'react-native';
 import {GreenButtonSmall} from './../../components/customButtons';
 import {Loading} from '../../components/Loading';
-import axios from 'axios';
+import Axios from 'axios';
 
 export default class ResetPassword extends Component {
   constructor(props) {
@@ -18,9 +19,9 @@ export default class ResetPassword extends Component {
       password: '',
       confirmPassword: '',
       error: '',
+      errors:[],
       loading: false,
     };
-    //this.updateValues = this.updateValues.bind(this);
   }
 
   // componentDidMount() {
@@ -66,16 +67,62 @@ export default class ResetPassword extends Component {
   //     }
   //   }
   resetPassword = () => {
-    Alert.alert(
-      'Success',
-      'Password Successfully Reset.',
-      [{text: 'Ok', onPress: () => {}}],
-      {cancelable: false},
-    );
-    // axios requset
-    //success navigate to login
-    // failure prompt alert try again
+    this.setState({loading:true})
+    const user = {
+      email :this.props.route.params.email,
+      password: this.state.password,
+      confirmPassword:this.state.confirmPassword,
+    }
+    Axios
+      .post('http://10.0.2.2:5000/users/resetPassword',user)
+      .then(res=>{
+        if(res.status === 200){
+          console.log(res.data.response);
+          this.setState({loading:false})
+          Alert.alert(
+            'Success',
+            'Password Successfully Reset.',
+            [{text: 'Ok', onPress: () => {}}],
+            {cancelable: false},
+          );
+          this.props.navigation.reset({
+            key:null,     
+            index: 0,     
+            routes: [{ name: 'Auth' }],
+          });
+        //  this.props.navigation.replace('Login');
+        }
+        else{
+          console.log(res)
+        }
+      })
+      .catch(err=>{
+        if(err.response){
+          if(err.response.status === 422){
+            console.log(err.response.data)
+            this.setState({errors:err.response.data})
+          }
+        }
+        else{
+          console.log('err.message = '+err.message);
+          Alert.alert(err.message);
+        }
+        this.setState({loading:false,password:'',confirmPassword:''})
+      })
   };
+
+  errFilter = (key) =>{
+    const {errors} = this.state;
+    if(errors && errors.length){
+        let data = errors.filter((err) => err.param ==key).map((param)=>{return param.msg });
+        console.log(data[0])
+        return data[0];
+    }
+    else{
+        let data = []
+        return data[0]='';
+    }
+  }
 
   render() {
     const {password, confirmPassword, error, loading} = this.state;
@@ -104,7 +151,7 @@ export default class ResetPassword extends Component {
                 }}
                 value={password}
               />
-              <Text style={styles.errorText}> {error}</Text>
+              <Text style={styles.errorText}>{this.errFilter('password')}</Text>
 
               <Text style={styles.inputTitles}>Confirm your New Password</Text>
               <TextInput
@@ -117,13 +164,13 @@ export default class ResetPassword extends Component {
                 }}
                 value={confirmPassword}
               />
-              <Text style={styles.errorText}>{error}</Text>
+              <Text style={styles.errorText}>{this.errFilter('confirmPassword')}</Text>
             </View>
           </KeyboardAvoidingView>
           <View style={styles.centerButton}>
             <GreenButtonSmall
               text={'Reset Password'}
-              onPress={() => this.props.navigation.navigate('Login')}
+              onPress={this.resetPassword}
             />
           </View>
         </View>
