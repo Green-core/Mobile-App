@@ -27,9 +27,10 @@ class Login extends Component{
        }
        //'https://ancient-temple-30883.herokuapp.com/users/login'
        Axios
-         .post('https://ancient-temple-30883.herokuapp.com/users/login',user)
+         .post('http://10.0.2.2:5000/users/login',user)
          .then(res=>{
             if(res.status === 200){
+               // console.log('res = ',res.data.response)
                 deviceStorage.saveItem('id',res.data.id);
                 deviceStorage.saveItem("jwtToken", res.data.token);
                 Alert.alert('Successfuly login')
@@ -47,7 +48,6 @@ class Login extends Component{
                     index: 0,     //go to first screen
                     routes: [{ name: 'App' }],
                   });
-               // this.props.navigation.navigate('App',{jwt:'heeey'})
             }
             this.setState({loading:false})
          })
@@ -55,16 +55,19 @@ class Login extends Component{
             console.log(err)
             if(err.response){
                 console.log('res',err.response);
-                if(err.response.status ===400){
+                if(err.response.status === 400){
                     Alert.alert("Incorrect Email or Password");
                 }
-                else if(err.response.status ===404){
+                else if(err.response.status === 404){
                     Alert.alert("Network Error")
+                }
+                else if(err.response.status === 403){
+                    Alert.alert(err.response.data.err)
                 }
             }
             else{
                 console.log('err.message = '+err.message);
-                //Alert.alert(err.message);
+                Alert.alert(err.message);
             }
              this.setState({loading:false,email:'',password:''})
          })
@@ -105,7 +108,7 @@ class Login extends Component{
                     {/* </KeyboardAvoidingView>  */}
                     <Text 
                         style={styles.forgotText}
-                        onPress={()=>Alert.alert("Reset password token has sent to your Email.Please Check Your Emails !")}
+                        onPress={()=>this.props.navigation.navigate('RequestEmail')}
                     >
                         Forgot Password
                     </Text> 

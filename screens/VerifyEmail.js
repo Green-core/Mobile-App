@@ -7,8 +7,8 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import {GreenButtonSmall} from './../../components/customButtons';
-import {Loading} from '../../components/Loading';
+import {GreenButtonSmall} from '../components/customButtons';
+import {Loading} from '../components/Loading';
 import Axios from 'axios';
 
 export default class VerifyToken extends Component {
@@ -28,17 +28,21 @@ export default class VerifyToken extends Component {
       email: this.props.route.params.email,
       token: this.state.token,
     };
-    Axios.post('http://10.0.2.2:5000/users/checkToken', user)
+    Axios.post('http://10.0.2.2:5000/users/verifyEmail', user)
       .then((res) => {
         if (res.status === 200) {
           //  console.log(res.data.response);
           Alert.alert(
             'Success',
-            'Your password now can be reset',
+            'Your email is verified',
             [{text: 'Ok', onPress: () => {}}],
             {cancelable: false},
           );
-          this.props.navigation.navigate('ResetPassword', {email: user.email});
+          this.props.navigation.reset({
+            key: 'null',
+            index: 0,
+            routes: [{name: 'Auth'}],
+          });
         } else {
           console.log(res);
         }
@@ -51,37 +55,6 @@ export default class VerifyToken extends Component {
           } else if (err.response.status === 400) {
             console.log(err.response.data.err);
             this.setState({error: err.response.data.err});
-          }
-        } else {
-          console.log('err.message = ' + err.message);
-          Alert.alert(err.message);
-        }
-        this.setState({loading: false, token: ''});
-      });
-  };
-
-  resendToken = () => {
-    this.setState({loading: true});
-    const email = this.props.route.params.email;
-    Axios.post('http://10.0.2.2:5000/users/forgotPassword', {email})
-      .then((res) => {
-        if (res.status === 200) {
-          // console.log(res.data);
-          this.setState({loading: false});
-          Alert.alert(
-            ' Verify Code Sent',
-            'Please check your emails',
-            [{text: 'Ok', onPress: () => {}}],
-            {cancelable: false},
-          );
-        } else {
-          console.log(res);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.status === 422) {
-            console.log(err.response.data[0].msg);
           }
         } else {
           console.log('err.message = ' + err.message);
@@ -123,25 +96,6 @@ export default class VerifyToken extends Component {
           <View style={styles.centerButton}>
             <GreenButtonSmall text={'Submit'} onPress={this.sendToken} />
           </View>
-          <Text
-            style={styles.resendText}
-            onPress={() =>
-              Alert.alert(
-                " Didn't receive code",
-                'Please check your emails',
-                [
-                  {
-                    text: 'Resend',
-                    onPress: () => {
-                      this.resendToken;
-                    },
-                  },
-                ],
-                {cancelable: false},
-              )
-            }>
-            Didn't receive the code ?
-          </Text>
         </View>
       );
     }
@@ -194,14 +148,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 13,
     marginLeft: 25,
-  },
-  resendText: {
-    fontFamily: 'Segoe UI',
-    color: 'green',
-    fontSize: 18,
-    marginLeft: 110,
-    marginTop: 85,
-    textDecorationLine: 'underline',
   },
   centerButton: {
     top: 60,
