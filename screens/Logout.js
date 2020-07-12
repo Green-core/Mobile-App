@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text ,Button,StyleSheet,Alert,TouchableOpacity} from 'react-native';
 import {Loading} from '../components/Loading'
 import deviceStorage from '../services/deviceStorage';
+import BackgroundTimer from 'react-native-background-timer';
 //TODO modal
 export default class AuthHome extends Component {
   constructor(props){
@@ -14,6 +15,7 @@ export default class AuthHome extends Component {
   
   logOut = ()=>{
     this.setState({loading:true})
+    BackgroundTimer.stopBackgroundTimer();
     this.deleteItem();
    this.props.navigation.reset({index: 0,routes: [{ name: 'Auth' }]})
   }
