@@ -29,30 +29,37 @@ export default class Signup extends Component{
             confirmPassword:this.state.confirmPassword
         }
         Axios
-           .post("https://ancient-temple-30883.herokuapp.com/users/register",user)  
+           .post("http://10.0.2.2:5000/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
                     // console.log(res.data)
                     Alert.alert('Successfuly Registered');
                     this.setState({loading:false});
-                    this.props.navigation.reset({
-                        key:'null',
-                        index: 0,
-                        routes: [{ name: 'Auth' }],
-                      });
+                    this.props.navigation.navigate('VerifyEmail',{email:user.email})
+                    // this.props.navigation.reset({
+                    //     key:'null',
+                    //     index: 0,
+                    //     routes: [{ name: 'Auth' }],
+                    //   });
                 }
                this.setState({loading:false});
            })
            .catch(err=>{
                 console.log(err)
-                if(err.response.status === 422){     
-                    this.setState({errors:err.response.data});         
-                    Alert.alert('Sign Up Failed');
-                    //Alert.alert("Network Error");
+                if(err.response){
+                    console.log('res',err.response);
+                    if(err.response.status === 422){     
+                        this.setState({errors:err.response.data});         
+                        Alert.alert('Sign Up Failed');
+                        //Alert.alert("Network Error");
+                    }
+                    else{
+                        this.setState({statusError:'Network Error'})
+                        this.setState({errors:err.response.data});
+                    }
                 }
                 else{
-                    this.setState({statusError:'Network Error'})
-                    this.setState({errors:err.response.data});
+                    console.log('err.message = '+err.message);
                 }
                 this.setState({loading:false});
             })

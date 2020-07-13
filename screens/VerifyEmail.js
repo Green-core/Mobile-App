@@ -7,95 +7,94 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import {GreenButtonSmall} from '../../components/customButtons';
-import {Loading} from '../../components/Loading';
+import {GreenButtonSmall} from '../components/customButtons';
+import {Loading} from '../components/Loading';
 import Axios from 'axios';
 
-export default class RequestEmail extends Component {
+export default class VerifyToken extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      token: '',
       error: '',
       loading: false,
     };
   }
 
-  sendEmail = () => {
-    this.setState({loading:true})
-    Axios
-      .post('http://10.0.2.2:5000/users/forgotPassword',{email:this.state.email})
-      .then(res=>{
-        if(res.status === 200){
-          console.log(res.data.response);
-          this.setState({loading:false})
+  sendToken = () => {
+    this.setState({loading: true});
+    console.log(this.props.route.params.email);
+    const user = {
+      email: this.props.route.params.email,
+      token: this.state.token,
+    };
+    Axios.post('http://10.0.2.2:5000/users/verifyEmail', user)
+      .then((res) => {
+        if (res.status === 200) {
+          //  console.log(res.data.response);
           Alert.alert(
-            ' Verify Code Sent',
-            'Please check your emails',
+            'Success',
+            'Your email is verified',
             [{text: 'Ok', onPress: () => {}}],
             {cancelable: false},
           );
-          this.props.navigation.navigate('VerifyToken',{email:this.state.email})
-        }
-        else{
-          console.log(res)
+          this.props.navigation.reset({
+            key: 'null',
+            index: 0,
+            routes: [{name: 'Auth'}],
+          });
+        } else {
+          console.log(res);
         }
       })
-      .catch(err=>{
-        if(err.response){
-          if(err.response.status === 422){
-            console.log(err.response.data[0].msg)
-            this.setState({error:err.response.data[0].msg})
+      .catch((err) => {
+        if (err.response) {
+          if (err.response.status === 422) {
+            console.log(err.response.data[0].msg);
+            this.setState({error: err.response.data[0].msg});
+          } else if (err.response.status === 400) {
+            console.log(err.response.data.err);
+            this.setState({error: err.response.data.err});
           }
-        }
-        else{
-          console.log('err.message = '+err.message);
+        } else {
+          console.log('err.message = ' + err.message);
           Alert.alert(err.message);
         }
-        this.setState({loading:false,email:''})
-      })
+        this.setState({loading: false, token: ''});
+      });
   };
 
   render() {
-    const { email,error,loading } = this.state;
+    const {error, token, loading} = this.state;
     if (loading) {
       return (
         <View style={styles.container}>
           <Loading size={'large'} />
         </View>
       );
-    } 
-    else {
+    } else {
       return (
         <View style={styles.container}>
-          <Text style={styles.headerText}>Request for password reset</Text>
-          {/* <ScrollView keyboardShouldPersistTaps="handled"> */}
-          <KeyboardAvoidingView behavior="height">
+          <Text style={styles.headerText}>Verify Token</Text>
+          <KeyboardAvoidingView enabled>
             <View style={styles.card}>
               <Text style={styles.inputTitles}>
-                Please provide your account email address to request a password
-                reset code.
+                Enter the token sent to your email address
               </Text>
               <TextInput
-                placeholder={'Email'}
+                placeholder={'Token'}
                 autoCapitalize="none"
                 style={styles.TextInput}
-                onChangeText={(email) => {
-                  this.setState({email});
+                onChangeText={(token) => {
+                  this.setState({token});
                 }}
-                value={email}
+                value={token}
               />
-
-              <Text style={styles.errorText}>{error}</Text>
+              <Text style={styles.errorText}> {error}</Text>
             </View>
           </KeyboardAvoidingView>
-          {/* </ScrollView> */}
           <View style={styles.centerButton}>
-            <GreenButtonSmall
-              text={'Submit'}
-              onPress={this.sendEmail}
-             // onPress={()=>this.props.navigation.navigate('VerifyToken')}
-            />
+            <GreenButtonSmall text={'Submit'} onPress={this.sendToken} />
           </View>
         </View>
       );
@@ -122,14 +121,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     shadowOpacity: 0.3,
     shadowOffset: {width: 1, height: 1},
-    // marginHorizontal: 4,
     marginLeft: 40,
     top: 70,
-    height: 180,
+    height: 170,
     width: '80%',
     marginBottom: 10,
     position: 'relative',
-    //zIndex: -1,
   },
   inputTitles: {
     marginLeft: 25,
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   centerButton: {
-    top: 80,
+    top: 60,
     alignContent: 'center',
     alignItems: 'center',
   },

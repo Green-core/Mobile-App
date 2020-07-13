@@ -27,7 +27,7 @@ import { withAppContext } from '../services/withAppContext'
      //{ headers:headers}
      //`http://10.0.2.2:5000/users/get/${id}`
     Axios
-    .get(`https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
+    .get(`http://10.0.2.2:5000/users/get/${id}`)
     .then((res) => {
       this.setState({
         user:res.data,
