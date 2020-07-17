@@ -9,7 +9,8 @@ export default class Notifications extends Component {
   constructor() {
     super();
     this.state = {
-      notified:false
+      notified:false,
+      data:[]
     };
 
     // PushNotification.configure({
@@ -66,27 +67,60 @@ export default class Notifications extends Component {
       });
   }
 
-  componentDidMount() {
-    BackgroundTimer.runBackgroundTimer(() => {
-      if(!this.state.notified){ 
-        this.displayPushNotifications();
-        console.log('Notified');
-        this.setState({...this.state , notified:true})
-      }
-    }, 30000);
+  getData(){
+    axios
+    .get(
+      `https://ancient-temple-30883.herokuapp.com/notifications/check/5edca6c3f37915125cf1e8d7`,
+    )
+    .then((res) => { 
+        this.setState({...this.state, data: res.data.data}); 
+    });
   }
 
+  componentDidMount() {
+    axios
+    .get(
+      `https://ancient-temple-30883.herokuapp.com/notifications/check/5edca6c3f37915125cf1e8d7`,
+    )
+    .then((res) => { 
+        this.setState({...this.state, data: res.data.data}); 
+    });
+
+    // BackgroundTimer.runBackgroundTimer(() => {
+    //   if(!this.state.notified){ 
+    //    // this.displayPushNotifications();
+    //     console.log('Notified');
+    //     this.setState({...this.state , notified:true})
+    //   }
+    // }, 30000);
+  }
+
+  // componentWillMount(){
+  //   this.setState({...this.state , notified:false})
+  // }
+
   render() {
-    this.setState({...this.state , notified:false})
+  console.log(JSON.stringify(this.state.data , null , 2))
     //send api request and recieve list of notifications if exists
+
+    const notifications =   this.state.data.map( (element) => {   
+      console.log(element.value)
+        return( 
+          <NotificationCard 
+           data = {element}  />
+        ) 
+    });
+  
+
+
 
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.titleText}>Notifications</Text>
-        <NotificationCard notificationType={'light'} />
+        {  notifications }
+        {/* <NotificationCard notificationType={'light'} />
         <NotificationCard notificationType={'water'} />
-        <NotificationCard notificationType={'fertilizer'} />
-        <NotificationCard notificationType={'bugs'} />
+        <NotificationCard notificationType={'fertilizer'} /> */}
         <View style={styles.finalSpace} />
       </ScrollView>
     );
