@@ -3,16 +3,13 @@ import React, {Component} from 'react';
 import {Alert, Text, View} from 'react-native';
 import {Icon, Avatar} from 'react-native-elements';
 import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
+  NavigationContainer,  
   DrawerActions,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
+  DrawerContentScrollView, 
   DrawerItem,
 } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -53,6 +50,10 @@ import {AppProvider} from './services/AppProvider';
 
 // Asyncstorage methods
 import deviceStorage from './services/deviceStorage';
+
+import TipsByPlantScreen from "./screens/tipsByPlantScreen";
+import TipsScreen from "./screens/tipsScreen";
+
 
 //---- theme
 // const colorScheme = useColorScheme();
@@ -381,10 +382,14 @@ class App extends Component {
           <NavigationContainer>
             <RootStack.Navigator
               headerMode="none"
-              initialRouteName="Splash"
+              //initialRouteName="Splash"
+              initialRouteName="TipsScreen"
               screenOptions={{
                 animationEnabled: false,
               }}>
+                
+              <RootStack.Screen name="TipsByPlant" component={TipsByPlantScreen} />
+              <RootStack.Screen name="TipsScreen" component={TipsScreen} />
               <RootStack.Screen name="Splash" component={WelcomeScreen} />
               <RootStack.Screen name="Auth" component={AuthStack} />
               <RootStack.Screen name="App" component={DrawerStack} />
