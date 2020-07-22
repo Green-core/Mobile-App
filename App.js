@@ -382,8 +382,9 @@ class App extends Component {
           <NavigationContainer>
             <RootStack.Navigator
               headerMode="none"
-              //initialRouteName="Splash"
-              initialRouteName="TipsScreen"
+              initialRouteName="Splash"
+              //initialRouteName="TipsByPlant"
+              //initialRouteName="TipsScreen"
               screenOptions={{
                 animationEnabled: false,
               }}>

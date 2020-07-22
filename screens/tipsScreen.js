@@ -1,48 +1,57 @@
 import React, {Component} from 'react';
-import {Text, View, ScrollView, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
 
-const data = {
-  type: 'Chilly',
-  tips: [
-    {
-      _id: '5f12e73dac71f8313cd5b3d3',
-      title: 'Title of tip 1',
-      body: 'body of tip 1 ',
-    },
-    {
-      _id: '5f12e73dac71f8313cd5b3d1',
-      title: 'Title of tip 2',
-      body: 'body of tip 2 ',
-    },
-    {
-      _id: '5f12e73dac71f8313cd5b3d2',
-      title: 'Title of tip 3',
-      body: 'body of tip 3 ',
-    },
-  ],
-};
-
 export class tips extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      tips: [],
+    };
+  }
+
+  componentDidMount() {
+    const {key} = this.props.route.params;
+    axios
+      .get(`https://ancient-temple-30883.herokuapp.com/tips/get/plant/${key}`)
+      .then((res) => {
+        const tips = res.data[0].tips;
+        this.setState({tips, loading: false});
+      })
+      .catch((error) => console.log(error));
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.card}>
-          <FlatList
-            data={data.tips}
-            renderItem={(item) => {
-              console.log(item.item);
-              return (
-                <View>
-                  <Text style={styles.title}>• {item.item.title} </Text>
-                  <Text style={styles.body}>{item.item.body} </Text>
-                </View>
-              );
-            }}
-            keyExtractor={(item) => item.id}
-          /> 
+          {this.state.loading ? (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color="#2CBE64" />
+            </View>
+          ) : (
+            <FlatList
+              data={this.state.tips}
+              renderItem={(item) => {
+                return (
+                  <View>
+                    <Text style={styles.title}>• {item.item.title} </Text>
+                    <Text style={styles.body}>{item.item.body} </Text>
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.id}
+            />
+          )}
         </View>
       </View>
     );
@@ -56,34 +65,39 @@ const styles = StyleSheet.create({
     left: '7%',
   },
 
+  loading: {
+    position: 'relative',
+    top: '45%', 
+  },
+
   container: {
     fontFamily: 'Segoe UI',
     flex: 1,
-   backgroundColor: '#E4E4E4', 
+    backgroundColor: '#E4E4E4',
   },
   card: {
     borderRadius: 10,
-    padding:10,
+    padding: 10,
     backgroundColor: 'white',
     marginHorizontal: 4,
     left: '7.5%',
-    top: '5%', 
+    top: '5%',
     width: '85%',
     height: '90%',
     position: 'relative',
   },
   title: {
     fontSize: 22,
-    margin: 10,
-    backgroundColor: 'green',
+    margin: 10, 
+    marginBottom: 0, 
   },
   body: {
     fontSize: 16,
     position: 'relative',
     left: '10%',
     width: '80%',
-    margin: 10,
-    backgroundColor: 'yellow',
+    margin: 10, 
+    marginTop: 0, 
   },
 });
 

@@ -4,36 +4,51 @@ import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
 
-const data = {
-  data: [
-    {
-      _id: '5f12e73dac71f8313cd5b3d3',
-      type: 'Chilly',
-      title: 'title of tip 1',
-      body: 'body of tip 1 ',
-    },
-    {
-      _id: '5f12e73dac71f8313cd5b3d2',
-      type: 'Gotukola',
-      title: 'title of tip 2',
-      body: 'body of tip 2',
-    },
-  ],
-};
+ 
 
 export class tips extends Component {
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      plants:[]
+    };
+  }
+
+  componentDidMount() {
+    // const {id, jwt} = this.props.context.state.user;
+     // add headers
+     //get profile details usind _id
+     const id = "5edca6c3f37915125cf1e8d7";
+     axios 
+      .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
+       .then((res) => {
+         const plants = res.data;
+         console.log(JSON.stringify(plants))
+         this.setState({ plants});
+       })
+       .catch((error) => console.log(error));
+   }
+ 
+   navigateToTips(key){
+      //alert(key)
+      this.props.navigation.navigate("TipsScreen" , {key})
+      //navigate to tips Screen with props 
+   }
+
+
   render() { 
     return (
       <View style={styles.container}>
         <Text style={styles.titleText}>Tips by plant name </Text>
         <FlatList
           style={styles.flatList}
-          data={data.data}
-          renderItem={(item) => {
-            console.log(item.item.type);
+          data={this.state.plants}
+          renderItem={(item) => { 
             return (
               <View style={styles.card}>
-                <Text style={styles.cardText}>{item.item.type} </Text>
+                <Text style={styles.cardText} onPress={()=>{this.navigateToTips(item.item)}}>{item.item} </Text>
               </View>
             );
           }}
