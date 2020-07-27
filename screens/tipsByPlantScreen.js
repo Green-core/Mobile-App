@@ -17,7 +17,7 @@ export class tips extends Component {
   }
 
   componentDidMount() {
-      const {id, jwt} = this.props.context.state.user;
+    //  const {id, jwt} = this.props.context.state.user;
      // add headers
      //get profile details usind _id
      const id = "5edca6c3f37915125cf1e8d7";

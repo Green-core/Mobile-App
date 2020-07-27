@@ -14,14 +14,13 @@ import MenuBar from '../components/menuBar';
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import { withAppContext } from '../services/withAppContext'
+import {withAppContext} from '../services/withAppContext';
 
 //form validator
 const validationScheme = yup.object({
-  unitID: yup.string().min(1) ,
+  unitID: yup.string().min(1),
   deviceName: yup.string().min(2),
-  location: yup.string().min(2),
-  plantType: yup.string().min(2)
+  plantType: yup.string().min(2),
 });
 
 class LinkUnitsScreen extends Component {
@@ -30,6 +29,36 @@ class LinkUnitsScreen extends Component {
     this.state = {
       user: [],
       plants: [],
+      types: ['Chiily', 'Gotukola', 'Papaya', 'Tomato', 'Daspethiya', 'Other'],
+      districts: [
+        'Ampara',
+        'Anuradhapura',
+        'Badulla',
+        'Batticaloa',
+        'Colombo',
+        'Galle',
+        'Gampaha',
+        'Hambantota',
+        'Jaffna',
+        'Kalmunai',
+        'Kalutara',
+        'Kandy',
+        'Kegalle',
+        'Kilinochchi',
+        'Kurunegala',
+        'Mannar',
+        'Matale',
+        'Matara',
+        'Monaragala',
+        'Mullaitivu',
+        'Nuwara Eliya',
+        'Polonnaruwa',
+        'Puttalam',
+        'Ratnapura',
+        'Rathnapura',
+        'Trincomalee ',
+        'Vavuniya',
+      ],
     };
     this.updateValues = this.updateValues.bind(this);
 
@@ -44,11 +73,9 @@ class LinkUnitsScreen extends Component {
 
   componentDidMount() {
     //get profile details usind _id
-    const {id,jwt} = this.props.context.state.user;
+    const {id, jwt} = this.props.context.state.user;
     axios
-      .get(
-        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
-      )
+      .get(` https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
       .then((res) => {
         const userData = res.data;
         this.setState({...this.state, user: userData, enabled: true});
@@ -67,37 +94,43 @@ class LinkUnitsScreen extends Component {
 
   updateValues(values) {
     Keyboard.dismiss();
-    console.log(JSON.stringify(values, null, 2)); 
-    console.log(JSON.stringify(values, null, 2));  
-    const plantData  =   this.state.plants.filter(plant => (plant.plantName==values.plantType)); 
+    console.log(JSON.stringify(values, null, 2));
+    console.log(JSON.stringify(values, null, 2));
+    const plantData = this.state.plants.filter(
+      (plant) => plant.plantName == values.plantType,
+    );
     const unit = {
-      ownerID:this.state.user._id ,  
-      deviceName:values.deviceName, 
-      unitID:values.unitID, 
-      plantType: values.plantType ,
-      location: values.location , 
-      updatedAt:new Date(),
-    }
-  
-    console.log(JSON.stringify(unit))
-     axios
-     .put(
-       ' https://ancient-temple-30883.herokuapp.com/units/update/'+values.unitID,unit
-     )
-     .then((res) => {  
-      ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
-     })
-     .catch((error) => console.log(error));
-     console.log(JSON.stringify(plantData))
-     
+      ownerID: this.state.user._id,
+      deviceName: values.deviceName,
+      unitID: values.unitID,
+      plantType: values.plantType,
+      location: values.location,
+      updatedAt: new Date(),
+    };
+
+    console.log(JSON.stringify(unit));
+    axios
+      .put(
+        ' https://ancient-temple-30883.herokuapp.com/units/update/' +
+          values.unitID,
+        unit,
+      )
+      .then((res) => {
+        ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
+      })
+      .catch((error) => console.log(error));
+    console.log(JSON.stringify(plantData));
   }
 
-  render() { 
-    console.log(JSON.stringify(this.state, null, 2)); 
-    const todoComponents = this.state.plants.forEach((item) => {
-      console.log(item.plantName);
-      return <Picker.Item label={item.plantName} value={item.plantName} />;
-    });
+  render() {
+    const typesList = this.state.types.map((item, index) => (
+      <Picker.Item label={item} value={item} key={index} />
+    ));
+    const districtList = this.state.districts.map((item, index) => (
+      <Picker.Item label={item} value={item} key={index} />
+    ));
+
+    console.log(JSON.stringify(this.state, null, 2));
 
     return (
       <View style={styles.container}>
@@ -109,11 +142,11 @@ class LinkUnitsScreen extends Component {
 
             <View style={styles.card}>
               <Formik
-                initialValues={{ 
+                initialValues={{
                   unitID: '',
                   deviceName: '',
                   location: '',
-                  plantType:'Mango'
+                  plantType: 'Mango',
                 }}
                 enableReinitialize
                 validationSchema={validationScheme}
@@ -126,13 +159,11 @@ class LinkUnitsScreen extends Component {
                     <TextInput
                       placeholder={'Enter unit ID here'}
                       onChangeText={props.handleChange('unitID')}
-                      selectedValue ={props.values.unitID}
+                      selectedValue={props.values.unitID}
                       style={[
                         styles.inputs,
                         ,
-                        props.errors.unitID
-                          ? styles.errorText
-                          : styles.inputs,
+                        props.errors.unitID ? styles.errorText : styles.inputs,
                       ]}
                     />
 
@@ -150,36 +181,32 @@ class LinkUnitsScreen extends Component {
                     />
                     <Text style={styles.inputTitles}>Plant type</Text>
 
-                    <Picker  
-                       selectedValue={props.values.plantType} 
-                       onValueChange={ props.handleChange('plantType') }
+                    <Picker
+                      selectedValue={props.values.plantType}
+                      onValueChange={props.handleChange('plantType')}
                       style={[
                         styles.plantTypePicker,
                         props.errors.plantType
                           ? styles.errorText
                           : styles.inputs,
-                      ]} 
-                      >
-                      <Picker.Item label="Chiily" value="Chiily" />
-                      <Picker.Item label="Gotukola" value="Gotukola" />
-                      <Picker.Item label="Papaya" value="Papaya" />
-                      <Picker.Item label="Tomato" value="Tomato" />
-                      <Picker.Item label="Daspethiya" value="Daspethiya" />
-                      <Picker.Item label="Other" value="Other" /> 
+                      ]}>
+                      {typesList}
                     </Picker>
 
-                    <Text style={styles.inputTitles}>Location</Text>
-                    <TextInput
-                      placeholder={'Enter location of the device here'}
-                      onChangeText={props.handleChange('location')}
-                      value={props.values.location}
+                    <Text style={styles.inputTitles}>Location</Text> 
+
+                    <Picker
+                      selectedValue={props.values.location}
+                      onValueChange={props.handleChange('location')}
                       style={[
-                        styles.inputs,
-                        props.errors.location
+                        styles.plantTypePicker,
+                        props.errors.plantType
                           ? styles.errorText
                           : styles.inputs,
-                      ]}
-                    /> 
+                      ]}>
+                      {districtList}
+                    </Picker>
+
                     <View style={styles.buttoContainer}>
                       <GreenButtonSmall
                         text={'Save changes'}
