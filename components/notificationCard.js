@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from 'react-native';
-import Axios from 'axios';
 const expan = require('./../assets/images/expan.png');
 const grayLine = require('../assets/images/line.png');
 const waterDrop = require('../assets/images/notifications/water.png');
@@ -25,7 +24,7 @@ export default class NotificationCard extends Component {
       animatedOpacity: new Animated.Value(0),
       viewState: true,
       rotateAnimation: new Animated.Value(0),
-      isVisible:true,
+      isVisible: true,
     };
   }
 
@@ -71,10 +70,12 @@ export default class NotificationCard extends Component {
     }
   };
 
+  hideCard() {
+    this.setState({...this.state, isVisible: false});
+  }
+
   onClickPerform = (id, type) => {
-    console.log(id, type) 
-    this.state.isVisible = false
-    console.log(this.state.isVisible)
+    this.hideCard();
     if (type == 'LT') {
       axios
         .put(
@@ -85,8 +86,6 @@ export default class NotificationCard extends Component {
           },
         )
         .then((res) => {
-          this.state.isVisible = false
-          console.log(this.state.isVisible)
           ToastAndroid.showWithGravityAndOffset(
             'Light turned on  !',
             ToastAndroid.SHORT,
@@ -111,17 +110,17 @@ export default class NotificationCard extends Component {
             ToastAndroid.BOTTOM,
             25,
             100,
-          ); 
+          );
         });
     }
   };
 
-  onClickActions = (id, type) => {
+  onClickActions = (id) => {
+    this.hideCard();
     //navigate to actions with id
   };
 
   render() {
-    //select the notification image
     var imagePath = '';
     var title = this.props.data.name;
     var message = this.props.data.value;
@@ -149,65 +148,71 @@ export default class NotificationCard extends Component {
     var animatedHeight = {
       height: this.state.animatedHeight,
     };
- 
-      return (
-        <View>
-          {this.state.isVisible?(
-        <View style={{marginVertical: 1}} > 
-          <Animated.View style={[styles.card, animatedHeight]}>
-            <View style={styles.cardHeader}>
-              <View style={styles.headerText}>
-                <Text style={styles.headerTitle}>{title}</Text>
-                <Text style={styles.headerSubTitle}>{this.props.data.name}</Text>
-              </View>
-              <View style={styles.headerImage}>
-                <Image
-                  source={imagePath}
-                  style={styles.notificationHeaderImage}
-                />
-              </View>
-            </View>
-  
-            <Animated.View
-              style={{...styles.cardBody, opacity: this.state.animatedOpacity}}>
-              <Text>{message}</Text>
-            </Animated.View>
-  
-            <TouchableWithoutFeedback onPress={this.toggleAnimation}>
-              <View style={styles.expanContainer}>
-                <Animated.Image
-                  source={expan}
-                  style={{...styles.expan, transform: [{rotate: rotateProp}]}}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <Text style={styles.text}></Text>
-          </Animated.View>
-          <Animated.View style={styles.buttonBar}>
-            <Image source={grayLine} style={styles.grayLine} />
-            <View style={styles.buttonLine}>
-              <Text
-                style={styles.buttonLineText}
-                onPress={() => {
-                  this.onClickPerform( id,  type);
-                }}>
-                {' '}
-                Perform{' '}
-              </Text>
-              <Text
-                style={styles.buttonLineText}
-                onPress={() => {
-                  onClickActions( id,  type);
-                }}>
-                Actions
-              </Text>
-            </View>
-          </Animated.View>
-        </View> ):<View><Text>Done</Text></View>}
-        </View>
-      );
-     
 
+    return (
+      <View>
+        {this.state.isVisible ? (
+          <View style={{marginVertical: 1}}>
+            <Animated.View style={[styles.card, animatedHeight]}>
+              <View style={styles.cardHeader}>
+                <View style={styles.headerText}>
+                  <Text style={styles.headerTitle}>{title}</Text>
+                  <Text style={styles.headerSubTitle}>
+                    {this.props.data.name}
+                  </Text>
+                </View>
+                <View style={styles.headerImage}>
+                  <Image
+                    source={imagePath}
+                    style={styles.notificationHeaderImage}
+                  />
+                </View>
+              </View>
+
+              <Animated.View
+                style={{
+                  ...styles.cardBody,
+                  opacity: this.state.animatedOpacity,
+                }}>
+                <Text>{message}</Text>
+              </Animated.View>
+
+              <TouchableWithoutFeedback onPress={this.toggleAnimation}>
+                <View style={styles.expanContainer}>
+                  <Animated.Image
+                    source={expan}
+                    style={{...styles.expan, transform: [{rotate: rotateProp}]}}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+              <Text style={styles.text}></Text>
+            </Animated.View>
+            <Animated.View style={styles.buttonBar}>
+              <Image source={grayLine} style={styles.grayLine} />
+              <View style={styles.buttonLine}>
+                <Text
+                  style={styles.buttonLineText}
+                  onPress={() => {
+                    this.onClickPerform(id, type);
+                  }}>
+                  {' '}
+                  Perform{' '}
+                </Text>
+                <Text
+                  style={styles.buttonLineText}
+                  onPress={() => {
+                    onClickActions(id );
+                  }}>
+                  Actions
+                </Text>
+              </View>
+            </Animated.View>
+          </View>
+        ) : (
+          <View></View>
+        )}
+      </View>
+    );
   }
 }
 

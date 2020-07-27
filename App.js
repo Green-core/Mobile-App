@@ -2,14 +2,11 @@ import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {Alert, Text, View} from 'react-native';
 import {Icon, Avatar} from 'react-native-elements';
-import {
-  NavigationContainer,  
-  DrawerActions,
-} from '@react-navigation/native';
+import {NavigationContainer, DrawerActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
   createDrawerNavigator,
-  DrawerContentScrollView, 
+  DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -51,9 +48,8 @@ import {AppProvider} from './services/AppProvider';
 // Asyncstorage methods
 import deviceStorage from './services/deviceStorage';
 
-import TipsByPlantScreen from "./screens/tipsByPlantScreen";
-import TipsScreen from "./screens/tipsScreen";
-
+import TipsByPlantScreen from './screens/tipsByPlantScreen';
+import TipsScreen from './screens/tipsScreen';
 
 //---- theme
 // const colorScheme = useColorScheme();
@@ -230,7 +226,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="add-circle-outline" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() => {
           props.navigation.navigate('Link Units');
         }}
@@ -240,7 +236,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="person-outline" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() => {
           props.navigation.navigate('Profile');
         }}
@@ -256,7 +252,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="border-all" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() => {
           props.navigation.navigate('View All Units');
         }}
@@ -266,7 +262,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="chat-bubble-outline" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() => {
           props.navigation.navigate('Chat');
         }}
@@ -276,7 +272,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="notifications-none" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() => {
           props.navigation.navigate('Notification');
         }}
@@ -287,7 +283,7 @@ function CustomDrawerContent(props) {
         activeTintColor="green"
         icon={() => (
           <Icon color="black" name="power-settings-new" type="MaterialIcons" />
-        )} 
+        )}
         onPress={() =>
           Alert.alert(
             'Log Out',
@@ -382,14 +378,18 @@ class App extends Component {
           <NavigationContainer>
             <RootStack.Navigator
               headerMode="none"
-              initialRouteName="Splash"
+              // initialRouteName="Splash"
+              initialRouteName="note"
               //initialRouteName="TipsByPlant"
               //initialRouteName="TipsScreen"
               screenOptions={{
                 animationEnabled: false,
               }}>
-                
-              <RootStack.Screen name="TipsByPlant" component={TipsByPlantScreen} />
+              <RootStack.Screen name="note" component={NotificationScreen} />
+              <RootStack.Screen
+                name="TipsByPlant"
+                component={TipsByPlantScreen}
+              />
               <RootStack.Screen name="TipsScreen" component={TipsScreen} />
               <RootStack.Screen name="Splash" component={WelcomeScreen} />
               <RootStack.Screen name="Auth" component={AuthStack} />
