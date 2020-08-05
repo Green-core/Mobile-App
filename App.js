@@ -278,6 +278,18 @@ function CustomDrawerContent(props) {
         }}
       />
 
+
+<DrawerItem
+        label="Tips"
+        activeTintColor="green"
+        icon={() => (
+          <Icon color="black" name="error-outline" type="MaterialIcons" />
+        )}
+        onPress={() => {
+          props.navigation.navigate('Tips');
+        }}
+      />
+
       <DrawerItem
         label="Log Out"
         activeTintColor="green"
@@ -336,6 +348,7 @@ const DrawerStack = () => (
     <Drawer.Screen name="View All Units" component={LinkUnitsStack} />
     <Drawer.Screen name="Chat" component={ChatStack} />
     <Drawer.Screen name="Notification" component={NotificationScreen} />
+    <Drawer.Screen name="Tips" component={TipsScreen} />
   </Drawer.Navigator>
 );
 const RootStack = createStackNavigator();
@@ -391,6 +404,7 @@ class App extends Component {
                 component={TipsByPlantScreen}
               />
               <RootStack.Screen name="TipsScreen" component={TipsScreen} />
+              <RootStack.Screen name="Actions" component={ ActionsScreen } />
               <RootStack.Screen name="Splash" component={WelcomeScreen} />
               <RootStack.Screen name="Auth" component={AuthStack} />
               <RootStack.Screen name="App" component={DrawerStack} />

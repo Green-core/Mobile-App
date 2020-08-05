@@ -116,8 +116,10 @@ export default class NotificationCard extends Component {
   };
 
   onClickActions = (id) => {
-    this.hideCard();
-    //navigate to actions with id
+   // this.hideCard();
+   console.log(id) 
+   this.props.navigation.navigate('Actions', { id });
+   //navigate to actions with id
   };
 
   render() {
@@ -201,7 +203,7 @@ export default class NotificationCard extends Component {
                 <Text
                   style={styles.buttonLineText}
                   onPress={() => {
-                    onClickActions(id );
+                    this.onClickActions(id );
                   }}>
                   Actions
                 </Text>

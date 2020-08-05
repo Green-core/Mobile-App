@@ -20,7 +20,7 @@ export class tips extends Component {
     //  const {id, jwt} = this.props.context.state.user;
      // add headers
      //get profile details usind _id
-     const id = "5edca6c3f37915125cf1e8d7";
+    const id = "5edca6c3f37915125cf1e8d7";// <-------------------------------add user ID here 
      axios 
       .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
        .then((res) => {
