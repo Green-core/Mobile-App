@@ -19,14 +19,14 @@ export class tips extends Component {
     };
   }
 
-  componentDidMount() {
-    const  key  =  "5edca6c3f37915125cf1e8d7";// <-------------------------------add user ID here 
-    //const {key} = this.props.route.params; //
+  componentDidMount() { 
+   const {key} = this.props.route.params; //
     axios
       .get(`https://ancient-temple-30883.herokuapp.com/tips/get/plant/${key}`)
       .then((res) => {
         const tips = res.data[0].tips;
-        this.setState({tips, loading: false});
+        console.warn(res.data )
+        this.setState({...this.state,tips, loading: false});
       })
       .catch((error) => console.log(error));
   }

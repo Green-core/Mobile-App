@@ -348,7 +348,7 @@ const DrawerStack = () => (
     <Drawer.Screen name="View All Units" component={LinkUnitsStack} />
     <Drawer.Screen name="Chat" component={ChatStack} />
     <Drawer.Screen name="Notification" component={NotificationScreen} />
-    <Drawer.Screen name="Tips" component={TipsScreen} />
+    <Drawer.Screen name="Tips" component={TipsByPlantScreen} />
   </Drawer.Navigator>
 );
 const RootStack = createStackNavigator();

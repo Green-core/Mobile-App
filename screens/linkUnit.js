@@ -65,8 +65,9 @@ class LinkUnitsScreen extends Component {
     axios
       .get('https://ancient-temple-30883.herokuapp.com/plants/get')
       .then((res) => {
-        const plantData = res.data;
-        this.setState({...this.state, plants: plantData});
+        console.log(JSON.stringify(res.data,null,2))
+        // const plantData = res.data;
+        // this.setState({...this.state, plants: plantData});
       })
       .catch((error) => console.log(error));
   }
@@ -93,9 +94,7 @@ class LinkUnitsScreen extends Component {
   }
 
   updateValues(values) {
-    Keyboard.dismiss();
-    console.log(JSON.stringify(values, null, 2));
-    console.log(JSON.stringify(values, null, 2));
+    Keyboard.dismiss(); 
     const plantData = this.state.plants.filter(
       (plant) => plant.plantName == values.plantType,
     );
@@ -107,8 +106,7 @@ class LinkUnitsScreen extends Component {
       location: values.location,
       updatedAt: new Date(),
     };
-
-    console.log(JSON.stringify(unit));
+ 
     axios
       .put(
         ' https://ancient-temple-30883.herokuapp.com/units/update/' +
@@ -118,8 +116,7 @@ class LinkUnitsScreen extends Component {
       .then((res) => {
         ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
       })
-      .catch((error) => console.log(error));
-    console.log(JSON.stringify(plantData));
+      .catch((error) => console.log(error)); 
   }
 
   render() {
@@ -129,8 +126,7 @@ class LinkUnitsScreen extends Component {
     const districtList = this.state.districts.map((item, index) => (
       <Picker.Item label={item} value={item} key={index} />
     ));
-
-    console.log(JSON.stringify(this.state, null, 2));
+ 
 
     return (
       <View style={styles.container}>
