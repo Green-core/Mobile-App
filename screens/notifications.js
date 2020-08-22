@@ -88,7 +88,7 @@ export default class Notifications extends Component {
   render() {
     const notifications = this.state.data.map((element) => {
       console.log(element.value);
-      return <NotificationCard data={element} />;
+      return <NotificationCard data={element} navigation={this.props.navigation.navigate} />;
     });
 
     return (

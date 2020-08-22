@@ -20,7 +20,9 @@ export class tips extends Component {
   }
 
   componentDidMount() { 
-   const {key} = this.props.route.params; //
+   const {key} = this.props.route.params; 
+   //console.log(this.props.route)
+   
     axios
       .get(`https://ancient-temple-30883.herokuapp.com/tips/get/plant/${key}`)
       .then((res) => {

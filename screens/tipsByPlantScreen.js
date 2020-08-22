@@ -3,6 +3,7 @@ import {Text, View, ScrollView, StyleSheet} from 'react-native';
 import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
+import { withAppContext } from '../services/withAppContext'
 
  
 
@@ -17,10 +18,11 @@ export class tips extends Component {
   }
 
   componentDidMount() {
-    //  const {id, jwt} = this.props.context.state.user;
+      const {id} = this.props.context.state.user;
+     // console.log(id);
      // add headers
      //get profile details usind _id
-    const id = "5edca6c3f37915125cf1e8d7";// <-------------------------------add user ID here 
+    //const id = "5edca6c3f37915125cf1e8d7";
      axios 
       .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
        .then((res) => {
@@ -33,7 +35,7 @@ export class tips extends Component {
  
    navigateToTips(key){
       //alert(key)
-      this.props.navigation.navigate("TipsScreen" , {key})
+      this.props.navigation.navigate("Tips" , {key})
       //navigate to tips Screen with props 
    }
 
@@ -99,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default tips;
+export default withAppContext(tips);

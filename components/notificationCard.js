@@ -17,8 +17,8 @@ const bees = require('../assets/images/notifications/bee.png');
 const fertilizer = require('../assets/images/notifications/fertilizer.png');
 const humidity = require('../assets/images/notifications/humidity.png');
 export default class NotificationCard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       animatedHeight: new Animated.Value(140),
       animatedOpacity: new Animated.Value(0),
@@ -118,7 +118,8 @@ export default class NotificationCard extends Component {
   onClickActions = (id) => {
    // this.hideCard();
    console.log(id) 
-   this.props.navigation.navigate('Actions', { id });
+   //console.log("navigation prop",this.props.navigation)  passed navigation prop
+   this.props.navigation('Actions', { id }); // passed navigation prop from nitification screen
    //navigate to actions with id
   };
 
