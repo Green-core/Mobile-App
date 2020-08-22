@@ -103,8 +103,22 @@ const HomeStack = () => (
     screenOptions={{
       headerStyle: {backgroundColor: 'white'},
       animationEnabled: false,
+      // headerTransparent:true
     }}>
-    <Home.Screen name="Profile settings" component={ProfileSettingsScreen} />
+    <Home.Screen
+      name="Profile settings"
+      component={ProfileSettingsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
     <Home.Screen
       name="Home"
       component={AuthHomeScreen}
@@ -131,6 +145,42 @@ const HomeStack = () => (
   </Home.Navigator>
 );
 
+// Link units
+const LinkUnit = createStackNavigator();
+const LinkUnitStack = () => (
+  <LinkUnit.Navigator
+    initialRouteName="Link Units"
+    screenOptions={{
+      headerStyle: {backgroundColor: 'white'},
+      animationEnabled: false,
+      // headerTransparent:true
+    }}>
+    <LinkUnit.Screen
+      name="Link Units"
+      component={LinkUnitsScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+  </LinkUnit.Navigator>
+);
+
 // profile
 //    - Account Settings
 //    - Profile Settings
@@ -138,14 +188,62 @@ const HomeStack = () => (
 const Profile = createStackNavigator();
 const ProfileStack = () => (
   <Profile.Navigator
-    headerMode="none"
+    //headerMode="none"
     initialRouteName="Profile"
     screenOptions={{
       animationEnabled: false,
     }}>
-    <Profile.Screen name="Profile" component={ProfileScreen} />
-    <Profile.Screen name="Profile Settings" component={ProfileSettingsScreen} />
-    <Profile.Screen name="Account Settings" component={AccountSettingsScreen} />
+    <Profile.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <Profile.Screen
+      name="Profile Settings"
+      component={ProfileSettingsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <Profile.Screen
+      name="Account Settings"
+      component={AccountSettingsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
   </Profile.Navigator>
 );
 
@@ -153,18 +251,66 @@ const ProfileStack = () => (
 //       - Unit Details
 //       - Actions
 
-const LinkUnits = createStackNavigator();
-const LinkUnitsStack = () => (
-  <LinkUnits.Navigator
-    headerMode="none"
+const ViewLinkUnits = createStackNavigator();
+const ViewLinkUnitsStack = () => (
+  <ViewLinkUnits.Navigator
+    //  headerMode="none"
     initialRouteName="View All Units"
     screenOptions={{
       animationEnabled: false,
     }}>
-    <LinkUnits.Screen name="View All Units" component={ViewAllUnitsScreen} />
-    <LinkUnits.Screen name="Unit Details" component={UnitDetailsScreen} />
-    <LinkUnits.Screen name="Actions" component={ActionsScreen} />
-  </LinkUnits.Navigator>
+    <ViewLinkUnits.Screen
+      name="View All Units"
+      component={ViewAllUnitsScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <ViewLinkUnits.Screen
+      name="Unit Details"
+      component={UnitDetailsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <ViewLinkUnits.Screen
+      name="Actions"
+      component={ActionsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+  </ViewLinkUnits.Navigator>
 );
 
 //  - All Messages
@@ -179,12 +325,129 @@ const ChatStack = () => (
     screenOptions={{
       animationEnabled: false,
     }}>
-    <Chat.Screen name="AllMessage" component={AllMessagesScreen} />
+    <Chat.Screen
+      name="AllMessage"
+      component={AllMessagesScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
     <Chat.Screen name="SingleMessage" component={SingleMessageScreen} />
     <Chat.Screen name="SendMessage" component={SendMessageScreen} />
     <Chat.Screen name="ReplyMessages" component={ReplyMessageScreen} />
   </Chat.Navigator>
 );
+
+// Plant Tips
+//    -Tip by plant screen
+//    - Tips
+
+const Tip = createStackNavigator();
+const TipStack = () => (
+  <Tip.Navigator
+    initialRouteName="Plant Types"
+    screenOptions={{
+      headerStyle: {backgroundColor: 'white'},
+      animationEnabled: false,
+      // headerTransparent:true
+    }}>
+    <Tip.Screen
+      name="Tips"
+      component={TipsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <Tip.Screen
+      name="Plant Types"
+      component={TipsByPlantScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+  </Tip.Navigator>
+);
+
+const Notification = createStackNavigator();
+const NotificationStack = () => (
+  <Notification.Navigator
+    initialRouteName="Notifications"
+    screenOptions={{
+      headerStyle: {backgroundColor: 'white'},
+      animationEnabled: false,
+      // headerTransparent:true
+    }}>
+    <Notification.Screen
+      name="Actions"
+      component={ActionsScreen}
+      options={({navigation}) => ({
+        headerRight: () => (
+          <Icon
+            onPress={() => navigation.navigate('Notification')}
+            containerStyle={{color: 'black', marginRight: 10}}
+            name={'notifications-none'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+    <Notification.Screen
+      name="Notifications"
+      component={NotificationScreen}
+      options={({navigation}) => ({
+        headerLeft: () => (
+          <Icon
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            containerStyle={{color: 'black', marginLeft: 10}}
+            name={'menu'}
+            type="MaterialIcons"
+          />
+        ),
+      })}
+    />
+  </Notification.Navigator>
+);
+
+//  custom drawer with icons
 
 function CustomDrawerContent(props) {
   return (
@@ -241,12 +504,6 @@ function CustomDrawerContent(props) {
           props.navigation.navigate('Profile');
         }}
       />
-      {/* <DrawerItem 
-          label="Profile Settings" 
-          activeTintColor="green"
-          icon= {() =><Icon  color="black" name='settings' type='MaterialIcons'/>  }    // activeBackgroundColor="green"
-          onPress={() => {props.navigation.navigate('Profile Settings')}}
-      /> */}
       <DrawerItem
         label="View All Units"
         activeTintColor="green"
@@ -278,8 +535,7 @@ function CustomDrawerContent(props) {
         }}
       />
 
-
-<DrawerItem
+      <DrawerItem
         label="Tips"
         activeTintColor="green"
         icon={() => (
@@ -341,14 +597,12 @@ const DrawerStack = () => (
     // }}
   >
     <Drawer.Screen name="Home" component={HomeStack} />
-    <Drawer.Screen name="Link Units" component={LinkUnitsScreen} />
+    <Drawer.Screen name="Link Units" component={LinkUnitStack} />
     <Drawer.Screen name="Profile" component={ProfileStack} />
-    {/* <Drawer.Screen name="Profile Settings" component={ProfileSettingsScreen} /> */}
-    {/* <Drawer.Screen name="Account Settings" component={AccountSettingsScreen} /> */}
-    <Drawer.Screen name="View All Units" component={LinkUnitsStack} />
+    <Drawer.Screen name="View All Units" component={ViewLinkUnitsStack} />
     <Drawer.Screen name="Chat" component={ChatStack} />
-    <Drawer.Screen name="Notification" component={NotificationScreen} />
-    <Drawer.Screen name="Tips" component={TipsByPlantScreen} />
+    <Drawer.Screen name="Notification" component={NotificationStack} />
+    <Drawer.Screen name="Tips" component={TipStack} />
   </Drawer.Navigator>
 );
 const RootStack = createStackNavigator();
@@ -392,19 +646,19 @@ class App extends Component {
             <RootStack.Navigator
               headerMode="none"
             initialRouteName="Splash"
-                // initialRouteName="note"
+              // initialRouteName="note"
               //initialRouteName="TipsByPlant"
               //initialRouteName="TipsScreen"
               screenOptions={{
                 animationEnabled: false,
               }}>
               <RootStack.Screen name="note" component={NotificationScreen} />
-              <RootStack.Screen
+              {/* <RootStack.Screen
                 name="TipsByPlant"
                 component={TipsByPlantScreen}
-              />
-              <RootStack.Screen name="TipsScreen" component={TipsScreen} />
-              <RootStack.Screen name="Actions" component={ ActionsScreen } />
+              /> */}
+              {/* <RootStack.Screen name="TipsScreen" component={TipsScreen} /> */}
+              {/* <RootStack.Screen name="Actions" component={ActionsScreen} /> */}
               <RootStack.Screen name="Splash" component={WelcomeScreen} />
               <RootStack.Screen name="Auth" component={AuthStack} />
               <RootStack.Screen name="App" component={DrawerStack} />
