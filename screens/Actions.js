@@ -9,34 +9,49 @@ import {
   Text,
 } from 'react-native';
 import axios from 'axios';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-
-const expan = require('./../assets/images/expan.png');
-const grayLine = require('../assets/images/line.png');
-const waterDrop = require('../assets/images/notifications/water.png');
-const lightBulb = require('../assets/images/notifications/bulb.png');
-const bees = require('../assets/images/notifications/bee.png');
-const fertilizer = require('../assets/images/notifications/fertilizer.png');
 
 export default class Actions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       light: false,
-      unitID: '5ec66db7aa16ff3a80870c9a',
+      auto: true,
+      water: false,
+      fertilizer: false,
+      unitID: this.props.route.params.unitId, 
+      baseURL:'https://ancient-temple-30883.herokuapp.com'
     };
+  }
+
+  componentDidMount() {
+    axios
+      .get(
+        `${this.state.baseURL}/units/get/unit/${this.props.route.params.unitId}`,
+      )
+      .then(async (response) => {  
+        this.setInitialState(
+          response.data.lightActuator.activated,
+          response.data.automated,
+          response.data.waterMotorActuator.activated,
+          response.data.fertilizerActuator.activated,
+        );
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  setInitialState(light, auto, water, fertilizer) { 
+    this.setState({...this.state, light, auto, water, fertilizer});
   }
 
   toggleSwitch = () => {
     const newState = !this.state.light;
     axios
-      .put(
-        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
-        {
-          actuator: 'lightActuator',
-          state: newState,
-        },
-      )
+      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+        actuator: 'lightActuator',
+        state: newState,
+      })
       .then((res) => {
         console.log(res);
       });
@@ -44,44 +59,37 @@ export default class Actions extends React.Component {
   };
 
   addWater = () => {
+    this.setState({...this.state, water: !this.state.water});
     axios
-      .put(
-        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
-        {
-          actuator: 'waterMotorActuator',
-          state: 'true',
-        },
-      )
+      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+        actuator: 'waterMotorActuator',
+        state: !this.state.water,
+      })
       .then((res) => {
-        ToastAndroid.showWithGravityAndOffset(
-          'Water added !',
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          25,
-          100,
-        );
         console.log(res);
       });
   };
 
   addFertilizer = () => {
+    this.setState({...this.state, fertilizer: !this.state.fertilizer});
     axios
-      .put(
-        `https://ancient-temple-30883.herokuapp.com/units/actuators/${this.state.unitID}`,
-        {
-          actuator: 'fertilizerActuator',
-          state: 'true',
-        },
-      )
+      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+        actuator: 'fertilizerActuator',
+        state: !this.state.fertilizer,
+      })
       .then((res) => {
-        ToastAndroid.showWithGravityAndOffset(
-          'Fertilizer added !',
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          25,
-          100,
-        );
         console.log(res);
+      });
+  };
+
+  setAuto = () => {
+    this.setState({...this.state, auto: !this.state.auto});
+    axios
+      .put(`${this.state.baseURL}/units/update/${this.state.unitID}`, {
+        automated: !this.state.auto,
+      })
+      .then((res) => {
+        console.log('Updated');
       });
   };
 
@@ -93,7 +101,27 @@ export default class Actions extends React.Component {
         <View style={styles.card}>
           <View style={styles.cardContent}>
             <View style={styles.detailLine}>
-              <Text style={styles.leftText}>Light bulb </Text>
+              <Text style={styles.leftText}>Automated </Text>
+
+              <View style={styles.switchContainer}>
+                <Switch
+                  trackColor={{false: '#0F4021', true: '#28AC5B'}}
+                  thumbColor={this.state.auto ? '#0F4021' : '#28AC5B'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => this.setAuto()}
+                  value={this.state.auto}
+                  style={{position: 'relative', right: 100}}
+                />
+              </View>
+            </View>
+
+            <View
+              style={
+                this.state.auto
+                  ? {...styles.detailLine, opacity: 0}
+                  : {...styles.detailLine}
+              }>
+              <Text style={styles.leftText}>Light bulb</Text>
 
               <View style={styles.switchContainer}>
                 <Switch
@@ -107,33 +135,43 @@ export default class Actions extends React.Component {
               </View>
             </View>
 
-            <View style={styles.detailLine}>
-              <Text style={styles.leftText}>Add water </Text>
+            <View
+              style={
+                this.state.auto
+                  ? {...styles.detailLine, opacity: 0}
+                  : {...styles.detailLine}
+              }>
+              <Text style={styles.leftText}>Water {'      '} </Text>
 
               <View style={styles.switchContainer}>
-                <View style={styles.buttonImageContainer}>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      this.addWater();
-                    }}>
-                    <Image source={waterDrop} style={styles.buttonImage} />
-                  </TouchableWithoutFeedback>
-                </View>
+                <Switch
+                  trackColor={{false: '#0F4021', true: '#28AC5B'}}
+                  thumbColor={this.state.water ? '#0F4021' : '#28AC5B'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => this.addWater()}
+                  value={this.state.water}
+                  style={{position: 'relative', right: 100}}
+                />
               </View>
             </View>
 
-            <View style={styles.detailLine}>
-              <Text style={styles.leftText}>Add fertilizer </Text>
+            <View
+              style={
+                this.state.auto
+                  ? {...styles.detailLine, opacity: 0}
+                  : {...styles.detailLine}
+              }>
+              <Text style={styles.leftText}>Fertilizer </Text>
 
               <View style={styles.switchContainer}>
-                <View style={styles.buttonImageContainer}>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      this.addFertilizer();
-                    }}>
-                    <Image source={fertilizer} style={styles.buttonImage} />
-                  </TouchableWithoutFeedback>
-                </View>
+                <Switch
+                  trackColor={{false: '#0F4021', true: '#28AC5B'}}
+                  thumbColor={this.state.fertilizer ? '#0F4021' : '#28AC5B'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => this.addFertilizer()}
+                  value={this.state.fertilizer}
+                  style={{position: 'relative', right: 100}}
+                />
               </View>
             </View>
           </View>

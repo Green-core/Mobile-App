@@ -3,7 +3,7 @@ import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
 import MenuBar from '../components/menuBar';
 import axios from 'axios';
-import { withAppContext } from '../services/withAppContext'
+import {withAppContext} from '../services/withAppContext';
 
 const plantImage = require('../assets/images/plants/mango.jpg');
 const grayLine = require('../assets/images/line.png');
@@ -13,14 +13,14 @@ class ViewAllUnitsScreen extends Component {
     super(props);
     this.state = {
       units: [],
+      baseURL: 'https://ancient-temple-30883.herokuapp.com',
     };
   }
 
   componentDidMount() {
-    const {id,jwt} = this.props.context.state.user;
-    //https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a'
+    const {id, jwt} = this.props.context.state.user;
     axios
-      .get(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`,)
+      .get(`${this.state.baseURL}/units/get/${id}`)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});
@@ -31,13 +31,13 @@ class ViewAllUnitsScreen extends Component {
       .catch((error) => console.log(error));
   }
 
-  navigateToDetails = (unitID) => {
-    this.props.navigation.navigate("Unit Details",{unitId:unitID})
+  navigateToDetails = (unitId) => {
+    this.props.navigation.navigate('Unit Details', {unitId});
     //alert(unitID);
   };
 
-  navigateToActions = (unitID) => {
-    this.props.navigation.navigate("Actions",{unitId:unitID})
+  navigateToActions = (unitId) => {
+    this.props.navigation.navigate('Actions', {unitId});
     //alert(unitID);
   };
 
@@ -45,13 +45,13 @@ class ViewAllUnitsScreen extends Component {
     const allCards = this.state.units.map((unit) => {
       const temparatureReading = unit.temperatureSensor.lastReading.substring(
         0,
-        unit.temperatureSensor.lastReading.length - 1,
+        unit.temperatureSensor.lastReading.length,
       );
       const soilMoistureReading = unit.soilMoistureSensor.lastReading;
       const lightIntensityReading = unit.lightIntensitySensor.lastReading;
       const humidityReading = unit.humiditySensor.lastReading.substring(
         0,
-        unit.humiditySensor.lastReading.length - 1,
+        unit.humiditySensor.lastReading.length,
       );
 
       return (
@@ -59,7 +59,7 @@ class ViewAllUnitsScreen extends Component {
           <View style={styles.cardHeader}>
             <Image source={plantImage} style={styles.plantImage} />
             <View style={styles.headerTextContainer}>
-              <Text style={styles.plantName}>Test Name</Text>
+              <Text style={styles.plantName}>{unit.unitName}</Text>
               <Text style={styles.subTitleText}>{unit._id} </Text>
             </View>
           </View>
@@ -109,8 +109,6 @@ class ViewAllUnitsScreen extends Component {
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <MenuBar />
-
           <View style={styles.cardHolder}>
             <Text style={styles.titleText}>Linked units</Text>
             {allCards}

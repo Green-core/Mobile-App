@@ -1,43 +1,43 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
-import BackArrow from '../components/backArrow';
+
 import axios from 'axios';
 import deviceStorage from '../services/deviceStorage';
 import MiniChart from '../components/miniChart';
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
-import { withAppContext } from '../services/withAppContext'
+import {withAppContext} from '../services/withAppContext';
 
- class UnitDetailScreen extends Component {
+class UnitDetailScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {  
+      baseURL:'https://ancient-temple-30883.herokuapp.com' ,
       soilMoistureData: [0, 0, 0, 0, 0, 0],
       temperatureData: [0, 0, 0, 0, 0, 0],
       lightIntensityData: [0, 0, 0, 0, 0, 0],
       humidityData: [0, 0, 0, 0, 0, 0],
       sensorDataTimeStamp: [],
-    };
+    }; 
   }
 
   componentDidMount() {
-    const {id,jwt} = this.props.context.state.user;  // user id and jwt token
-   //console.log('unitId = ',this.props.route.params.unitId)  // access unit id
-    //console.log('id = ',id)
+    const {id, jwt} = this.props.context.state.user; // user id and jwt token
+
+
     axios
-      .get( `https://ancient-temple-30883.herokuapp.com/units/get/${id}`,)
+      .get(`${this.state.baseURL}/units/get/unit/${this.props.route.params.unitId}`)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});
-        //console.log(JSON.stringify(this.state.units[0].soilMoistureSensor, null ,2))
 
-        const soilMoistureSensor = await this.state.units[0].soilMoistureSensor
+        const soilMoistureSensor = await this.state.units.soilMoistureSensor
           .pastReadings;
-        const temperatureSensor = await this.state.units[0].temperatureSensor
+        const temperatureSensor = await this.state.units.temperatureSensor
           .pastReadings;
-        const lightIntensitySensor = await this.state.units[0]
-          .lightIntensitySensor.pastReadings;
-        const humiditySensor = await this.state.units[0].humiditySensor
+        const lightIntensitySensor = await this.state.units.lightIntensitySensor
+          .pastReadings;
+        const humiditySensor = await this.state.units.humiditySensor
           .pastReadings;
 
         const soilMoistureData = [];
@@ -61,7 +61,7 @@ import { withAppContext } from '../services/withAppContext'
             dt = t = null;
 
             soilMoistureData.push(
-              parseInt(data.reading.substring(0, data.reading.length - 1)),
+              parseInt(data.reading.substring(0, data.reading.length)),
             );
             sensorDataTimeStamp.push(time);
             time = null;
@@ -71,7 +71,7 @@ import { withAppContext } from '../services/withAppContext'
           .slice(Math.max(temperatureSensor.length - 6, 1))
           .forEach((data) => {
             temperatureData.push(
-              parseInt(data.reading.substring(0, data.reading.length - 1)),
+              parseInt(data.reading.substring(0, data.reading.length)),
             );
           });
 
@@ -79,7 +79,7 @@ import { withAppContext } from '../services/withAppContext'
           .slice(Math.max(lightIntensitySensor.length - 6, 1))
           .forEach((data) => {
             lightIntensityData.push(
-              parseInt(data.reading.substring(0, data.reading.length - 3)),
+              parseInt(data.reading.substring(0, data.reading.length)),
             );
           });
 
@@ -87,29 +87,33 @@ import { withAppContext } from '../services/withAppContext'
           .slice(Math.max(humiditySensor.length - 6, 1))
           .forEach((data) => {
             humidityData.push(
-            parseInt(data.reading.substring(0, data.reading.length - 1)),
+              parseInt(data.reading.substring(0, data.reading.length)),
             );
           });
 
-        console.log(humidityData); 
+        // console.log({sensorDataTimeStamp});
+        // console.log({soilMoistureData});
+        // console.log({temperatureData});
+        // console.log({lightIntensityData});
+        // console.log({humidityData});
         this.setState({
           ...this.state,
           sensorDataTimeStamp,
           soilMoistureData,
           temperatureData,
           lightIntensityData,
-          humidityData
+          humidityData,
         });
       })
       .catch((error) => console.log(error));
+
+      console.log(JSON.stringify(this.props.route.params.unitID))
   }
 
-  render() { 
-   // console.log('routes',this.props.route.params.unitId)
+  render() {
     return (
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <BackArrow />
+        <ScrollView showsVerticalScrollIndicator={false}> 
 
           <View style={styles.cardHolder}>
             <Text style={styles.titleText}>
@@ -159,7 +163,7 @@ import { withAppContext } from '../services/withAppContext'
                 this.state.sensorDataTimeStamp[
                   this.state.sensorDataTimeStamp.length - 1
                 ]
-              } 
+              }
             />
 
             <MiniChart
@@ -205,5 +209,3 @@ const styles = StyleSheet.create({
   },
 });
 export default withAppContext(UnitDetailScreen);
-
- 
