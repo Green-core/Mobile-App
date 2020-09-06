@@ -48,6 +48,9 @@ import ViewAllUnitsScreen from './screens/viewAllUnits';
 import UnitDetailsScreen from './screens/unitDetails';
 import ActionsScreen from './screens/Actions';
 
+import TipsByPlantScreen from './screens/tipsByPlantScreen';
+import TipsScreen from './screens/tipsScreen';
+
 // React context provider
 import {AppProvider} from './services/AppProvider';
 
@@ -279,6 +282,16 @@ function CustomDrawerContent(props) {
         onPress={() => {
           props.navigation.navigate('Notification');
         }}
+      />    
+    <DrawerItem
+        label="Tips"
+        activeTintColor="green"
+        icon={() => (
+          <Icon color="black" name="error-outline" type="MaterialIcons" />
+        )}
+        onPress={() => {
+          props.navigation.navigate('Tips');
+        }}
       />
 
       <DrawerItem
@@ -339,6 +352,7 @@ const DrawerStack = () => (
     <Drawer.Screen name="View All Units" component={LinkUnitsStack} />
     <Drawer.Screen name="Chat" component={ChatStack} />
     <Drawer.Screen name="Notification" component={NotificationScreen} />
+    <Drawer.Screen name="Tips" component={TipsByPlantScreen} />
   </Drawer.Navigator>
 );
 const RootStack = createStackNavigator();
@@ -387,7 +401,12 @@ class App extends Component {
               }}>
               <RootStack.Screen name="Splash" component={WelcomeScreen} />
               <RootStack.Screen name="Auth" component={AuthStack} />
-              <RootStack.Screen name="App" component={DrawerStack} />
+              <RootStack.Screen name="App" component={DrawerStack} /> 
+              <RootStack.Screen name="TipsScreen" component={TipsScreen} />
+              <RootStack.Screen
+                name="TipsByPlant"
+                component={TipsByPlantScreen}
+              />
             </RootStack.Navigator>
           </NavigationContainer>
         </AppProvider>
