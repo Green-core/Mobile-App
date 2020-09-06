@@ -7,10 +7,6 @@ class AppProvider extends Component {
         super(props);        
         this.state = {
             user:{},
-           // jwt:'',
-           // email:'',
-            id:'',
-
         };       
     } 
     
@@ -29,19 +25,32 @@ class AppProvider extends Component {
 
     setData = (user) =>{
        // console.log("passing jwt",user)
-        this.setState((prevState)=>({user}))
-       // console.log("after =",this.state.user)
+        this.setState(prevState=>({
+            user:{
+                ...prevState.user,
+                id:user.id,
+                email:user.email,
+                jwt:user.jwt
+
+            }
+        }))
+        console.log("after =",this.state.user)
     }
     
     componentDidMount() {
-        AsyncStorage.getItem('id')
-            .then((id) => {
+        AsyncStorage.getItem('data')
+            .then((data) => {
+                d = JSON.parse(data)
+                if(d.id !== null){
                 this.setState(prevState => ({
                         user: {
                           ...prevState.user,
-                          id: id,
+                          id: d.id,
+                          email:d.email,
+                          jwt:d.jwt
                         }
                       }));
+                }
             })
             .catch(error => {
                 this.setState({ error })

@@ -3,7 +3,7 @@ import { View, Text ,Button,StyleSheet,Alert,TouchableOpacity} from 'react-nativ
 import Axios from 'axios';
 import {Loading} from '../components/Loading'
 //import AsyncStorage from '@react-native-community/async-storage';
-//import deviceStorage from '../services/deviceStorage';
+import deviceStorage from '../services/deviceStorage';
 import { withAppContext } from '../services/withAppContext'
  class AuthHome extends Component {
   constructor(props){
@@ -11,14 +11,15 @@ import { withAppContext } from '../services/withAppContext'
     this.state = {
       loading: true,
       user:{},
+      token:'',
     }
   }
 
   componentDidMount(){
 
     const {id,jwt} = this.props.context.state.user;
-    //console.log("Context props inside auth = ",this.props.context);
-    //console.log("Context inside auth user= ",this.props.context.state.user);
+  //  console.log("Context props inside auth = ",this.props.context);
+  //  console.log("Context inside auth user= ",this.props.context.state.user);
   
 
      const headers = {
@@ -26,8 +27,9 @@ import { withAppContext } from '../services/withAppContext'
      };
      //{ headers:headers}
      //`http://10.0.2.2:5000/users/get/${id}`
+     //https://ancient-temple-30883.herokuapp.com/users/get
     Axios
-    .get(`https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
+    .get(`http://10.0.2.2:5000/users/get/${id}`,{headers:headers})
     .then((res) => {
       this.setState({
         user:res.data,

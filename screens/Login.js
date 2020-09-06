@@ -5,6 +5,7 @@ import { Loading }from '../components/Loading';
 import deviceStorage from '../services/deviceStorage';
 import {  GreenButtonSmall} from './../components/customButtons';
 import { withAppContext } from '../services/withAppContext'
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Login extends Component{
 
@@ -39,6 +40,12 @@ class Login extends Component{
                     email:res.data.email,
                     jwt:res.data.token
                }
+               AsyncStorage.setItem('data',JSON.stringify(data),
+               ()=>{
+                AsyncStorage.getItem('data', (err, result) => {
+                    console.log('result',result);
+                  });
+               })
                //  console.log("Login  data = ",data)
                 // console.log("login context",this.props.context)
                  this.props.context.setData(data);
@@ -72,6 +79,8 @@ class Login extends Component{
              this.setState({loading:false,email:'',password:''})
          })
     }
+
+    
 
     render(){
       //  console.log('login props',this.props)
