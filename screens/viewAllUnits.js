@@ -107,8 +107,7 @@ class ViewAllUnitsScreen extends Component {
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.cardHolder}>
-            <Text style={styles.titleText}>Linked units</Text>
+          <View style={styles.cardHolder}> 
             {allCards}
             <View style={styles.finalSpace}></View>
           </View>
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 1},
     marginHorizontal: 4,
     left: '7.5%',
-    top: 120,
+    top: 40,
     height: 360,
     width: '85%',
     margin: 'auto',
@@ -229,10 +228,10 @@ const styles = StyleSheet.create({
   },
 
   cardHolder: {
-    height: 'auto',
+    //height: 'auto',
   },
   finalSpace: {
-    height: 150,
+    height: 40,
   },
 });
 export default withAppContext(ViewAllUnitsScreen);

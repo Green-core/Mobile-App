@@ -3,6 +3,7 @@ import {Text, View, ScrollView, StyleSheet} from 'react-native';
 import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
+import { withAppContext } from '../services/withAppContext'
 
  
 
@@ -12,20 +13,14 @@ export class tips extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plants:[],
-      baseURL:'https://ancient-temple-30883.herokuapp.com',
-      //baseURL:'https://ancient-temple-30883.herokuapp.com'
+      plants:[]
     };
   }
 
   componentDidMount() {
-     //get profile details usind _id
-     
-    //const {id,jwt} = this.props.context.state.user; 
-      const id1 = "5edca6c3f37915125cf1e8d7";// <-------------------------------add user ID here 
-      console.log("ID :- " , id)
+      const {id} = this.props.context.state.user;  
      axios 
-      .get(`${this.state.baseURL}/tips/get/${id1}`) 
+      .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
        .then((res) => {
          const plants = res.data;
          console.log(JSON.stringify(plants))
@@ -36,15 +31,14 @@ export class tips extends Component {
  
    navigateToTips(key){
       //alert(key)
-      this.props.navigation.navigate("TipsScreen" , {key})
+      this.props.navigation.navigate("Tips" , {key})
       //navigate to tips Screen with props 
    }
 
 
   render() { 
     return (
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Tips by plant name </Text>
+      <View style={styles.container}> 
         <FlatList
           style={styles.flatList}
           data={this.state.plants}
@@ -76,7 +70,7 @@ const styles = StyleSheet.create({
 
   flatList: {
     position: 'relative',
-    top: '10%',
+    top: '5%',
   },
 
   container: {
@@ -89,7 +83,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: {width: 1, height: 1},
     marginHorizontal: 4,
-    marginBottom: 10,
+    marginBottom: 15,
     left: '7.5%',
     top: '40%',
     height: 50,
@@ -102,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default tips;
+export default withAppContext(tips);

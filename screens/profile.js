@@ -58,8 +58,7 @@ class ProfileScreen extends Component {
     const date = toyear + '-' + tomonth + '-' + todate;
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Profile</Text>
+      <View style={styles.container}> 
 
         <View style={styles.card}>
           <View style={styles.cardContent}>
@@ -154,14 +153,14 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 1},
     marginHorizontal: 4,
     left: '6.5%',
-    top: '14%',
+    top: '10%',
     height: '78%',
     width: '85%',
     margin: 'auto',
     position: 'relative',
   },
   grayLine: {
-    top: 40,
+    top:  '2.5%',
     width: '80%',
     left: '10%',
     right: '10%',
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     left: '5%',
     right: '5%',
     width: '90%',
-    top: 40,
+    top:  '3.5%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',

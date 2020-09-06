@@ -77,8 +77,7 @@ class LinkUnitsScreen extends Component {
       location: values.location , 
       updatedAt:new Date(),
     }
-  
-    console.log(JSON.stringify(unit))
+   
      axios
      .put(
        ' https://ancient-temple-30883.herokuapp.com/units/update/'+values.unitID,unit
@@ -86,23 +85,15 @@ class LinkUnitsScreen extends Component {
      .then((res) => {  
       ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);
      })
-     .catch((error) => console.log(error));
-     console.log(JSON.stringify(plantData))
+     .catch((error) => console.log(error)); 
      
   }
 
-  render() { 
-    console.log(JSON.stringify(this.state, null, 2)); 
-    const todoComponents = this.state.plants.forEach((item) => {
-      console.log(item.plantName);
-      return <Picker.Item label={item.plantName} value={item.plantName} />;
-    });
-
+  render() {  
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}> 
-          <View style={{height: 690}} key="a">
-            <Text style={styles.titleText}>Link units</Text>
+          <View style={{height: 690}} key="a"> 
 
             <View style={styles.card}>
               <Formik
@@ -275,7 +266,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 1},
     marginHorizontal: 4,
     left: '6.5%',
-    top: 120,
+    top: '10%',
     height: 510,
     width: '85%',
     margin: 'auto',

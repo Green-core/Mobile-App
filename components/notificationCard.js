@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-
+import axios from 'axios';
 import {
   Animated,
   StyleSheet,
+  ToastAndroid,
   View,
   Text,
   TouchableWithoutFeedback,
@@ -11,18 +12,16 @@ import {
 const expan = require('./../assets/images/expan.png');
 const grayLine = require('../assets/images/line.png');
 const waterDrop = require('../assets/images/notifications/water.png');
-const lightBulb = require('../assets/images/notifications/bulb.png');
-const bees = require('../assets/images/notifications/bee.png');
-const fertilizer = require('../assets/images/notifications/fertilizer.png');
-
+const lightBulb = require('../assets/images/notifications/bulb.png'); 
 export default class NotificationCard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       animatedHeight: new Animated.Value(140),
       animatedOpacity: new Animated.Value(0),
       viewState: true,
       rotateAnimation: new Animated.Value(0),
+      isVisible: true,
     };
   }
 
@@ -68,30 +67,76 @@ export default class NotificationCard extends Component {
     }
   };
 
-  render() { 
-    //select the notification image
+  hideCard() {
+    this.setState({...this.state, isVisible: false});
+  }
+
+  onClickPerform = (id, type) => {
+    this.hideCard();
+    if (type == 'LT') {
+      axios
+        .put(
+          `https://ancient-temple-30883.herokuapp.com/units/actuators/${id}`,
+          {
+            actuator: 'lightActuator',
+            state: 'true',
+          },
+        )
+        .then((res) => {
+          ToastAndroid.showWithGravityAndOffset(
+            'Light turned on  !',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            100,
+          );
+        });
+    } else {
+      axios
+        .put(
+          `https://ancient-temple-30883.herokuapp.com/units/actuators/${id}`,
+          {
+            actuator: 'waterMotorActuator',
+            state: 'true',
+          },
+        )
+        .then((res) => {
+          ToastAndroid.showWithGravityAndOffset(
+            'Water added !',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            100,
+          );
+        });
+    }
+  };
+
+  onClickActions = (id) => {
+   // this.hideCard();
+   console.log(id) 
+   //console.log("navigation prop",this.props.navigation)  passed navigation prop
+   this.props.navigation('Actions', { id }); // passed navigation prop from nitification screen
+   //navigate to actions with id
+  };
+
+  render() {
     var imagePath = '';
-    var title = '';
-    switch (this.props.notificationType) {
-      case 'light':
+    var title = this.props.data.name;
+    var message = this.props.data.value;
+    var type = this.props.data.type;
+    var id = this.props.data.id;
+
+    switch (type) {
+      case 'LT':
         imagePath = lightBulb;
-        title = 'Need some light'
+        title = 'Need some light';
+        message = `Light intensity level is ${this.props.data.value}lux`;
         break;
-      case 'water':
+      case 'SM':
         imagePath = waterDrop;
-        title = 'Need to add water'
-        break;
-      case 'fertilizer':
-        imagePath = fertilizer;
-        title = 'Need to add fertilizer'
-        break;
-      case 'bugs':
-        imagePath = bees;
-        title = 'Need to repell insects'
-        break;
-      default:
-        title = 'Need to add water'
-        imagePath = waterDrop;
+        title = 'Need to add water';
+        message = `soil moisture level is ${this.props.data.value}%`;
         break;
     }
 
@@ -105,43 +150,67 @@ export default class NotificationCard extends Component {
     };
 
     return (
-      <View style={{marginVertical: 1}}>
-        <Animated.View style={[styles.card, animatedHeight]}>
-          <View style={styles.cardHeader}>
-            <View style={styles.headerText}>
-              <Text style={styles.headerTitle}>{title}</Text>
-              <Text style={styles.headerSubTitle}>Mango plant backyard</Text>
-            </View>
-            <View style={styles.headerImage}>
-              <Image
-                source={imagePath}
-                style={styles.notificationHeaderImage}
-              />
-            </View>
-          </View>
+      <View>
+        {this.state.isVisible ? (
+          <View style={{marginVertical: 1}}>
+            <Animated.View style={[styles.card, animatedHeight]}>
+              <View style={styles.cardHeader}>
+                <View style={styles.headerText}>
+                  <Text style={styles.headerTitle}>{title}</Text>
+                  <Text style={styles.headerSubTitle}>
+                    {this.props.data.name}
+                  </Text>
+                </View>
+                <View style={styles.headerImage}>
+                  <Image
+                    source={imagePath}
+                    style={styles.notificationHeaderImage}
+                  />
+                </View>
+              </View>
 
-          <Animated.View
-            style={{...styles.cardBody, opacity: this.state.animatedOpacity}}>
-            <Text>Soil moisture level is below 10%</Text>
-          </Animated.View>
+              <Animated.View
+                style={{
+                  ...styles.cardBody,
+                  opacity: this.state.animatedOpacity,
+                }}>
+                <Text>{message}</Text>
+              </Animated.View>
 
-          <TouchableWithoutFeedback onPress={this.toggleAnimation}>
-            <View style={styles.expanContainer}>
-              <Animated.Image
-                source={expan}
-                style={{...styles.expan, transform: [{rotate: rotateProp}]}}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <Text style={styles.text}></Text>
-        </Animated.View>
-        <Animated.View style={styles.buttonBar}>
-          <Image source={grayLine} style={styles.grayLine} />
-          <View style={styles.buttonLine}>
-            <Text style={styles.buttonLineText}> Perform </Text>
-            <Text style={styles.buttonLineText}>Actions</Text>
+              <TouchableWithoutFeedback onPress={this.toggleAnimation}>
+                <View style={styles.expanContainer}>
+                  <Animated.Image
+                    source={expan}
+                    style={{...styles.expan, transform: [{rotate: rotateProp}]}}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+              <Text style={styles.text}></Text>
+            </Animated.View>
+            <Animated.View style={styles.buttonBar}>
+              <Image source={grayLine} style={styles.grayLine} />
+              <View style={styles.buttonLine}>
+                <Text
+                  style={styles.buttonLineText}
+                  onPress={() => {
+                    this.onClickPerform(id, type);
+                  }}>
+                  {' '}
+                  Perform{' '}
+                </Text>
+                <Text
+                  style={styles.buttonLineText}
+                  onPress={() => {
+                    this.onClickActions(id );
+                  }}>
+                  Actions
+                </Text>
+              </View>
+            </Animated.View>
           </View>
-        </Animated.View>
+        ) : (
+          <View></View>
+        )}
       </View>
     );
   }
