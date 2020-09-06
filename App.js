@@ -453,16 +453,17 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View
-        style={{flexDirection: 'column', marginTop: 20, alignItems: 'center'}}>
+        style={{flexDirection: 'column', marginTop: 20,marginBottom:10, alignItems: 'center'}}>
         <Avatar
           rounded
           // icon={{name: 'home',type:'MaterialIcons'}}
           source={{
-            uri: 'https://api.adorable.io/avatars/50/abott@adorable.png',
+            uri: 'https://www.logolynx.com/images/logolynx/03/039b004617d1ef43cf1769aae45d6ea2.png',
+           // uri: 'https://api.adorable.io/avatars/50/abott@adorable.png',
           }}
-          size="small"
+          size="large"
         />
-        <Text
+        {/* <Text
           style={{
             marginTop: 5,
             marginBottom: 15,
@@ -471,8 +472,8 @@ function CustomDrawerContent(props) {
             marginLeft: 15,
             flexDirection: 'column',
           }}>
-          kavishka@gmail.com
-        </Text>
+         
+        </Text> */}
       </View>
       {/* <DrawerItemList {...props} activeTintColor="green" /> */}
 
@@ -611,6 +612,7 @@ class App extends Component {
     super(props);
     this.state = {
       loading: true,
+      jwt:''
     };
     // this.loadItem = deviceStorage.loadItem.bind(this);
     // this.loadItem();
@@ -631,6 +633,12 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({loading: false});
+    async () => {
+      let jwt=await AsyncStorage.getItem('jwtToken');
+      console.log(jwt)
+      this.setState({jwt});
+      return jwt;
+    }
   }
 
   render() {
