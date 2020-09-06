@@ -9,8 +9,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
-import {GreenButtonSmall} from '../components/customButtons';
-import MenuBar from '../components/menuBar';
+import {GreenButtonSmall} from '../components/customButtons'; 
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -101,9 +100,7 @@ class LinkUnitsScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <MenuBar />
-
+        <ScrollView showsVerticalScrollIndicator={false}> 
           <View style={{height: 690}} key="a">
             <Text style={styles.titleText}>Link units</Text>
 

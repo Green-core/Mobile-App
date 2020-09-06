@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';
-import {GreenButtonSmall} from './../components/customButtons';
-import MenuBar from '../components/menuBar';
+import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';  
 import axios from 'axios';
 import {withAppContext} from '../services/withAppContext';
 

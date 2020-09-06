@@ -8,8 +8,7 @@ import {
   Keyboard,
   ToastAndroid,
 } from 'react-native';
-import {GreenButtonSmall} from './../components/customButtons';
-import BackArrow from '../components/backArrow';
+import {GreenButtonSmall} from './../components/customButtons'; 
 import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -91,8 +90,7 @@ const validationScheme = yup.object({
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <BackArrow />
+        <ScrollView showsVerticalScrollIndicator={false}> 
 
           <View style={{height: 590}}>
             <Text style={styles.titleText}>Account settings</Text>

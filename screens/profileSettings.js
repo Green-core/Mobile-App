@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, TextInput,Keyboard , ToastAndroid, } from 'react-native';
 import {GreenButtonSmall} from './../components/customButtons';
-import BackArrow from '../components/backArrow';
+
 import axios from 'axios';
 import { Formik} from 'formik';
 import * as yup from 'yup'
@@ -66,8 +66,7 @@ class ProfileSettingsScreen extends Component {
   render() {
     console.log(JSON.stringify(this.state.mobile + '+' + this.state.name));
     return (
-      <View style={styles.container}>
-        <BackArrow  />
+      <View style={styles.container}> 
 
         <View>
           <Text style={styles.titleText}>Profile settings</Text>
