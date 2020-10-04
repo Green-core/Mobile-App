@@ -92,8 +92,7 @@ export default class Notifications extends Component {
     });
 
     return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.titleText}>Notifications</Text>
+      <ScrollView style={styles.container}> 
         {notifications}
         <View style={styles.finalSpace} />
       </ScrollView>
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: 'relative',
     left: '7%',
-    top: 72,
+    bottom : '10%',
   },
 
   container: {

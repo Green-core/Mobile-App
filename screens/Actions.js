@@ -95,9 +95,7 @@ export default class Actions extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Control actuators</Text>
-
+      <View style={styles.container}>  
         <View style={styles.card}>
           <View style={styles.cardContent}>
             <View style={styles.detailLine}>

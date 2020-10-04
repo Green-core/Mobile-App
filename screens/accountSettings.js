@@ -92,9 +92,7 @@ const validationScheme = yup.object({
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}> 
 
-          <View style={{height: 590}}>
-            <Text style={styles.titleText}>Account settings</Text>
-
+          <View style={{height: 590}}> 
             <View style={styles.card}>
               <Formik
                 initialValues={{

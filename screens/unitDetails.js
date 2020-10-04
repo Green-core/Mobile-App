@@ -116,8 +116,7 @@ class UnitDetailScreen extends Component {
         <ScrollView showsVerticalScrollIndicator={false}> 
 
           <View style={styles.cardHolder}>
-            <Text style={styles.titleText}>
-              {this.props.name} plant details{' '}
+            <Text style={styles.titleText}> 
             </Text>
 
             <MiniChart

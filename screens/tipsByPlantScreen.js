@@ -18,9 +18,10 @@ export class tips extends Component {
   }
 
   componentDidMount() {
-      const {id} = this.props.context.state.user;  
+    const {id} = this.props.context.state.user;  
+    console.log(id);
      axios 
-      .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
+     .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
        .then((res) => {
          const plants = res.data;
          console.log(JSON.stringify(plants))

@@ -75,8 +75,7 @@ useEffect(() => {
 
 const styles = StyleSheet.create({
  card:{ 
-  marginLeft: 35,
-  marginTop: 60,
+  marginLeft: 35, 
   paddingTop: 21,
   borderRadius: 20,
   backgroundColor: 'white',
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
   shadowOffset: {width: 1, height: 1},
   marginHorizontal: 4,
   marginLeft: '5%',
-  top: 60,
+  top: 20,
   height: 400,
   width: '90%',
   margin: 'auto',

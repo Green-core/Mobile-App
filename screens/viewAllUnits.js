@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, ScrollView, Text, View, Image} from 'react-native';  
+import {StyleSheet, ScrollView, Text, View, Image} from 'react-native'; 
 import axios from 'axios';
-import {withAppContext} from '../services/withAppContext';
+import {withAppContext  } from '../services/withAppContext';
 
 const plantImage = require('../assets/images/plants/mango.jpg');
 const grayLine = require('../assets/images/line.png');
@@ -16,15 +16,19 @@ class ViewAllUnitsScreen extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.context.state.user )
     const {id, jwt} = this.props.context.state.user;
+    //https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a'
+    console.log(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`)
     axios
-      .get(`${this.state.baseURL}/units/get/${id}`)
+   // .get(`${this.state.baseURL}/units/get/${id}`)
+    .get(`https://ancient-temple-30883.herokuapp.com/units/get/5edca6c3f37915125cf1e8d7`)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});
         //console.log(JSON.stringify(units, null ,2))
 
-        console.log(JSON.stringify(units[0].soilTemp, null, 2));
+        console.log(JSON.stringify(units , null, 2));
       })
       .catch((error) => console.log(error));
   }
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 1},
     marginHorizontal: 4,
     left: '7.5%',
-    top: 40,
+    top: 80,
     height: 360,
     width: '85%',
     margin: 'auto',
@@ -228,10 +232,10 @@ const styles = StyleSheet.create({
   },
 
   cardHolder: {
-    //height: 'auto',
+    height: 'auto',
   },
   finalSpace: {
-    height: 40,
+    height: 150,
   },
 });
 export default withAppContext(ViewAllUnitsScreen);

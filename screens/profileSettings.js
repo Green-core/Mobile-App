@@ -68,8 +68,7 @@ class ProfileSettingsScreen extends Component {
     return (
       <View style={styles.container}> 
 
-        <View>
-          <Text style={styles.titleText}>Profile settings</Text>
+        <View> 
 
           <View style={styles.card}>
             <Formik
