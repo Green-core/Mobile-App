@@ -477,14 +477,14 @@ function CustomDrawerContent(props) {
       </View>
       {/* <DrawerItemList {...props} activeTintColor="green" /> */}
 
-      <DrawerItem
+      {/* <DrawerItem
         label="Home"
         activeTintColor="green"
         icon={() => <Icon color="black" name="home" type="MaterialIcons" />} // activeBackgroundColor="green"
         onPress={() => {
           props.navigation.navigate('Home');
         }}
-      />
+      /> */}
       <DrawerItem
         label="Link Units"
         activeTintColor="green"
