@@ -29,7 +29,7 @@ export default class Signup extends Component{
             confirmPassword:this.state.confirmPassword
         }
         Axios
-           .post("http://10.0.2.2:5000/users/register",user)  
+           .post("https://ancient-temple-30883.herokuapp.com/users/register",user)  
            .then(res=>{
                 if(res.status === 200){
                     // console.log(res.data)

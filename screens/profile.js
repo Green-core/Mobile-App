@@ -74,8 +74,8 @@ class ProfileScreen extends Component {
             <Text style={styles.cardTextLarge}>Account created on </Text>
             <Text style={styles.cardTextSmall}>{date}</Text>
 
-            <Text style={styles.cardTextLarge}>Number of modules </Text>
-            <Text style={styles.cardTextSmall}>{modules}</Text>
+            {/* <Text style={styles.cardTextLarge}>Number of modules </Text>
+            <Text style={styles.cardTextSmall}>{modules}</Text> */}
           </View>
         </View>
         <Image source={grayLine} style={styles.grayLine} />
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
 
   buttonLineText: {
     fontSize: 14,
-    paddingTop: '5%',
+    paddingTop: '4%',
     paddingLeft: '2%',
     paddingRight: '8%',
     color: '#454F63',

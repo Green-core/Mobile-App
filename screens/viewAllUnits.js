@@ -50,7 +50,7 @@ class ViewAllUnitsScreen extends Component {
         unit.temperatureSensor.lastReading.length,
       );
       const soilMoistureReading = unit.soilMoistureSensor.lastReading;
-      const lightIntensityReading = unit.lightIntensitySensor.lastReading;
+      const lightIntensityReading = unit.lightIntensitySensor.lastReading ;
       const humidityReading = unit.humiditySensor.lastReading.substring(
         0,
         unit.humiditySensor.lastReading.length,
@@ -75,13 +75,13 @@ class ViewAllUnitsScreen extends Component {
             </View>
 
             <View style={styles.contentDetails}>
-              <Text style={styles.cardContentDetail}>Test Name</Text>
-              <Text style={styles.cardContentDetail}>Test Type </Text>
+              <Text style={styles.cardContentDetail}>{unit.unitName}</Text>
+              <Text style={styles.cardContentDetail}>{unit.plantType}  </Text>
               <Text style={styles.cardContentDetail}>{unit.location} </Text>
               <View style={styles.cardContentDetailCondition}>
                 <Text>Soil temperature : {temparatureReading} °C </Text>
                 <Text>Soil moisture : {soilMoistureReading} % </Text>
-                <Text>Light intensity level : {lightIntensityReading} </Text>
+                <Text>Light intensity level : {lightIntensityReading} lux </Text>
                 <Text>Relative humidity: {humidityReading} %</Text>
                 <Text> {''}</Text>
               </View>

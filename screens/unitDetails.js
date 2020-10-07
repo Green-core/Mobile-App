@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
 
   finalSpace: {
-    height: 150,
+    height: 60,
   },
 });
 export default withAppContext(UnitDetailScreen);

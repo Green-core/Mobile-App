@@ -82,10 +82,11 @@ export default class Notifications extends Component {
         this.getData();
         console.log('Notified');
       }
-    }, 30000);
+    }, 60000);
   }
 
   render() {
+    console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
     const notifications = this.state.data.map((element) => {
       console.log(element.value);
       return <NotificationCard data={element} navigation={this.props.navigation.navigate} />;

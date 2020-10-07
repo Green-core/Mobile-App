@@ -4,7 +4,7 @@ import {LineChart} from 'react-native-chart-kit';
 
 
 
-const MiniChart = ({xdata, ydata, dataPoints =[0,0,0,0,0,0] , yAxisLabel , yAxisSuffix , yAxisInterval , labels , title , subTitle}) => {
+const MiniChart = ({xdata, ydata, dataPoints =[0,0,0,0,0,0] , yAxisLabel , yAxisSuffix , yAxisInterval , labels , title , subTitle  }) => {
   
   const graphData = {
     labels: labels,
@@ -47,6 +47,7 @@ useEffect(() => {
             data={graphDataState}
             width={Dimensions.get('window').width * 0.9} // from react-native
             height={320}
+            fromZero={true}
             yAxisLabel={yAxisLabel}
             yAxisSuffix={ yAxisSuffix}
             yAxisInterval={yAxisInterval} // optional, defaults to 1
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
  card:{ 
   marginLeft: 35, 
   paddingTop: 21,
+  marginBottom: 41,
   borderRadius: 20,
   backgroundColor: 'white',
   shadowOpacity: 0.3,
@@ -84,8 +86,9 @@ const styles = StyleSheet.create({
   marginHorizontal: 4,
   marginLeft: '5%',
   top: 20,
+  bottom:20,
   height: 400,
-  width: '90%',
+  width: '90%', 
   margin: 'auto',
   position: 'relative', 
  },
