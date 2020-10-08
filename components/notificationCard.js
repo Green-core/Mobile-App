@@ -77,14 +77,13 @@ export default class NotificationCard extends Component {
       axios
         .put(
           `https://ancient-temple-30883.herokuapp.com/units/actuators/${id}`,
-          {
-            actuator: 'lightActuator',
-            state: 'true',
+          { 
+            automated:  true ,
           },
         )
         .then((res) => {
           ToastAndroid.showWithGravityAndOffset(
-            'Light turned on  !',
+            'Automated  !',
             ToastAndroid.SHORT,
             ToastAndroid.BOTTOM,
             25,
@@ -95,14 +94,13 @@ export default class NotificationCard extends Component {
       axios
         .put(
           `https://ancient-temple-30883.herokuapp.com/units/actuators/${id}`,
-          {
-            actuator: 'waterMotorActuator',
-            state: 'true',
+          { 
+            automated:  true ,
           },
         )
         .then((res) => {
           ToastAndroid.showWithGravityAndOffset(
-            'Water added !',
+            'Automated !',
             ToastAndroid.SHORT,
             ToastAndroid.BOTTOM,
             25,
@@ -196,7 +194,7 @@ export default class NotificationCard extends Component {
                     this.onClickPerform(id, type);
                   }}>
                   {' '}
-                  Perform{' '}
+                  Automate{' '}
                 </Text>
                 <Text
                   style={styles.buttonLineText}
