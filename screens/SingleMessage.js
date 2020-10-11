@@ -6,6 +6,8 @@ import ReplyMessage from './ReplyMessage'
 import NavigationBar from 'react-native-navbar';
 import MessageComponent from './MessageComponent'
 import { withAppContext } from '../services/withAppContext'
+import baseURL  from '../config'
+
 export default class SingleMessage extends React.Component{
     
     constructor(props){
@@ -29,7 +31,7 @@ export default class SingleMessage extends React.Component{
         // const data = { id: "5ece4f41f8dc143c847d3c85" }
         axios.post(
             // 'http://localhost:5000/chats/get-one',
-            'https://ancient-temple-30883.herokuapp.com/chats/get-one',
+            `${baseURL}/chats/get-one`,
             data
         ).then(res => {
             const chatData = res.data

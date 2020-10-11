@@ -6,7 +6,7 @@ import deviceStorage from '../services/deviceStorage';
 import {  GreenButtonSmall} from './../components/customButtons';
 import { withAppContext } from '../services/withAppContext'
 import AsyncStorage from '@react-native-community/async-storage';
-
+import baseURL  from '../config'
 class Login extends Component{
 
     constructor(props){
@@ -28,7 +28,7 @@ class Login extends Component{
        }
        //'https://ancient-temple-30883.herokuapp.com/users/login'
        Axios
-         .post("https://ancient-temple-30883.herokuapp.com/users/login",user)
+         .post(`${baseURL}/users/login`,user)
          .then(res=>{
             if(res.status === 200){
                // console.log('res = ',res.data.response)

@@ -11,6 +11,7 @@ import {
 import {GreenButtonSmall} from './../../components/customButtons';
 import {Loading} from '../../components/Loading';
 import Axios from 'axios';
+import baseURL  from './../../config'
 
 export default class ResetPassword extends Component {
   constructor(props) {
@@ -23,49 +24,7 @@ export default class ResetPassword extends Component {
       loading: false,
     };
   }
-
-  // componentDidMount() {
-
-  //     this.initAuthToken();
-  // }
-
-  // initAuthToken = async () => {
-  //     const authData = await AsyncStorage.getItem('authentication_data');
-
-  //     if (authData !== null) {
-  //       const authDataJson = JSON.parse(authData);
-
-  //       // get user data
-  //       fetch(consts.API_URL + '/users/populate-settings', {
-  //         headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({
-  //           authToken: authData.authToken,
-  //           deviceId: authData.deviceId
-  //         }),
-  //         method: "POST"
-  //       })
-  //         .then(res => res.json())
-  //         .then(data => {
-
-  //           if (data.ack === 'success') {
-  //             this.populateUserSettings(data.response);
-  //           } else {
-  //             this.props.navigation.navigate("SignIn");
-  //           }
-  //         })
-  //         .catch(e => {
-  //           this.setState({
-  //             error: true
-  //           });
-  //         });
-
-  //     } else {
-  //       this.props.navigation.navigate("SignIn");
-  //     }
-  //   }
+ 
   resetPassword = () => {
     this.setState({loading:true})
     const user = {
@@ -74,7 +33,7 @@ export default class ResetPassword extends Component {
       confirmPassword:this.state.confirmPassword,
     }
     Axios
-      .post('http://10.0.2.2:5000/users/resetPassword',user)
+      .post(`${baseURL}/users/resetPassword`,user)
       .then(res=>{
         if(res.status === 200){
           console.log(res.data.response);

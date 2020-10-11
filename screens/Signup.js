@@ -4,7 +4,7 @@ import Axios from 'axios';
 
 import { Loading }from '../components/Loading';
 import {   GreenButtonSmall} from './../components/customButtons';
-
+import baseURL  from '../config'
 export default class Signup extends Component{
 
     constructor(props){        
@@ -29,7 +29,7 @@ export default class Signup extends Component{
             confirmPassword:this.state.confirmPassword
         }
         Axios
-           .post("https://ancient-temple-30883.herokuapp.com/users/register",user)  
+           .post(`${baseURL}/users/register`,user)  
            .then(res=>{
                 if(res.status === 200){
                     // console.log(res.data)

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {  Formik} from 'formik'; 
 import React, { Component } from 'react';
+
 class Demo extends Component {
 
     render(){

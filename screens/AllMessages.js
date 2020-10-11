@@ -5,6 +5,7 @@ import axios from 'axios';
 import {ListItem} from 'react-native-elements';
 import {withAppContext} from '../services/withAppContext';
 import {FloatingAction} from 'react-native-floating-action';
+import baseURL  from '../config'
 
 export default class AllMessages extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class AllMessages extends React.Component {
     //const data = id
     const data = {userID: '5ecb578fb2b10b0844de4cff'};
     axios
-      .post('https://ancient-temple-30883.herokuapp.com/chats/get-all', data)
+      .post(`${baseURL}/chats/get-all`, data)
       .then((res) => {
         const chatData = res.data;
         console.log(chatData);

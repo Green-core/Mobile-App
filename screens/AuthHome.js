@@ -5,6 +5,7 @@ import {Loading} from '../components/Loading'
 //import AsyncStorage from '@react-native-community/async-storage';
 import deviceStorage from '../services/deviceStorage';
 import { withAppContext } from '../services/withAppContext'
+import baseURL  from '../config'
  class AuthHome extends Component {
   constructor(props){
     super(props);
@@ -29,7 +30,7 @@ import { withAppContext } from '../services/withAppContext'
      //`http://10.0.2.2:5000/users/get/${id}`
      //https://ancient-temple-30883.herokuapp.com/users/get
     Axios
-    .get(`http://10.0.2.2:5000/users/get/${id}`,{headers:headers})
+    .get(`${baseURL}/users/get/${id}`,{headers:headers})
     .then((res) => {
       this.setState({
         user:res.data,

@@ -9,6 +9,7 @@ import {
 import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
+import baseURL  from '../config'
 
 export class tips extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export class tips extends Component {
    //console.log(this.props.route)
    
     axios
-      .get(`https://ancient-temple-30883.herokuapp.com/tips/get/plant/${key}`)
+      .get(`${baseURL}/tips/get/plant/${key}`)
       .then((res) => {
         const tips = res.data[0].tips;
         console.warn(res.data )

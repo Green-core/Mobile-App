@@ -4,7 +4,7 @@ import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
 import NavigationBar from 'react-native-navbar';
 import { withAppContext } from '../services/withAppContext'
-
+import baseURL  from '../config'
 export default class SendMessage extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ export default class SendMessage extends React.Component {
 
             axios
               .post(
-                'https://ancient-temple-30883.herokuapp.com/chats/send-message',
+                `${baseURL}/chats/send-message`,
                 data,
               )
               .then((res) => {

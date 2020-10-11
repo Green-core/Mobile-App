@@ -4,7 +4,7 @@ import Tips from '../components/tipsCard';
 import axios from 'axios';
 import {FlatList} from 'react-native-gesture-handler';
 import { withAppContext } from '../services/withAppContext'
-
+import baseURL  from '../config'
  
 
 export class tips extends Component {
@@ -21,7 +21,7 @@ export class tips extends Component {
     const {id} = this.props.context.state.user;  
     console.log(id);
      axios 
-     .get(`https://ancient-temple-30883.herokuapp.com/tips/get/${id}`) 
+     .get(`${baseURL}/tips/get/${id}`) 
        .then((res) => {
          const plants = res.data;
          console.log(JSON.stringify(plants))

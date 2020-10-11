@@ -7,12 +7,12 @@ import MiniChart from '../components/miniChart';
 import 'intl';
 import 'intl/locale-data/jsonp/en'; // or any other locale you need
 import {withAppContext} from '../services/withAppContext';
+import baseURL  from '../config'
 
 class UnitDetailScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {  
-      baseURL:'https://ancient-temple-30883.herokuapp.com' ,
+    this.state = {   
       soilMoistureData: [0, 0, 0, 0, 0, 0],
       temperatureData: [0, 0, 0, 0, 0, 0],
       lightIntensityData: [0, 0, 0, 0, 0, 0],
@@ -26,7 +26,7 @@ class UnitDetailScreen extends Component {
 
 
     axios
-      .get(`${this.state.baseURL}/units/get/unit/${this.props.route.params.unitId}`)
+      .get(`${baseURL}/units/get/unit/${this.props.route.params.unitId}`)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});

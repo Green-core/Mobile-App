@@ -9,6 +9,7 @@ import {
   Text,
 } from 'react-native';
 import axios from 'axios';
+import baseURL  from '../config'
 
 export default class Actions extends React.Component {
   constructor(props) {
@@ -19,14 +20,13 @@ export default class Actions extends React.Component {
       water: false,
       fertilizer: false,
       unitID: this.props.route.params.unitId, 
-      baseURL:'https://ancient-temple-30883.herokuapp.com'
     };
   }
 
   componentDidMount() {
     axios
       .get(
-        `${this.state.baseURL}/units/get/unit/${this.props.route.params.unitId}`,
+        `${baseURL}/units/get/unit/${this.props.route.params.unitId}`,
       )
       .then(async (response) => {  
         this.setInitialState(
@@ -48,7 +48,7 @@ export default class Actions extends React.Component {
   toggleSwitch = () => {
     const newState = !this.state.light;
     axios
-      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+      .put(`${baseURL}/units/actuators/${this.state.unitID}`, {
         actuator: 'lightActuator',
         state: newState,
       })
@@ -61,7 +61,7 @@ export default class Actions extends React.Component {
   addWater = () => {
     this.setState({...this.state, water: !this.state.water});
     axios
-      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+      .put(`${baseURL}/units/actuators/${this.state.unitID}`, {
         actuator: 'waterMotorActuator',
         state: !this.state.water,
       })
@@ -73,7 +73,7 @@ export default class Actions extends React.Component {
   addFertilizer = () => {
     this.setState({...this.state, fertilizer: !this.state.fertilizer});
     axios
-      .put(`${this.state.baseURL}/units/actuators/${this.state.unitID}`, {
+      .put(`${baseURL}/units/actuators/${this.state.unitID}`, {
         actuator: 'fertilizerActuator',
         state: !this.state.fertilizer,
       })
@@ -85,7 +85,7 @@ export default class Actions extends React.Component {
   setAuto = () => {
     this.setState({...this.state, auto: !this.state.auto});
     axios
-      .put(`${this.state.baseURL}/units/update/${this.state.unitID}`, {
+      .put(`${baseURL}/units/update/${this.state.unitID}`, {
         automated: !this.state.auto,
       })
       .then((res) => {

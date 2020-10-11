@@ -14,7 +14,7 @@ import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import { withAppContext } from '../services/withAppContext'
-
+import baseURL  from '../config'
 //form validator
 const validationScheme = yup.object({
   unitID: yup.string().min(1) ,
@@ -33,7 +33,7 @@ class LinkUnitsScreen extends Component {
     this.updateValues = this.updateValues.bind(this);
 
     axios
-      .get('https://ancient-temple-30883.herokuapp.com/plants/get')
+      .get(`${baseURL}/plants/get`)
       .then((res) => {
         const plantData = res.data;
         this.setState({...this.state, plants: plantData});
@@ -46,7 +46,7 @@ class LinkUnitsScreen extends Component {
     const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
+        `${baseURL}/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -56,7 +56,7 @@ class LinkUnitsScreen extends Component {
 
     //get plant details usind _id
     axios
-      .get('https://ancient-temple-30883.herokuapp.com/plants/get')
+      .get(`${baseURL}/plants/get`)
       .then((res) => {
         const plantData = res.data;
         this.setState({...this.state, plants: plantData});
@@ -80,7 +80,7 @@ class LinkUnitsScreen extends Component {
    
      axios
      .put(
-       ' https://ancient-temple-30883.herokuapp.com/units/update/'+values.unitID,unit
+      `${baseURL}/units/update/`+values.unitID,unit
      )
      .then((res) => {  
       ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);

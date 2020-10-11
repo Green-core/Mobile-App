@@ -5,13 +5,12 @@ import {withAppContext  } from '../services/withAppContext';
 
 const plantImage = require('../assets/images/plants/mango.jpg');
 const grayLine = require('../assets/images/line.png');
-
+import baseURL  from '../config'
 class ViewAllUnitsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      units: [],
-      baseURL: 'https://ancient-temple-30883.herokuapp.com',
+      units: [], 
     };
   }
 
@@ -19,10 +18,10 @@ class ViewAllUnitsScreen extends Component {
     console.log(this.props.context.state.user )
     const {id, jwt} = this.props.context.state.user;
     //https://ancient-temple-30883.herokuapp.com/units/get/5ec66db7aa16ff3a80870c9a'
-    console.log(`https://ancient-temple-30883.herokuapp.com/units/get/${id}`)
+    console.log(`${baseURL}/units/get/${id}`)
     axios
    // .get(`${this.state.baseURL}/units/get/${id}`)
-    .get(`https://ancient-temple-30883.herokuapp.com/units/get/5edca6c3f37915125cf1e8d7`)
+    .get(`${baseURL}/units/get/5edca6c3f37915125cf1e8d7`)
       .then(async (res) => {
         const units = await res.data;
         this.setState({units});

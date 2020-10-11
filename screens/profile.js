@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import {withAppContext} from '../services/withAppContext';
 const grayLine = require('../assets/images/line.png');
+import baseURL  from '../config'
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class ProfileScreen extends Component {
     // add headers
     //get profile details usind _id
     axios
-      .get(`https://ancient-temple-30883.herokuapp.com/users/get/${id}`)
+      .get(`${baseURL}/users/get/${id}`)
       .then((res) => {
         const userData = res.data;
         this.setState({...userData});

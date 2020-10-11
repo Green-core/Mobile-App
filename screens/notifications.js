@@ -4,7 +4,7 @@ import NotificationCard from '../components/notificationCard';
 import PushNotification from 'react-native-push-notification';
 import axios from 'axios';
 import BackgroundTimer from 'react-native-background-timer';
-
+import baseURL  from '../config'
 export default class Notifications extends Component {
   constructor() {
     super();
@@ -12,38 +12,12 @@ export default class Notifications extends Component {
       data: [],
     };
 
-    // PushNotification.configure({
-    //   onRegister: function (token) {
-    //     console.log("TOKEN:", token);
-    //   },
-    //   onNotification: function (notification) {
-    //     console.log("NOTIFICATION:", notification);
-    //     notification.finish(PushNotificationIOS.FetchResult.NoData);
-    //   },
-    //   onAction: function (notification) {
-    //     console.log("ACTION:", notification.action);
-    //     console.log("NOTIFICATION:", notification);
-    //   },
-
-    //   onRegistrationError: function(err) {
-    //     console.error(err.message, err);
-    //   },
-    //   permissions: {
-    //     alert: true,
-    //     badge: true,
-    //     sound: true,
-    //   },
-
-    //   popInitialNotification: true,
-
-    //   requestPermissions: true,
-    // });
   }
 
   displayPushNotifications() {
     axios
       .get(
-        `https://ancient-temple-30883.herokuapp.com/notifications/check/5edca6c3f37915125cf1e8d7`,
+        `${baseURL}/notifications/check/5edca6c3f37915125cf1e8d7`,
       )
       .then((res) => {
         if (res.data.state) {
@@ -67,7 +41,7 @@ export default class Notifications extends Component {
     this.setState({...this.state, data: []});
     axios
       .get(
-        `https://ancient-temple-30883.herokuapp.com/notifications/check/5edca6c3f37915125cf1e8d7`,
+        `${baseURL}/notifications/check/5edca6c3f37915125cf1e8d7`,
       )
       .then((res) => {
         this.setState({...this.state, data: res.data.data});

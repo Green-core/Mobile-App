@@ -13,6 +13,8 @@ import axios from 'axios';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import { withAppContext } from '../services/withAppContext'
+import baseURL  from '../config'
+
 
 //form validator
 const validationScheme = yup.object({
@@ -39,7 +41,7 @@ const validationScheme = yup.object({
     const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        `https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
+        `${baseURL}/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -62,7 +64,7 @@ const validationScheme = yup.object({
       };
 
       axios
-        .post('https://ancient-temple-30883.herokuapp.com/users/check', checkPassword)
+        .post(`${baseURL}/users/check`, checkPassword)
         .then((res) => {
           const result = res.data;
           console.log(result);
@@ -74,7 +76,7 @@ const validationScheme = yup.object({
           } else {
             axios
               .put(
-                ' https://ancient-temple-30883.herokuapp.com/users/update/',
+                `${baseURL}/users/update/`,
                 { id,
                   password: values.newPassword},
               )

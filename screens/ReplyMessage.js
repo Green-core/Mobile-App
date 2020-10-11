@@ -3,6 +3,7 @@ import axios from 'axios';
 import {TextInput, View, Button, Text} from 'react-native';
 import {Formik} from 'formik';
 import { withAppContext } from '../services/withAppContext'
+import baseURL  from '../config'
 
 export default class ReplyMessage extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ export default class ReplyMessage extends React.Component {
               fromID: this.state.userID,
             };
 
-            axios.post('https://ancient-temple-30883.herokuapp.com/chats/reply', data).then((res) => {
+            axios.post(`${baseURL}/chats/reply`, data).then((res) => {
               console.log(res);
             });
 

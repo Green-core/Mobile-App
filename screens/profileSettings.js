@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Formik} from 'formik';
 import * as yup from 'yup'
 import { withAppContext } from '../services/withAppContext'
-
+import baseURL  from '../config'
 //form validator
 const validationScheme = yup.object({
   name : yup.string().min(5), 
@@ -31,7 +31,7 @@ class ProfileSettingsScreen extends Component {
     const {id,jwt} = this.props.context.state.user;
     axios
       .get(
-        ` https://ancient-temple-30883.herokuapp.com/users/get/${id}`,
+        `${baseURL}/users/get/${id}`,
       )
       .then((res) => {
         const userData = res.data;
@@ -54,7 +54,7 @@ class ProfileSettingsScreen extends Component {
     console.log(JSON.stringify(newUser, null, 2));
      axios
     .put(
-      'https://ancient-temple-30883.herokuapp.com/users/account/update', newUser
+      `${baseURL}/users/account/update`, newUser
     )
     .then((res) => {  
      ToastAndroid.show('Update succesfull !', ToastAndroid.SHORT);

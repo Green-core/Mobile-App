@@ -10,7 +10,7 @@ import {
 import {GreenButtonSmall} from '../../components/customButtons';
 import {Loading} from '../../components/Loading';
 import Axios from 'axios';
-
+import baseURL  from './../../config'
 export default class RequestEmail extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ export default class RequestEmail extends Component {
   sendEmail = () => {
     this.setState({loading:true})
     Axios
-      .post('http://10.0.2.2:5000/users/forgotPassword',{email:this.state.email})
+      .post(`${baseURL}/users/forgotPassword`,{email:this.state.email})
       .then(res=>{
         if(res.status === 200){
           console.log(res.data.response);

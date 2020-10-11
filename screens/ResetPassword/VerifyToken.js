@@ -10,6 +10,7 @@ import {
 import {GreenButtonSmall} from './../../components/customButtons';
 import {Loading} from '../../components/Loading';
 import Axios from 'axios';
+import baseURL  from './../../config'
 
 export default class VerifyToken extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class VerifyToken extends Component {
       email: this.props.route.params.email,
       token: this.state.token,
     };
-    Axios.post('http://10.0.2.2:5000/users/checkToken', user)
+    Axios.post(`${baseURL}/users/checkToken`, user)
       .then((res) => {
         if (res.status === 200) {
           //  console.log(res.data.response);
@@ -63,7 +64,7 @@ export default class VerifyToken extends Component {
   resendToken = () => {
     this.setState({loading: true});
     const email = this.props.route.params.email;
-    Axios.post('http://10.0.2.2:5000/users/forgotPassword', {email})
+    Axios.post(`${baseURL}/users/forgotPassword`, {email})
       .then((res) => {
         if (res.status === 200) {
           // console.log(res.data);
